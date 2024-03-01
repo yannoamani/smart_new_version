@@ -59,7 +59,7 @@ export default function List() {
                     <Text style={styles.itemText}>
                         {/* {token} */}
                         Offre : {item.nom_offre.toUpperCase()} ({item.categorie.categorie}) {"\n"}
-                        Du {item.debut} au {item.fin}
+                        Du {item.debut.split(' ')[0]} au {item.fin.split(' ')[0]}
                     </Text>
                     <Text style={styles.itemText}>
                         Lieu : {item.lieu.toUpperCase()}, Employeur : {item.entreprise.nom.toUpperCase()}

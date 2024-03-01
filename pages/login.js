@@ -1,6 +1,6 @@
 import styles from '../styles';
 import React, { useEffect, useState } from "react";
-import { Text, View, Image, TextInput, Pressable, Modal, KeyboardAvoidingView } from 'react-native';
+import { Text, View, Image, TextInput, Pressable, Modal, KeyboardAvoidingView, Linking } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -22,10 +22,7 @@ export default function Login() {
                 mobile: 1
             })
             console.log('req', req);
-            setTimeout(() => {
-                // Set loading to false to hide the loader when the task is complete
-                setLoading(false);
-              }, 3000);
+            setLoading(false);
             Alert.alert('Réussi', req.data.message, [
                 { text: 'OK', onPress: () => setModalVisible(!isModalVisible)}
             ], {cancelable: true})
@@ -46,7 +43,7 @@ export default function Login() {
             res.data.user.details = res.data.compte
             await AsyncStorage.setItem('user', JSON.stringify(res.data.user))
             // Alert.alert('Connecté','',{text: 'OK', onPress: () => console.log('OK')})
-            console.log(res.data.user.offres);
+            console.log(res.data);
             const offres = []
             res.data.user.offres.forEach(offre => {
                 offres.push(offre.id)
@@ -80,7 +77,7 @@ export default function Login() {
                 style={styles.containerForm}
                 behavior={'padding'} 
             >
-                <Text style={styles.titleText}>LOGIN</Text>
+                <Text style={styles.titleText}>CONNEXION</Text>
                 <Pressable style={{
                     margin: 5
                 }}></Pressable>
@@ -105,17 +102,18 @@ export default function Login() {
                     style={styles.Button}
                 >
                     <Text style={styles.buttonText}>
-                        Login
+                        Se connecter
                     </Text>
                 </Pressable>
                 <Pressable style={{
                     margin: 2
                 }}></Pressable>
                 <Pressable style={styles.Button} onPress={() => {
-                    navigation.navigate('Signin')
+                    //navigation.navigate('Signin')
+                    Linking.openURL("http://192.168.1.8:8080/registre")
                 }}>
                     <Text style={styles.buttonText}>
-                        Sign Up
+                        S'inscrire
                     </Text>
                 </Pressable>
                 <Modal 

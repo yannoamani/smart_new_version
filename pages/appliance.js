@@ -1,15 +1,22 @@
-import { FlatList, View, Text, ScrollView, Pressable, Modal, TextInput } from "react-native";
+import { FlatList, View, Text, ScrollView, Pressable, Modal, TextInput, Alert } from "react-native";
 import styles from '../styles';
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import HTML from 'react-native-render-html';
 import { Ionicons } from '@expo/vector-icons';
 import { displayDate } from "../Utils";
+import Loader from '../components/loader';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Appliance({route}) {
     const { id } = route.params;
     const [data, setData] = useState();
+    const [loading, setLoading] = useState(false);
+    const [color, setColor] = useState("black");
+    const [color2, setColor2] = useState("black");
+    const [color3, setColor3] = useState("black");
+    const [color4, setColor4] = useState("black");
+    const [color5, setColor5] = useState("black");
     const [note, setNote] = useState();
     const [comment, setComment] = useState();
     const [desc, setDesc] = useState();
@@ -23,7 +30,7 @@ export default function Appliance({route}) {
             }
             const offer = await axios.get('detail_offre/'+ id)
             //console.log("offer",offer.data.data.offre.description);
-            console.log(offer.data.data);
+            console.log("appliance", offer.data.data);
             setData(offer.data.data);
             if (offer.data.data.description[0] === '<') {
                 //console.log("."+offer.data.data.description.replace(/<[^>]*>/g, ' ').toUpperCase().trim()+".");
@@ -36,17 +43,27 @@ export default function Appliance({route}) {
 
     const rateComp = async () => {
         try {
+            setLoading(true)
             const token = await AsyncStorage.getItem('token')
+            const user = JSON.parse(await AsyncStorage.getItem('user'))
             if (token) {
                 axios.defaults.headers.common.Authorization = `Bearer ${token}`;
             }
-            const offer = await axios.get('rate_entreprise/', {
-
-            })
-            console.log(offer.data.data);
+            const payload = {
+                "offre_id": id,
+                "student_id": user.id,
+                "notes": note,
+                "avis": comment
+            }
+            console.log(payload);
+            const offer = await axios.post('rate_entreprise', payload)
+            Alert.alert("Info", offer.data.message, [{text: 'OK', onPress: () => console.log('OK')}], { cancelable: true })
+            console.log("offer", offer.data);
         } catch (error) {
+            Alert.alert("Echec", "Un problème est survenu lors de l'enregistrement", [{text: 'OK', onPress: () => console.log('OK')}], { cancelable: true })
             console.log(error);
         }
+        setLoading(false)
     }
 
     useEffect(() => {
@@ -96,7 +113,7 @@ export default function Appliance({route}) {
                         </Text>
                         <Text style={styles.basicText}>
                             <Ionicons name="contrast-outline" size={20} color="#87CEEB" /> &nbsp;
-                            Job du : {data.pointage}
+                            Paiement par : {data.pointage}
                         </Text>
                         <Text style={styles.basicText}>
                             <Ionicons name="cash-outline" size={20} color="#87CEEB" /> &nbsp;
@@ -126,18 +143,91 @@ export default function Appliance({route}) {
                             animationType='slide'
                         >
                             <View style={styles.modalView}>
-                                <TextInput
+                                {/* <TextInput
                                     placeholder='Entrez votre note'
                                     value={note}
                                     onChangeText={text => setNote(text)}
                                     style={styles.textInput}
                                     keyboardType="numeric"
-                                />
+                                /> */}
+                                <Text style={styles.titleText}>
+                                    EVALUER
+                                </Text>
+                                <Loader loading={loading} />
+                                <View style={{
+                                    flexDirection:"row",
+                                    alignItems: "center", // Center the stars vertically
+                                    marginBottom: 10,
+                                }}>
+                                    <Ionicons name="star" size={30} color={color} style={{
+                                        marginHorizontal: "2%",
+                                    }} onPress={() => {
+                                        if (color == "black") {
+                                            setColor('yellow')
+                                        } else {
+                                            setColor2('black')
+                                            setColor3('black')
+                                            setColor4('black')
+                                            setColor5('black')
+                                        }
+                                        setNote(1)
+                                    }}/>
+                                    <Ionicons name="star" size={30} color={color2} style={{
+                                        marginHorizontal: "2%",
+                                    }} onPress={() => {
+                                        if (color2 == "black") {
+                                            setColor('yellow')
+                                            setColor2('yellow')
+                                        } else {
+                                            setColor3('black')
+                                            setColor4('black')
+                                            setColor5('black')
+                                        }
+                                        setNote(2)
+                                    }}/>
+                                    <Ionicons name="star" size={30} color={color3} style={{
+                                        marginHorizontal: "2%",
+                                    }} onPress={() => {
+                                        if (color3 == "black") {
+                                            setColor('yellow')
+                                            setColor2('yellow')
+                                            setColor3('yellow')
+                                        } else {
+                                            setColor4('black')
+                                            setColor5('black')
+                                        }
+                                        setNote(3)
+                                    }}/>
+                                    <Ionicons name="star" size={30} color={color4} style={{
+                                        marginHorizontal: "2%",
+                                    }} onPress={() => {
+                                        if (color4 == "black") {
+                                            setColor('yellow')
+                                            setColor2('yellow')
+                                            setColor3('yellow')
+                                            setColor4('yellow')
+                                        } else {
+                                            setColor5('black')
+                                        }
+                                        setNote(4)
+                                    }}/>
+                                    <Ionicons name="star" size={30} color={color5} style={{
+                                        margin: "2%",
+                                    }} onPress={() => {
+                                        setColor('yellow')
+                                        setColor2('yellow')
+                                        setColor3('yellow')
+                                        setColor4('yellow')
+                                        setColor5('yellow')
+                                        setNote(5)
+                                    }}/>
+                                </View>
                                 <TextInput
                                     placeholder='Entrez votre commentaire'
                                     value={comment}
                                     onChangeText={text => setComment(text)}
                                     style={styles.textInput}
+                                    multiline={true}
                                 />
                                 {/* <Loader loading={loading} /> */}
                                 <Pressable 
@@ -161,7 +251,7 @@ export default function Appliance({route}) {
                             </View>
                         </Modal>
                         {
-                            data.offre_student.recruit == 1 ? 
+                            (data.offre_student.recruit && data.offre_student.avis == "") ? 
                             <Pressable style={{
                                 backgroundColor: '#87CEEB',
                                 width: "30%",

@@ -7,20 +7,24 @@ import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 
-export default function AppliancesList() {
+export default function Contacts() {
     const navigation = useNavigation();
     const [data, setData] = useState();
+    const [already, setAlready] = useState(false)
     const [refreshing, setRefreshing] = useState(false);
-
+    const [isLoading, setLoading] = useState(true)
+    const token = AsyncStorage.getItem('token')
     const getOffers = async () => {
         try {
             const token = await AsyncStorage.getItem('token')
             if (token) {
                 axios.defaults.headers.common.Authorization = `Bearer ${token}`;
             }
-            const res = await axios.get('get_offres_postule');
-            console.log(res.data.data.offres);
-            setData(res.data.data.offres);
+            const res = await axios.get('get_who_contact_student');
+            setData(res.data.entreprises);
+            setLoading(false)
+            console.log("contacts", res.data.entreprises);
+            console.log("count", data.length);
             setRefreshing(false);
         } catch (error) {
             console.log(error);
@@ -38,37 +42,41 @@ export default function AppliancesList() {
         fetchOffers();
 
         // Set up an interval to fetch offers every 1 minute
-        // const intervalId = setInterval(fetchOffers, 60000);
+        //const intervalId = setInterval(fetchOffers, 60000);
 
         // // Clean up the interval when the component unmounts
-        // return () => clearInterval(intervalId);
+        //return () => clearInterval(intervalId);
     }, []);
 
     const renderItem = ({ item }) => {
-        const time = displayDate(item.created_at);
+        const time = displayDate(item.pivot.offre.created_at);
         return (
             <View style={styles.item}>
                 <Pressable onPress={() => {
-                    navigation.navigate("Appliance", { id: item.id });
+                    navigation.navigate("Contact", { data: item });
                 }}>
                     <Text style={styles.itemText}>
-                        Offre : {item.nom_offre.toUpperCase()} ({item.categorie.categorie}) {"\n"}
-                        Du {item.debut.split(' ')[0]} au {item.fin.split(' ')[0]}
+                        {/* {token} */}
+                        Offre : {item.pivot.offre.nom_offre.toUpperCase()} ({item.pivot.offre.categorie.categorie}) {"\n"}
+                        Du {item.pivot.offre.debut} au {item.pivot.offre.fin}
                     </Text>
                     <Text style={styles.itemText}>
-                        Lieu : {item.lieu.toUpperCase()}, Employeur : {item.entreprise.nom.toUpperCase()}
+                        Lieu : {item.pivot.offre.lieu.toUpperCase()}, Employeur : {item.nom.toUpperCase()}
                     </Text>
                     <Text style={styles.itemText}>
                         Posté le : {time.date} à {time.hour}
                     </Text>
                     <Text style={{
                             position: "absolute",
-                            right: '2%',
-                            bottom: '1%'
+                            right: '3%',
+                            bottom: '3%'
                         }}>
                     {
                         item.pivot.recruit == 1 ?
-                        <Ionicons color={"darkgreen"} name="checkmark-done-circle-outline" size={35} /> : <></>
+                        <Ionicons color={"darkgreen"} name="checkmark-done-circle-outline" size={35} /> :
+                        item.pivot.recruit == 2 ?
+                        <Ionicons color={"red"} name="close-circle-outline" size={35} /> :
+                        null
                     }
                     </Text>
                 </Pressable>
@@ -78,26 +86,25 @@ export default function AppliancesList() {
 
     return (
         <View style={styles.container}>
-            {/* <ScrollView
-                showsVerticalScrollIndicator={false}
+            <View
                 style={{
                     width: '100%',
                     padding: '0.5%',
                 }}
-            > */}
+            >
                 {data ? (
                     <FlatList
                         style={{ width: "100%" }}
                         renderItem={renderItem}
                         data={data}
-                        keyExtractor={item => item.id.toString()}
+                        keyExtractor={item => item.pivot.id}
                         onRefresh={fetchOffers}
                         refreshing={refreshing}
                     />
                 ) : (
-                    <Text style={styles.titleText}>Loading...</Text>
+                    <Text style={styles.titleText}>Aucune donnée</Text>
                 )}
-            {/* </ScrollView> */}
+            </View>
         </View>
     );
 }

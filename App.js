@@ -12,6 +12,8 @@ import { Image,Pressable,Text } from 'react-native';
 import Profile from './pages/profil';
 import Offer from './pages/offer';
 import Appliance from './pages/appliance';
+import Contact from './pages/contact';
+import Contacts from './pages/contacts';
 import AppliancesList from './pages/appliances';
 import EditSelf from './pages/editself';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -22,7 +24,7 @@ import Schedules from './pages/schedules';
 import Skills from './pages/competences';
 
 export default function App() {
-  axios.defaults.baseURL = 'http://192.168.1.9:8000/api/';
+  axios.defaults.baseURL = 'http://192.168.1.5:8000/api/';
   const setAuthorizationHeader = async () => {
     try {
       const token = await AsyncStorage.getItem('token');
@@ -43,6 +45,7 @@ export default function App() {
   // Call the function to set the Authorization header
   const token = setAuthorizationHeader();
   const OfferStack = createNativeStackNavigator();
+  const ContactsStack = createNativeStackNavigator();
   const AuthStack = createNativeStackNavigator();
   const ApplianceStack = createNativeStackNavigator();
   const ProfileStack = createNativeStackNavigator();
@@ -60,6 +63,21 @@ export default function App() {
           headerBackTitleVisible: false
         }} />
       </OfferStack.Navigator>
+    );
+  }
+  function ContactsStackScreen() {
+    return (
+      <ContactsStack.Navigator screenOptions={{
+        headerStyle: {
+          backgroundColor: '#87CEEB',
+        }
+      }}>
+        <ContactsStack.Screen name="Contacts" component={Contacts} options={{}} />
+        <ContactsStack.Screen name="Contact" component={Contact} options={{
+          headerTitle: "Détails de l'offre",
+          headerBackTitleVisible: false
+        }} />
+      </ContactsStack.Navigator>
     );
   }
   function AppliancesStackScreen() {
@@ -141,6 +159,8 @@ export default function App() {
               iconName = 'briefcase-outline'; // Adjust the icon name as needed
             } else if (route.name === 'AppliancesTab') {
               iconName = 'bookmark-outline'; // Adjust the icon name as needed
+            } else if (route.name === 'ContactsTab') {
+              iconName = 'people-outline'; // Adjust the icon name as needed
             }
 
             // You can return any component here, not just Ionicons!
@@ -163,8 +183,12 @@ export default function App() {
             }} />
             <Tab.Screen name="AppliancesTab" component={AppliancesStackScreen} options={{
               title: 'Mes Postulations',
-            headerShown: false,
-          }}/>
+              headerShown: false,
+            }}/>
+            <Tab.Screen name="ContactsTab" component={ContactsStackScreen} options={{
+              title: 'Mes Contacts',
+              headerShown: false,
+            }}/>
             <Tab.Screen name="ProfileTab" component={ProfileStackScreen} options={{
               title: 'Profil',
             headerShown: false,
