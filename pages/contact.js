@@ -17,24 +17,12 @@ export default function Contact({route}) {
     
     const getOffer = async () => {
         try {
-            // const token = await AsyncStorage.getItem('token')
-            // // const user = await AsyncStorage.getItem('user')
-            // if (token) {
-            //     axios.defaults.headers.common.Authorization = `Bearer ${token}`;
-            // }
-            // // console.log(JSON.parse(user));
-            // const offer = await axios.get('detail_offre/'+ id)
-            // setData(offer.data.data);
-            // //console.log(offer.data);
-            // const res = await axios.get('get_offres_postule');
-            // //console.log("res",res.data.data.offres);
-            // console.log(already);
-            //return console.log(already);
             if (data.pivot.offre.description[0] === '<') {
                 setDesc(data.pivot.offre.description.replace(/<[^>]*>|&nbsp;/g, ' ').trim().toUpperCase().split('  '))
             }
+            const res = await axios.put('confirmAlarm/'+ data.pivot.id);
         } catch (error) {
-            console.log(error);
+            console.log(error.message);
         }
     }
 

@@ -1,5 +1,5 @@
 // App.js
-import React from 'react';
+import React, { useState } from 'react';
 import Login from './pages/login';
 import Signin from './pages/signin';
 import axios from 'axios';
@@ -24,7 +24,7 @@ import Schedules from './pages/schedules';
 import Skills from './pages/competences';
 
 export default function App() {
-  axios.defaults.baseURL = 'http://192.168.1.5:8000/api/';
+  axios.defaults.baseURL = 'http://192.168.1.2:8000/api/';
   const setAuthorizationHeader = async () => {
     try {
       const token = await AsyncStorage.getItem('token');
@@ -41,9 +41,24 @@ export default function App() {
       console.error('Error setting Authorization header:', error);
     }
   };
-  
-  // Call the function to set the Authorization header
   const token = setAuthorizationHeader();
+  const [final, setFinal] = useState()
+  const getAlarmNumber = async () => {
+    try {
+        const res = await axios.get('get_who_contact_student');
+        let cpt = 0
+        res.data.entreprises.forEach(entreprise => {
+          if (entreprise.pivot.alarm == 1) {
+            cpt++
+          }
+        });
+        setFinal(cpt)
+    } catch (error) {
+        return null;
+    }
+  };
+  const intervalId = setInterval(getAlarmNumber, 60000);
+  const alarm_number = final;
   const OfferStack = createNativeStackNavigator();
   const ContactsStack = createNativeStackNavigator();
   const AuthStack = createNativeStackNavigator();
@@ -188,6 +203,7 @@ export default function App() {
             <Tab.Screen name="ContactsTab" component={ContactsStackScreen} options={{
               title: 'Mes Contacts',
               headerShown: false,
+              tabBarBadge: alarm_number > 0 ? alarm_number : null
             }}/>
             <Tab.Screen name="ProfileTab" component={ProfileStackScreen} options={{
               title: 'Profil',

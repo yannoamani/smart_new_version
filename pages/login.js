@@ -63,6 +63,7 @@ export default function Login() {
         } catch (error) {
             Alert.alert(error.message,'',[{text: 'OK', onPress: () => console.log('OK')}])
             console.log(error);
+            setLoading(false);
         }
     }
     return (
