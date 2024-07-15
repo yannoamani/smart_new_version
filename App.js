@@ -24,7 +24,7 @@ import Schedules from './pages/schedules';
 import Skills from './pages/competences';
 
 export default function App() {
-  axios.defaults.baseURL = 'http://192.168.1.2:8000/api/';
+  axios.defaults.baseURL = 'http://192.168.1.4:8000/api/';
   const setAuthorizationHeader = async () => {
     try {
       const token = await AsyncStorage.getItem('token');
