@@ -1,5 +1,5 @@
 import { View, Text, Platform, Pressable, TextInput, Alert, KeyboardAvoidingView } from "react-native";
-import styles from '../styles';
+import styles from '../pages/styles/editExp';
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Ionicons } from '@expo/vector-icons';
@@ -57,17 +57,21 @@ export default function EditSchedule({route}) {
       useEffect(() => {
       }, []);
       return (
-          <View 
-              style={styles.containerOffer}
-          >
-              <KeyboardAvoidingView 
+        <KeyboardAvoidingView 
                   style={{
-                      alignItems: "center",
+                      // alignItems: "center",
                       flex: 1
                   }}
                   behavior={'height'}>
+          <View style={styles.container} >
+             
+                  <Text style={styles.title}>Modifier ma plage horaire</Text>
+                  <View style={{height:20}}></View>
+                  <Text style={styles.label}>Heure de début </Text>
+                  <View style={{height:2}}></View>
                   <TextInput 
-                      style={styles.textInput}
+                   readOnly={true}
+                      style={styles.input}
                       placeholder="__:__"
                       value={hourstart}
                       keyboardType="numeric"
@@ -77,8 +81,12 @@ export default function EditSchedule({route}) {
                       }}
                       onChangeText={handleTimeConfirm}
                   />
+                  <View style={{height:20}}></View>
+                  <Text style={styles.label}>Heure de fin </Text>
+                  <View style={{height:2}}></View>
                   <TextInput 
-                      style={styles.textInput}
+                   readOnly={true}
+                      style={styles.input}
                       placeholder="__:__"
                       value={hourend}
                       keyboardType="numeric"
@@ -88,8 +96,12 @@ export default function EditSchedule({route}) {
                       }}
                       onChangeText={handleTimeConfirm}
                   />
+                     <View style={{height:20}}></View>
+                  <Text style={styles.label}>Date  </Text>
+                  <View style={{height:2}}></View>
                   <TextInput
-                      style={styles.textInput}
+                  readOnly={true}
+                      style={styles.input}
                       placeholder="Date (__/__/____)"
                       keyboardType="numeric"
                       value={start}
@@ -109,6 +121,7 @@ export default function EditSchedule({route}) {
                       onConfirm={handleConfirm}
                       onCancel={hideshowDatePicker}
                     />
+                     <View style={{height:30}}></View>
                       <Pressable 
                           onPress={async () => {
                               try {
@@ -142,13 +155,14 @@ export default function EditSchedule({route}) {
                                   { cancelable: true })
                               }
                           }} 
-                          style={styles.Button}
+                          style={styles.button}
                       >
-                          <Text style={styles.buttonText}>
-                              OK
+                          <Text style={styles.textButton}>
+                             Modifier
                           </Text>
                       </Pressable>
-              </KeyboardAvoidingView>
+             
           </View>
+          </KeyboardAvoidingView>
       )
 }

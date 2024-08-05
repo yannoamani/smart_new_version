@@ -6,6 +6,7 @@ const styles = StyleSheet.create({
       paddingTop: "2%",
       alignItems: 'center',
       width: "100%",
+      
     },
     container1: {
       //flex: 1,
@@ -161,6 +162,50 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'space-around',
     },
+    modalText:{
+      color: 'black',
+      fontSize: 20,
+      fontWeight: 'bold',
+      textAlign: 'center',
+    },
+    // voici le style pour la page de connexion
+    safeAraea:{
+      flex:1,
+      color: 'black',
+
+      // alignContent: 'center',
+      // justifyContent: 'center',
+      // alignSelf: 'center',
+     
+      
+      padding: 10
+
+    },
+    containerModif:{
+      flex: 1,
+      width: "100%",
+      backgroundColor: '#87CEEB',
+     
+      // alignItems: 'center',
+      justifyContent: 'center',
+      alignSelf: 'center',
+      
+ },
+ scroll:{
+
+  
+ 
+  
+
+ }
+
+
   });
+
+  
+  
+
+  
+
 
 export default styles;

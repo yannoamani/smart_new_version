@@ -1,15 +1,18 @@
-import { FlatList, View, Text, ScrollView, Pressable, Modal, TextInput, Alert } from "react-native";
+import { FlatList,useWindowDimensions,SafeAreaView, View, Text,Image, ScrollView, Pressable, Modal, TextInput, Alert } from "react-native";
 import styles from '../styles';
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import HTML from 'react-native-render-html';
+import RenderHtml from 'react-native-render-html';
 import { Ionicons } from '@expo/vector-icons';
 import { displayDate } from "../Utils";
 import Loader from '../components/loader';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Appliance({route}) {
+     const { width } = useWindowDimensions();
     const { id } = route.params;
+    const {detailsOffres}=route.params
     const [data, setData] = useState();
     const [loading, setLoading] = useState(false);
     const [color, setColor] = useState("black");
@@ -21,6 +24,7 @@ export default function Appliance({route}) {
     const [comment, setComment] = useState();
     const [desc, setDesc] = useState();
     const [isModalVisible, setModalVisible] = useState(false);
+
     
     const getOffer = async () => {
         try {
@@ -57,10 +61,14 @@ export default function Appliance({route}) {
             }
             console.log(payload);
             const offer = await axios.post('rate_entreprise', payload)
+            // setModalVisible(!isModalVisible)
+           
+            
             Alert.alert("Info", offer.data.message, [{text: 'OK', onPress: () => console.log('OK')}], { cancelable: true })
             console.log("offer", offer.data);
+            
         } catch (error) {
-            Alert.alert("Echec", "Un problème est survenu lors de l'enregistrement", [{text: 'OK', onPress: () => console.log('OK')}], { cancelable: true })
+            Alert.alert("Echec", error.response.data.message, [{text: 'OK', onPress: () => console.log('OK')}], { cancelable: true })
             console.log(error);
         }
         setLoading(false)
@@ -71,13 +79,68 @@ export default function Appliance({route}) {
     }, []);
 
     return (
-            <ScrollView 
-            contentContainerStyle={styles.containerOffer}
-            showsVerticalScrollIndicator={false}
+        <View style={{flex:1, padding:10}}>
+            <ScrollView  style={{flex:1}}
+           
+            
             >
-                {data ? (
-                    <View>
-                        <Text style={styles.titleText}>
+                {
+                    <View >
+                   <View style={{height:60, width:60, alignItems:'center', justifyContent:'center', alignSelf:'center'}}>
+                   <Image source={{uri:'https://new.newpowerjuca.com/templates/empower/images/job.png'}} style={{height:'100%', width:'100%'}}></Image>
+                   </View>
+                   <View style={{height:10}}></View>
+                   <Text style={{fontSize:20, fontWeight:'bold', textAlign:'center'}}>{detailsOffres.nom_offre}</Text>
+                   <View style={{height:10}}></View>
+                   <Text style={{fontSize:20,color:'#1e90ff', textAlign:'center'}}>{detailsOffres.entreprise.nom.toUpperCase()}</Text>
+                   <View style={{height:15}}></View>
+                   <View style={{flexDirection:'row',flexWrap:'wrap',  flex:1, justifyContent:'center', alignItems:'center'}}>
+                    <View style={{flexDirection:'row', backgroundColor:'#1e90ff', borderRadius:5, padding:5, justifyContent:'center', alignItems:'center',margin:2}}>
+                    <Ionicons name="location-sharp" size={20} color="white" />
+                    <Text style={{color:'white', marginLeft:5}}>{detailsOffres.lieu}</Text>
+                    </View>
+                    <View style={{flexDirection:'row', backgroundColor:'#1e90ff', borderRadius:5, padding:5, justifyContent:'center', alignItems:'center',margin:2}}>
+                    <Text style={{color:'white'}}>$</Text>
+                    <Text style={{color:'white', marginLeft:2}}>{detailsOffres.salaire} FCFA</Text>
+                    </View>
+                    <View style={{flexDirection:'row', backgroundColor:'#1e90ff', borderRadius:5, padding:5, justifyContent:'center', alignItems:'center',margin:2}}>
+                    <Ionicons name="briefcase" size={20} color="white" />
+                    <Text style={{color:'white', marginLeft:5}}>{detailsOffres.categorie.categorie}</Text>
+                    </View>
+                    <View style={{flexDirection:'row', backgroundColor:'#1e90ff', borderRadius:5, padding:5, justifyContent:'center', alignItems:'center',margin:2}}>
+                    <Ionicons name="mail" size={20} color="white" />
+                    <Text style={{color:'white', marginLeft:5}}>{detailsOffres.entreprise.email}</Text>
+                    </View>
+                    <View style={{flexDirection:'row', backgroundColor:'#1e90ff', borderRadius:5, padding:5, justifyContent:'center', alignItems:'center',margin:2}}>
+                    <Ionicons name="call" size={20} color="white" />
+                    <Text style={{color:'white', marginLeft:5}}>{detailsOffres.entreprise.contact}</Text>
+                    </View>
+                    <View style={{flexDirection:'row', backgroundColor:'#1e90ff', borderRadius:5, padding:5, justifyContent:'center', alignItems:'center',margin:2}}>
+                   
+                    <Text style={{color:'white', marginLeft:5}}>{detailsOffres.nbre_person} personnes </Text>
+                    </View>
+                   </View>
+                   <View style={{height:10}}></View>
+                   <Text style={{fontSize:20, fontWeight:'bold', }}>Descriptionde l'offre</Text>
+                   <View style={{height:10}}></View>
+                   <RenderHtml
+       contentWidth={width}
+      source={{ html: detailsOffres.description }}
+    />
+
+
+
+
+
+
+                  
+                  
+
+                
+                     
+                     
+                    
+                        {/* <Text style={styles.titleText}>
                             <Ionicons name="briefcase" size={25} /> &nbsp;
                             {data.nom_offre} ({data.categorie.categorie.toUpperCase()})
                         </Text>
@@ -137,12 +200,13 @@ export default function Appliance({route}) {
                         <Text style={styles.basicText}>
                             <Ionicons name="mail-outline" size={20} color="#87CEEB" /> &nbsp;
                             Mail : {data.entreprise.email}
-                        </Text>
+                        </Text> */}
                         <Modal 
                             visible={isModalVisible}
                             animationType='slide'
                         >
-                            <View style={styles.modalView}>
+                            <SafeAreaView style={{flex:1,}}>
+                            <View style={{flex:1,padding:10,alignItems:'center',justifyContent:'center'}}>
                                 {/* <TextInput
                                     placeholder='Entrez votre note'
                                     value={note}
@@ -150,116 +214,66 @@ export default function Appliance({route}) {
                                     style={styles.textInput}
                                     keyboardType="numeric"
                                 /> */}
-                                <Text style={styles.titleText}>
-                                    EVALUER
+                                <Text style={{fontSize:20,fontWeight:'bold'}}>
+                                    Comment vous avez apprecie l'offre ?  
                                 </Text>
+                                <View style={{height:10}}></View>
                                 <Loader loading={loading} />
                                 <View style={{
                                     flexDirection:"row",
                                     alignItems: "center", // Center the stars vertically
                                     marginBottom: 10,
                                 }}>
-                                    <Ionicons name="star" size={30} color={color} style={{
-                                        marginHorizontal: "2%",
-                                    }} onPress={() => {
-                                        if (color == "black") {
-                                            setColor('yellow')
-                                        } else {
-                                            setColor2('black')
-                                            setColor3('black')
-                                            setColor4('black')
-                                            setColor5('black')
-                                        }
-                                        setNote(1)
-                                    }}/>
-                                    <Ionicons name="star" size={30} color={color2} style={{
-                                        marginHorizontal: "2%",
-                                    }} onPress={() => {
-                                        if (color2 == "black") {
-                                            setColor('yellow')
-                                            setColor2('yellow')
-                                        } else {
-                                            setColor3('black')
-                                            setColor4('black')
-                                            setColor5('black')
-                                        }
-                                        setNote(2)
-                                    }}/>
-                                    <Ionicons name="star" size={30} color={color3} style={{
-                                        marginHorizontal: "2%",
-                                    }} onPress={() => {
-                                        if (color3 == "black") {
-                                            setColor('yellow')
-                                            setColor2('yellow')
-                                            setColor3('yellow')
-                                        } else {
-                                            setColor4('black')
-                                            setColor5('black')
-                                        }
-                                        setNote(3)
-                                    }}/>
-                                    <Ionicons name="star" size={30} color={color4} style={{
-                                        marginHorizontal: "2%",
-                                    }} onPress={() => {
-                                        if (color4 == "black") {
-                                            setColor('yellow')
-                                            setColor2('yellow')
-                                            setColor3('yellow')
-                                            setColor4('yellow')
-                                        } else {
-                                            setColor5('black')
-                                        }
-                                        setNote(4)
-                                    }}/>
-                                    <Ionicons name="star" size={30} color={color5} style={{
-                                        margin: "2%",
-                                    }} onPress={() => {
-                                        setColor('yellow')
-                                        setColor2('yellow')
-                                        setColor3('yellow')
-                                        setColor4('yellow')
-                                        setColor5('yellow')
-                                        setNote(5)
-                                    }}/>
+                                   
                                 </View>
+                                
                                 <TextInput
                                     placeholder='Entrez votre commentaire'
                                     value={comment}
+                                    placeholderTextColor={'grey'}
                                     onChangeText={text => setComment(text)}
-                                    style={styles.textInput}
+                                    style={{height:150,borderRadius:10,width:'100%',borderWidth:1,borderColor:'black',padding:10}}
                                     multiline={true}
                                 />
                                 {/* <Loader loading={loading} /> */}
+                                <View style={{height:20}}></View>
                                 <Pressable 
                                     onPress={rateComp} 
-                                    style={styles.Button}
+                                    style={{backgroundColor:'#1e90ff',padding:10,borderRadius:10,width:'100%'}}
                                 >
-                                    <Text style={styles.buttonText}>
-                                        OK
+                                    <Text style={{textAlign:'center',fontSize:20,color:'white'}}>
+                                    Commenter
                                     </Text>
                                 </Pressable>
+                                <View style={{height:20}}></View>   
                                 <Pressable 
+
                                     onPress={() => {
                                         setModalVisible(!isModalVisible)
                                     }} 
-                                    style={styles.Button}
+                                    style={{backgroundColor:'red',padding:10,borderRadius:10,color:'white'}}
                                 >
-                                    <Text style={styles.buttonText}>
+                                    <Text style={{color:'white'}}>
                                         Retour
                                     </Text>
                                 </Pressable>
                             </View>
+                            </SafeAreaView>
                         </Modal>
+                        
+                        {/* && data.offre_student.avis == null */}
                         {
-                            (data.offre_student.recruit && data.offre_student.avis == "") ? 
-                            <Pressable style={{
-                                backgroundColor: '#87CEEB',
+                            (detailsOffres.pivot.recruit==1 ) ? 
+                            <View style={{
+                                backgroundColor: '#1e90ff',
                                 width: "30%",
                                 marginTop: 10,
                                 alignSelf: 'center',
-                                borderRadius: 20,
+                                borderRadius: 10,
+                                height:50,
+                                width:'100%',
                                 padding: "2%"
-                            }} onPress={async () => {
+                            }}><Pressable  onPress={async () => {
                                 try {
                                     setModalVisible(!isModalVisible)
                                     console.log(data)
@@ -269,16 +283,17 @@ export default function Appliance({route}) {
                             }}>
                                 <Text style={{
                                     textAlign: 'center',
-                                    fontSize: 20
+                                    fontSize: 20,
+                                    color: 'white',
+                                    fontWeight:"bold"
                                 }}>
-                                    Noter
+                                    Commenter
                                 </Text>
-                            </Pressable> : <></>
+                            </Pressable></View> : <></>
                         }
                     </View>
-                ) : (
-                    <Text style={styles.titleText}>Loading...</Text>
-                )}
+               }
             </ScrollView>
+            </View>
     )
 }

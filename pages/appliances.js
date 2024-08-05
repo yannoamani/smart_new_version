@@ -1,5 +1,6 @@
-import { FlatList, View, Text, Pressable, ScrollView } from "react-native";
-import styles from '../styles';
+import { FlatList, View, Text, Pressable,  Image,ScrollView } from "react-native";
+import styles from '../pages/styles/offerStyle';
+
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { displayDate } from "../Utils";
@@ -7,11 +8,16 @@ import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 
+
 export default function AppliancesList() {
     const navigation = useNavigation();
     const [data, setData] = useState();
     const [refreshing, setRefreshing] = useState(false);
 
+    const toLowerCase = (string) => {
+        if (!string) return string;
+        return string.charAt(0).toUpperCase() + string.slice(1);
+      };
     const getOffers = async () => {
         try {
             const token = await AsyncStorage.getItem('token')
@@ -47,32 +53,40 @@ export default function AppliancesList() {
     const renderItem = ({ item }) => {
         const time = displayDate(item.created_at);
         return (
+            <Pressable onPress={() => {
+                navigation.navigate("Appliance", { id: item.id , detailsOffres: item });
+            }}>
+            <View style={styles.card}>
             <View style={styles.item}>
-                <Pressable onPress={() => {
-                    navigation.navigate("Appliance", { id: item.id });
-                }}>
-                    <Text style={styles.itemText}>
-                        Offre : {item.nom_offre.toUpperCase()} ({item.categorie.categorie}) {"\n"}
-                        Du {item.debut.split(' ')[0]} au {item.fin.split(' ')[0]}
-                    </Text>
-                    <Text style={styles.itemText}>
-                        Lieu : {item.lieu.toUpperCase()}, Employeur : {item.entreprise.nom.toUpperCase()}
-                    </Text>
-                    <Text style={styles.itemText}>
-                        Posté le : {time.date} à {time.hour}
-                    </Text>
-                    <Text style={{
-                            position: "absolute",
-                            right: '2%',
-                            bottom: '1%'
-                        }}>
-                    {
-                        item.pivot.recruit == 1 ?
-                        <Ionicons color={"darkgreen"} name="checkmark-done-circle-outline" size={35} /> : <></>
-                    }
-                    </Text>
-                </Pressable>
+               
+                   <View style={styles.image}>
+             {
+                item.pivot.recruit==1?  <Ionicons name="checkmark-circle" size={30} color="green"></Ionicons>: <Ionicons name="hourglass" size={30} color="orange"></Ionicons>
+             }
+                   </View>
+                   <View style={{width:3}}></View>
+                   <Text  style={styles.title}  numberOfLines={1}
+        ellipsizeMode="tail">{item.nom_offre.toUpperCase()} - {item.entreprise.nom.toUpperCase()}</Text>
+           <View style={{height:10}}></View>
+         
+                  </View>
+                  <Text style={styles.categorie}>{item.categorie.categorie}</Text>
+         <View style={{height:10}}></View>
+         <View style={styles.containerRow}></View>
+         <View style={styles.containerRow}>
+         <Ionicons
+                name={ "location-sharp"}
+                color={'gray'}  
+                size={24}
+              ></Ionicons>
+              <View style={{width:5}}></View>
+              <Text style={styles.categorie}>{item.lieu}</Text>
+              </View>
+               
             </View>
+          
+            
+            </Pressable>
         );
     };
 

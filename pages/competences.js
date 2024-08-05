@@ -1,18 +1,22 @@
-import { FlatList, View, Text, Pressable, Alert } from "react-native";
+import { FlatList,ActivityIndicator, View, Text, Pressable, Alert } from "react-native";
 import styles from '../styles';
+import style1 from '../pages/styles/editExp';
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { displayDate } from "../Utils";
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
+import { Dropdown } from 'react-native-element-dropdown';
 
 export default function Skills() {
     const navigation = useNavigation();
     const [data, setData] = useState();
     const [skills, setSkills] = useState();
     const [refreshing, setRefreshing] = useState(false);
+    const [isLoading, setLoading] = useState(false);
     const token = AsyncStorage.getItem('token')
+    const[competence, setCompetence] = useState(0);
     const goToAddSched = () => {
         navigation.navigate("AddSched");
     }
@@ -147,6 +151,7 @@ export default function Skills() {
                                     //return console.log(item.id);
                                     const del = await axios.delete('deleteCompetencesOfStudents/'+ item.id)
                                     Alert.alert("Réussi", 'Compétence supprimée au profil', [{text: 'OK', onPress: () => console.log('OK')}], { cancelable: true })
+                                    getUserSkills();
                                 } catch (error) {
                                     Alert.alert("Echec", error.message, [{text: 'OK', onPress: () => console.log('OK')}], { cancelable: true })
                                 }
@@ -170,13 +175,18 @@ export default function Skills() {
     };
 
     return (
-        <View style={styles.container}>
+        <View style={{flex: 1,paddingTop: "2%", width: "100%"}}>
             {data || skills ? (
-                    <View style={styles.container1}>
-                        <Text>
+                    <View style={{flex:1}}>
+                        {/* <Text>
                             Toutes les compétences
-                        </Text>
-                        <FlatList
+                        </Text> */}
+                        {/* <FlatList
+                        ListHeaderComponent={<View>
+                            <View style={{height:30}}>
+                                
+                            </View>
+                        </View>}
                             style={{ width: "100%" }}
                             renderItem={renderItem}
                             data={data}
@@ -184,28 +194,93 @@ export default function Skills() {
                             onRefresh={fetchOffers}
                             refreshing={refreshing}
                             scrollEnabled={true} 
-                        />
+                            
+                        /> */}
                         {/* <Text>
                             {JSON.stringify(data)}
                         </Text> */}
-                        <Text>
+                        {/* <Text>
                             Mes compétences
-                        </Text>
+                        </Text> */}
+                        {/* <View style={{height:40}}></View> */}
                         <FlatList
-                            style={{ width: "100%" }}
+                        // style={{width:'100%', height:'100%'}}
+                         ListHeaderComponent={<View style={{padding: "2%"}}>
+                         <Text style={style1.title}>Ajouter une competence</Text>
+                         <View style={{height:20}}></View>
+                            <Dropdown 
+                 style={style1.dropdown}
+                 search
+                 placeholder="Competence ..."
+                 placeholderStyle={style1.placeholderStyle}
+                 selectedTextStyle={style1.selectedTextStyle}
+                 inputSearchStyle={style1.inputSearchStyle}
+                 iconStyle={style1.iconStyle}
+                //  value={degree}
+                 valueField={"competence"}
+
+                data={data}
+                maxHeight={300}
+                onChange={item => {
+          setCompetence(item.id);
+          console.log(competence);
+          
+        }}
+                labelField={"competence"}
+                 ></Dropdown>
+                  <View style={{height:10}}></View>
+                  <Pressable style={style1.button}  onPress={ async () => {
+                               setLoading(true);
+                                try {
+
+                                   if(competence==0){
+                                    Alert.alert("Echec", 'Veuillez selectionner une competence', [{text: 'OK', onPress: () => console.log('OK')}], { cancelable: true })
+                                    setLoading(false);
+                                   }
+                                   else{
+                                    const del = await axios.post('addCompetences', {
+                                        competence: [competence]
+                                    })
+                                    getUserSkills();
+                                    Alert.alert("Réussi", 'Compétence ajoutée au profil', [{text: 'OK', onPress: () => console.log('OK')}], { cancelable: true })
+                                    setLoading(false);
+                                    console.log(del.data);
+                                   }
+                                } catch (error) {
+                                    Alert.alert("Echec", JSON.stringify(error.response.data.message), [{text: 'OK', onPress: () => console.log('OK')}], { cancelable: true })
+                                    setLoading(false);
+                                }
+                            }}>
+                   <Text style={style1.textButton}>{
+                       isLoading ? <ActivityIndicator size="large" color="white" /> : "Ajouter"
+                   }</Text>
+                  </Pressable>
+
+                            
+                            <View style={{height:60}}></View>
+                            <Text style={style1.title}>Mes competences </Text>
+                        </View>}
+                            style={{ width: "100%",height:'100%' }}
                             renderItem={renderItem2}
                             data={skills}
                             keyExtractor={item => item.id.toString()}
                             onRefresh={fetchOffers}
                             refreshing={refreshing} 
                             scrollEnabled={true}
+                            ListEmptyComponent={<View style={{height:'100%', width:'100%', justifyContent:'center', alignItems:'center'}} >
+                                <View style={{borderColor:'gray', borderWidth:1, padding:10, height:40, backgroundColor:"red"}}>
+                                <Text style={{color:'white'}}>Aucune compétence ajoutée</Text>
+                                </View>
+                            </View>}
                         />
                         {/* <Text>
                             {JSON.stringify(skills)}
                         </Text> */}
                     </View>
             ) : (
-                <Text style={styles.titleText}>Loading...</Text>
+               <View style={{flex:1,height:"100%", alignItems:'center', justifyContent:'center'}}>
+               <ActivityIndicator size="large" color="black" />
+               </View>
             )}
         </View>
     );

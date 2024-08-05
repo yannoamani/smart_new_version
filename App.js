@@ -22,9 +22,10 @@ import AddSchedule from './pages/addschedule';
 import EditSchedule from './pages/editschedule';
 import Schedules from './pages/schedules';
 import Skills from './pages/competences';
+import Abonnement from './pages/abonnement';
 
 export default function App() {
-  axios.defaults.baseURL = 'http://192.168.1.4:8000/api/';
+  axios.defaults.baseURL = 'http://192.168.1.14:8000/api/';
   const setAuthorizationHeader = async () => {
     try {
       const token = await AsyncStorage.getItem('token');
@@ -130,6 +131,10 @@ export default function App() {
         }} />
         <ProfileStack.Screen name="Editer" component={EditSelf} options={{
            headerTitle: "Ajouter une expérience",
+           headerBackTitleVisible: false
+        }} />
+        <ProfileStack.Screen name="Abonnement" component={Abonnement} options={{
+           headerTitle: "Abonnement",
            headerBackTitleVisible: false
         }} />
         <ProfileStack.Screen name="AddSched" component={AddSchedule} options={{

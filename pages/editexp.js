@@ -1,5 +1,6 @@
-import { View, Text, Platform, Pressable, TextInput, Alert, ScrollView } from "react-native";
+import { KeyboardAvoidingView,View, Text, Platform, Pressable, TextInput, Alert, ScrollView,ActivityIndicator } from "react-native";
 import styles from '../styles';
+import experienceStyle from "../pages/styles/editExp";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 //import { Ionicons } from '@expo/vector-icons';
@@ -17,6 +18,7 @@ export default function EditExp({route}) {
     const [exp, setExp] = useState(expR ? expR.experience : "");
     const [company, setCompany] = useState(expR ? expR.entreprise : "");
     const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
+    const [loading, Setloading]=useState(false)
     const hideshowTimePicker = () => {
         if (isTimePickerVisible) {
         setTimePickerVisibility(false);
@@ -40,44 +42,61 @@ export default function EditExp({route}) {
         //console.log('expR : ', expR);
     }, []);
     return (
+        <KeyboardAvoidingView
+        style={{
+          // alignItems: "center",
+          flex: 1,
+          
+         
+        }}
+        behavior={"height"}
+      >
+        <View style={experienceStyle.container}>
         <ScrollView 
-            style={styles.containerOffer}
+            style={{flex:1}}
         >
+        <Text style={experienceStyle.title}>Modifier votre experience</Text>
             <View 
                 style={{
-                    alignItems: "center",
+                    // alignItems: "center",
                     flex: 1
                 }}
                 //behavior={'height'}
                 >
+                <View style={{height:20}}></View>
+                <Text style={experienceStyle.label}>Poste </Text>
+                <View style={{height:5}}></View>
                 <TextInput 
-                    style={styles.textInput}
-                    placeholder="Poste"
+                    style={experienceStyle.input}
+                    placeholder="Ajoutez un poste ici"
                     value={job}
                     onChangeText={(text) => {setJob(text)}}
                 />
+                <View style={{height:20}}></View>
+                 <Text style={experienceStyle.label}>Entreprise </Text>
+                <View style={{height:5}}></View>
                 <TextInput 
-                    style={styles.textInput}
-                    placeholder="Entreprise"
+                    style={experienceStyle.input}
+                    placeholder="Ajoutez l'entreprise ici "
                     value={company}
                     onChangeText={(text) => {setCompany(text)}}
                 />
-                <TextInput
-                    style={styles.textArea}
-                    placeholder="Description"
-                    multiline={true}
-                    //numberOfLines={4}
-                    value={exp}
-                    onChangeText={setExp}
-                />
+                
+                 <View style={{height:20}}></View>
+                 <Text style={experienceStyle.label}>Lieu</Text>
+                 <View style={{height:5}}></View>
                 <TextInput 
-                    style={styles.textInput}
+                    style={experienceStyle.input}
                     placeholder="Lieu"
                     value={place}
                     onChangeText={(text) => {setPlace(text)}}
                 />
+                  <View style={{height:20}}></View>
+                 <Text style={experienceStyle.label}>Date de debut</Text>
+                 <View style={{height:5}}></View>
                 <TextInput
-                    style={styles.textInput}
+                 readOnly={true}
+                    style={experienceStyle.input}
                     placeholder="Date (__/__/____)"
                     keyboardType="numeric"
                     value={hourstart}
@@ -87,8 +106,12 @@ export default function EditExp({route}) {
                       }}
                     onChangeText={handleTimeConfirm} // MM/DD/YYYY has 10 characters
                 />
+                <View style={{height:20}}></View>
+                 <Text style={experienceStyle.label}>Date de fin </Text>
+                 <View style={{height:5}}></View>
                 <TextInput
-                    style={styles.textInput}
+                readOnly={true}
+                    style={experienceStyle.input}
                     placeholder="Date (__/__/____)"
                     keyboardType="numeric"
                     value={hourend}
@@ -104,9 +127,28 @@ export default function EditExp({route}) {
                     onConfirm={handleTimeConfirm}
                     onCancel={hideshowTimePicker}
                   />
+                    
+                    <View style={{height:20}}></View>
+                 <Text style={experienceStyle.label}>Description </Text>
+                 <View style={{height:5}}></View>
+                <TextInput
+                    style={experienceStyle.textarea}
+                    placeholder="Ajoutez une description"
+                    multiline={true}
+                    //numberOfLines={4}
+                    value={exp}
+                    onChangeText={setExp}
+                />
+                    <View style={{height:30}}></View>
+
+                    
                     <Pressable 
+                    disabled={loading}
                         onPress={async () => {
-                            try {
+                            Setloading(true);
+                            try {  
+                              
+
                                 if (createFormattedDateExp(hourstart) === 'Invalid' || createFormattedDateExp(hourend) === 'Invalid') {
                                     // Alert.alert('Warning', 'Entrez des dates valides.', [
                                     //     { text: 'OK', onPress: () => console.log('OK Pressed') }
@@ -114,13 +156,15 @@ export default function EditExp({route}) {
                                     //   { cancelable: false })
                                     console.log('Invalide');
                                 } else {
+                                 
                                     const req = await axios.post('modifyExperience/'+ expR.id, {
                                         poste: job,
                                         lieu: place,
                                         dateDebut: createFormattedDateExp(hourstart),
                                         dateFin: createFormattedDateExp(hourend),
                                         experience: exp,
-                                        entreprise: company
+                                        entreprise: company,
+
                                     })
                                     setCompany('')
                                     setExp('')
@@ -128,6 +172,7 @@ export default function EditExp({route}) {
                                     setPlace('')
                                     handleHourStartChange('')
                                     handleHourEndChange('')
+                                    Setloading(false);
                                     Alert.alert('Succès', 'Expérience modifiée avec succès.', [
                                         { text: 'OK', onPress: () => console.log('OK') }
                                       ],
@@ -137,15 +182,20 @@ export default function EditExp({route}) {
                                 }
                             } catch (error) {
                                 console.log(error);
+                                Setloading(false);
                             }
                         }} 
-                        style={styles.Button}
+                        style={experienceStyle.button}
                     >
-                        <Text style={styles.buttonText}>
-                            OK
+                        <Text style={experienceStyle.textButton}>
+                           {
+                            loading ?<ActivityIndicator size="large" color={'white'}/> : 'Modifier'
+                           }
                         </Text>
                     </Pressable>
             </View>
         </ScrollView>
+        </View>
+        </KeyboardAvoidingView>
     )
 }

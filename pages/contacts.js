@@ -100,6 +100,12 @@ export default function Contacts() {
                         keyExtractor={item => item.pivot.id}
                         onRefresh={fetchOffers}
                         refreshing={refreshing}
+                        ListEmptyComponent={
+                        <View style={{  }}>
+                            <Text style={{ color: "gray", fontSize: 20, textAlign: "center",  }} >Aucune donnée</Text>
+                        </View>
+                        
+                        }
                     />
                 ) : (
                     <Text style={styles.titleText}>Aucune donnée</Text>
