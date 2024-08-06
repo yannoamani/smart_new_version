@@ -59,24 +59,27 @@ export default function AppliancesList() {
             <View style={styles.card}>
             <View style={styles.item}>
                
-                   <View style={styles.image}>
+                   <View >
              {
-                item.pivot.recruit==1?  <Ionicons name="checkmark-circle" size={30} color="green"></Ionicons>: <Ionicons name="hourglass" size={30} color="orange"></Ionicons>
+                item.pivot.recruit==1?  <Ionicons name="checkmark-circle" size={25} color="#1A9E47"></Ionicons>: <Ionicons name="hourglass" size={25} color="#FFD233"></Ionicons>
              }
                    </View>
                    <View style={{width:3}}></View>
-                   <Text  style={styles.title}  numberOfLines={1}
-        ellipsizeMode="tail">{item.nom_offre.toUpperCase()} - {item.entreprise.nom.toUpperCase()}</Text>
+                 <View>
+                 <Text  style={styles.title}  numberOfLines={1}
+        ellipsizeMode="tail">{item.nom_offre} - {item.entreprise.nom}</Text> 
+        <Text  style={styles.sub}  numberOfLines={1}>{item.categorie.categorie}</Text>
+                 </View>
            <View style={{height:10}}></View>
          
                   </View>
-                  <Text style={styles.categorie}>{item.categorie.categorie}</Text>
-         <View style={{height:10}}></View>
+                
+         <View style={{height:20}}></View>
          <View style={styles.containerRow}></View>
          <View style={styles.containerRow}>
          <Ionicons
                 name={ "location-sharp"}
-                color={'gray'}  
+                color={'black'}  
                 size={24}
               ></Ionicons>
               <View style={{width:5}}></View>

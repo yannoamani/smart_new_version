@@ -1,4 +1,4 @@
-import { FlatList,useWindowDimensions,SafeAreaView, View, Text,Image, ScrollView, Pressable, Modal, TextInput, Alert } from "react-native";
+import { FlatList,useWindowDimensions,SafeAreaView, StyleSheet,View, Text,Image, ScrollView, Pressable, Modal, TextInput, Alert } from "react-native";
 import styles from '../styles';
 import React, { useEffect, useState } from "react";
 import axios from "axios";
@@ -8,6 +8,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { displayDate } from "../Utils";
 import Loader from '../components/loader';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+
 
 export default function Appliance({route}) {
      const { width } = useWindowDimensions();
@@ -85,43 +86,85 @@ export default function Appliance({route}) {
             
             >
                 {
-                    <View >
+                    <View  style={{flex:1}}>
                    <View style={{height:60, width:60, alignItems:'center', justifyContent:'center', alignSelf:'center'}}>
-                   <Image source={{uri:'https://new.newpowerjuca.com/templates/empower/images/job.png'}} style={{height:'100%', width:'100%'}}></Image>
+                   <Image source={require('../assets/emploijeune.png')} style={{height:'100%', width:'100%'}}></Image>
                    </View>
+                   <View height={15}></View>
+                   <Text style={Monstyles.Title}>{detailsOffres.nom_offre.toUpperCase()}</Text>
                    <View style={{height:10}}></View>
-                   <Text style={{fontSize:20, fontWeight:'bold', textAlign:'center'}}>{detailsOffres.nom_offre}</Text>
-                   <View style={{height:10}}></View>
-                   <Text style={{fontSize:20,color:'#1e90ff', textAlign:'center'}}>{detailsOffres.entreprise.nom.toUpperCase()}</Text>
-                   <View style={{height:15}}></View>
-                   <View style={{flexDirection:'row',flexWrap:'wrap',  flex:1, justifyContent:'center', alignItems:'center'}}>
-                    <View style={{flexDirection:'row', backgroundColor:'#1e90ff', borderRadius:5, padding:5, justifyContent:'center', alignItems:'center',margin:2}}>
-                    <Ionicons name="location-sharp" size={20} color="white" />
-                    <Text style={{color:'white', marginLeft:5}}>{detailsOffres.lieu}</Text>
-                    </View>
-                    <View style={{flexDirection:'row', backgroundColor:'#1e90ff', borderRadius:5, padding:5, justifyContent:'center', alignItems:'center',margin:2}}>
-                    <Text style={{color:'white'}}>$</Text>
-                    <Text style={{color:'white', marginLeft:2}}>{detailsOffres.salaire} FCFA</Text>
-                    </View>
-                    <View style={{flexDirection:'row', backgroundColor:'#1e90ff', borderRadius:5, padding:5, justifyContent:'center', alignItems:'center',margin:2}}>
-                    <Ionicons name="briefcase" size={20} color="white" />
-                    <Text style={{color:'white', marginLeft:5}}>{detailsOffres.categorie.categorie}</Text>
-                    </View>
-                    <View style={{flexDirection:'row', backgroundColor:'#1e90ff', borderRadius:5, padding:5, justifyContent:'center', alignItems:'center',margin:2}}>
-                    <Ionicons name="mail" size={20} color="white" />
-                    <Text style={{color:'white', marginLeft:5}}>{detailsOffres.entreprise.email}</Text>
-                    </View>
-                    <View style={{flexDirection:'row', backgroundColor:'#1e90ff', borderRadius:5, padding:5, justifyContent:'center', alignItems:'center',margin:2}}>
-                    <Ionicons name="call" size={20} color="white" />
-                    <Text style={{color:'white', marginLeft:5}}>{detailsOffres.entreprise.contact}</Text>
-                    </View>
-                    <View style={{flexDirection:'row', backgroundColor:'#1e90ff', borderRadius:5, padding:5, justifyContent:'center', alignItems:'center',margin:2}}>
-                   
-                    <Text style={{color:'white', marginLeft:5}}>{detailsOffres.nbre_person} personnes </Text>
-                    </View>
-                   </View>
-                   <View style={{height:10}}></View>
-                   <Text style={{fontSize:20, fontWeight:'bold', }}>Descriptionde l'offre</Text>
+                   <Text style={Monstyles.souTitre}>{detailsOffres.entreprise.nom}</Text>
+                   <View height={15}></View>
+                   <View style={Monstyles.container}>
+       
+   
+      
+   <View style={{height:15}}></View>
+        <View style={{flexDirection:'row', alignItems:'center', width:'100%'}}>
+   <Ionicons
+              name={ "location-outline"}
+              color={'black'}
+              size={20 } />
+              <View style={{width:10}}></View>
+           
+              
+   <Text style={Monstyles.info}>{detailsOffres.lieu}</Text>
+   </View>
+   <View style={{height:15}}></View>
+        <View style={{flexDirection:'row', alignItems:'center', width:'100%'}}>
+   <Ionicons
+              name={ "mail-outline"}
+              color={'black'}
+              size={20 } />
+              <View style={{width:10}}></View>
+           
+              
+   <Text style={Monstyles.info}>{detailsOffres.entreprise.email}</Text>
+   </View>
+   <View style={{height:15}}></View>
+        <View style={{flexDirection:'row', alignItems:'center', width:'100%'}}>
+   <Ionicons
+              name={ "call-outline"}
+              color={'black'}
+              size={20 } />
+              <View style={{width:10}}></View>
+              
+   <Text  style={Monstyles.info}>{detailsOffres.entreprise.contact}</Text>
+   </View>
+   <View style={{height:15}}></View>
+      {
+        detailsOffres.salaire==null?null:  <View style={{flexDirection:'row', alignItems:'center', width:'100%'}}>
+   <Ionicons
+              name={ "cash"}
+              color={'gray'}
+              size={20 } />
+              <View style={{width:10}}></View>
+              
+   <Text  style={Monstyles.info}>{detailsOffres.salaire} FCFA </Text>
+   </View>
+      }
+        <View style={{height:15}}></View>
+       
+        <View style={{flexDirection:'row', alignItems:'center', width:'100%'}}>
+   <Ionicons
+              name={ "person-outline"}
+              color={'black'}
+              size={20 } />
+              <View style={{width:10}}></View>
+              
+   <Text  style={Monstyles.info}>{detailsOffres.nbre_person} Personne(s)</Text>
+   </View>
+ 
+   
+        
+      
+     
+
+        </View>
+                  
+                  
+                   <View style={{height:20}}></View>
+                   <Text style={{fontSize:20, fontWeight:'bold', }}>DESCRIPTION DE L'OFFRE</Text>
                    <View style={{height:10}}></View>
                    <RenderHtml
        contentWidth={width}
@@ -139,83 +182,19 @@ export default function Appliance({route}) {
                 
                      
                      
-                    
-                        {/* <Text style={styles.titleText}>
-                            <Ionicons name="briefcase" size={25} /> &nbsp;
-                            {data.nom_offre} ({data.categorie.categorie.toUpperCase()})
-                        </Text>
-                        {desc ? 
-                            <Text style={styles.basicText}>
-                                {
-                                    desc.join('\n')
-                                }
-                            </Text>
-                            : (
-                            <Text style={{ textAlign: 'center' }}>
-                                ...
-                            </Text>
-                        )}
-                        <Text style={{
-                            borderBottomWidth: 1,
-                            fontSize: 20,
-                            fontWeight: 'bold',
-                            textAlign: 'center',
-                            // paddingHorizontal: '20%',
-                            marginBottom: '2%',
-                            marginTop: '2%'
-                        }}>
-                            Détails de l'offre :
-                        </Text>
-                        <Text style={styles.basicText}>
-                            <Ionicons name="calendar-outline" size={20} color="#87CEEB" /> &nbsp;
-                            Periode : Du {data.debut} au {data.fin}
-                        </Text>
-                        <Text style={styles.basicText}>
-                            <Ionicons name="location-outline" size={20} color="#87CEEB" /> &nbsp;
-                            Lieu : {data.lieu}
-                        </Text>
-                        <Text style={styles.basicText}>
-                            <Ionicons name="contrast-outline" size={20} color="#87CEEB" /> &nbsp;
-                            Paiement par : {data.pointage}
-                        </Text>
-                        <Text style={styles.basicText}>
-                            <Ionicons name="cash-outline" size={20} color="#87CEEB" /> &nbsp;
-                            Salaire : {data.salaire}
-                        </Text>
-                        <Text style={{
-                            borderBottomWidth: 1,
-                            fontSize: 20,
-                            fontWeight: 'bold',
-                            textAlign: 'center',
-                            // paddingHorizontal: '20%',
-                            marginBottom: '2%',
-                            marginTop: '2%'
-                        }}>
-                            Détails de l'entreprise :
-                        </Text>
-                        <Text style={styles.basicText}>
-                            <Ionicons name="business-outline" size={20} color="#87CEEB" /> &nbsp;
-                            Entreprise : {data.entreprise.nom}
-                        </Text>
-                        <Text style={styles.basicText}>
-                            <Ionicons name="mail-outline" size={20} color="#87CEEB" /> &nbsp;
-                            Mail : {data.entreprise.email}
-                        </Text> */}
                         <Modal 
                             visible={isModalVisible}
                             animationType='slide'
                         >
-                            <SafeAreaView style={{flex:1,}}>
+                            <View style={Monstyles.header}>
+                                <Ionicons name="arrow-back-outline" onPress={() => setModalVisible(false)} size={30} color="white" style={Monstyles.back}></Ionicons>
+                                <Text style={Monstyles.headerText}>Commenter offre</Text>
+                            </View>
+                           
                             <View style={{flex:1,padding:10,alignItems:'center',justifyContent:'center'}}>
-                                {/* <TextInput
-                                    placeholder='Entrez votre note'
-                                    value={note}
-                                    onChangeText={text => setNote(text)}
-                                    style={styles.textInput}
-                                    keyboardType="numeric"
-                                /> */}
-                                <Text style={{fontSize:20,fontWeight:'bold'}}>
-                                    Comment vous avez apprecie l'offre ?  
+                             
+                                <Text style={Monstyles.titleReset}>
+                                    Quelle est votre appreciation pour cette offre?  
                                 </Text>
                                 <View style={{height:10}}></View>
                                 <Loader loading={loading} />
@@ -232,48 +211,32 @@ export default function Appliance({route}) {
                                     value={comment}
                                     placeholderTextColor={'grey'}
                                     onChangeText={text => setComment(text)}
-                                    style={{height:150,borderRadius:10,width:'100%',borderWidth:1,borderColor:'black',padding:10}}
+                                    style={Monstyles.inputCustom}
                                     multiline={true}
                                 />
                                 {/* <Loader loading={loading} /> */}
-                                <View style={{height:20}}></View>
+                                <View style={{height:40}}></View>
                                 <Pressable 
                                     onPress={rateComp} 
-                                    style={{backgroundColor:'#1e90ff',padding:10,borderRadius:10,width:'100%'}}
+                                    style={Monstyles.button}
+                                    
                                 >
-                                    <Text style={{textAlign:'center',fontSize:20,color:'white'}}>
-                                    Commenter
+                                
+                                   <Text style={{textAlign:'center',fontSize:20,color:'white'}}>
+                                    Envoyer
                                     </Text>
+                                  
                                 </Pressable>
                                 <View style={{height:20}}></View>   
-                                <Pressable 
-
-                                    onPress={() => {
-                                        setModalVisible(!isModalVisible)
-                                    }} 
-                                    style={{backgroundColor:'red',padding:10,borderRadius:10,color:'white'}}
-                                >
-                                    <Text style={{color:'white'}}>
-                                        Retour
-                                    </Text>
-                                </Pressable>
+                               
                             </View>
-                            </SafeAreaView>
+                        
                         </Modal>
                         
                         {/* && data.offre_student.avis == null */}
                         {
                             (detailsOffres.pivot.recruit==1 ) ? 
-                            <View style={{
-                                backgroundColor: '#1e90ff',
-                                width: "30%",
-                                marginTop: 10,
-                                alignSelf: 'center',
-                                borderRadius: 10,
-                                height:50,
-                                width:'100%',
-                                padding: "2%"
-                            }}><Pressable  onPress={async () => {
+                           <Pressable  style={Monstyles.button} onPress={async () => {
                                 try {
                                     setModalVisible(!isModalVisible)
                                     console.log(data)
@@ -281,15 +244,10 @@ export default function Appliance({route}) {
                                     console.log(error);
                                 }
                             }}>
-                                <Text style={{
-                                    textAlign: 'center',
-                                    fontSize: 20,
-                                    color: 'white',
-                                    fontWeight:"bold"
-                                }}>
+                                <Text style={Monstyles.textbutton}>
                                     Commenter
                                 </Text>
-                            </Pressable></View> : <></>
+                            </Pressable> : <></>
                         }
                     </View>
                }
@@ -297,3 +255,136 @@ export default function Appliance({route}) {
             </View>
     )
 }
+
+
+const Monstyles = StyleSheet.create({
+    container: {
+        flex: 1,
+        padding: 15,
+        borderRadius: 16,
+        backgroundColor: '#fff',
+       
+        shadowColor: '#000', // Couleur de l'ombre
+        shadowOffset: { width: 0, height: 4 }, // Décalage de l'ombre
+        shadowOpacity: 0.5,
+        shadowRadius: 2, // Rayon de l'ombre
+       
+      },
+      detailoffre:{
+        color:'black',
+        fontSize: 14,
+        fontWeight:'500',
+        marginBottom:10
+
+      },
+      subtile:{
+        flexDirection:'row', alignItems:'center', width:'100%',flex: 1
+      },
+      nom_entreprise:{
+        color:'#F38B2B',
+        fontWeight:'300',
+        fontSize: 15
+      },
+      location:{
+        color:'black',
+        fontWeight:'500',
+        fontSize: 15
+      },
+      info:{
+        color:'black',
+        fontWeight:'500',
+        fontSize: 10,
+        flex: 1
+      },
+      date:{
+        color:'#FF0000',
+        fontWeight:'500',
+        fontSize: 10
+      },
+      titleDescription:{
+        color:'#F38B2B',
+        fontWeight:'500',
+        fontSize: 24,
+        textAlign:'center'
+      },
+      Title:{
+        color:'#F38B2B',
+        textAlign:'center',
+        fontSize: 24,
+        fontWeight:'500',
+
+      },
+      souTitre:{
+        color:'#000000',
+        fontWeight:'300',
+        textAlign:'center'
+      },
+      button:{
+        backgroundColor: '#F38B2B',
+        width: '100%',
+        elevation: 5,
+        borderRadius: 10,
+        
+        height: 40,
+        alignItems: 'center',
+        justifyContent: 'center',
+        shadowColor: '#000', // Couleur de l'ombre
+        shadowOffset: { width: 0, height: 4 }, // Décalage de l'ombre
+        shadowOpacity: 0.5,
+        shadowRadius: 4, // Rayon de l'ombre
+       
+        elevation: 10, 
+       
+            
+       
+    },
+    textbutton:{
+        color:'#FFFFFF',
+        fontSize: 20,
+    },
+
+header:{
+    height: 100,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#F38B2B',
+    position:'relative',
+    
+  },
+  back:{
+    position:'absolute',
+    left:10,
+   bottom:20
+  },
+  titleReset:{
+    fontSize: 13,
+    fontWeight: '700',
+  },
+  headerText:{
+position:'absolute',
+bottom:10,
+fontWeight:'700',
+fontSize:20
+    
+    
+  },
+  inputCustom:{
+     
+  
+    borderColor:'#F38B2B',
+    borderWidth:1,
+    borderRadius:10,
+    borderLeftColor: '#F38B2B',
+    borderRightColor: '#1A9E47',
+   //  borderBlockEndColor: '#1A9E47',
+   //  borderBlockStartColor: '#F38B2B',
+    borderRightColor: '#1A9E47',
+    borderLeftColor: '#1A9E47',
+    paddingLeft:20,
+    padding:10,
+    height:185,
+    width: '100%',
+    
+    },
+})
+

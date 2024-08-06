@@ -3,19 +3,24 @@ import { StyleSheet } from "react-native";
 const style= StyleSheet.create({
  container:{
     flex: 1,
-    padding:5
+    padding:10,
+    backgroundColor:'#F1F2F4'
  },
  
  card:{
     backgroundColor: 'white',
         borderRadius: 10,
-        borderWidth: 1  ,
+        
         borderColor: 'gray',
         padding: 10,
-        margin: 5,
+        marginTop: 20,
+        
+  shadowOffset: { width: 0, height: 4 }, // Décalage de l'ombre
+  shadowOpacity: 0.5,
+  shadowRadius: 2, // Rayon de l'ombre
  },
  item:{
-    flexDirection:'row', alignItems:'center', width:'100%'
+    flexDirection:'row', alignItems:'center', alignSelf:'center', width:'100%', 
  },
  
  image:{
@@ -29,12 +34,11 @@ const style= StyleSheet.create({
         fontFamily:'poppins',
        color: "black",
        fontFamily: "serif",
-       fontSize: 14,
-       fontWeight: 'bold',
+       fontSize: 15,
+       fontWeight: '500',
        textAlign: 'left',
        alignContent: 'flex-start',
-       justifyContent: 'flex-center',
-       alignSelf: 'center',
+     
     //    flex:1
 },
 categorie:{
@@ -53,6 +57,12 @@ publication:{
      textAlign: 'right',
      alignContent: 'flex-end',
      
+},
+sub:{
+   fontSize: 15,
+   fontWeight:'500',
+   color:'black',
+   marginTop: 4
 }
 });
 export default style

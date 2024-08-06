@@ -1,4 +1,4 @@
-import { FlatList, View, Image, Text, ScrollView, Alert } from "react-native";
+import { FlatList, View, SafeAreaView,Image, Text, ScrollView,StyleSheet, Alert } from "react-native";
 import styles from "../styles";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
@@ -7,6 +7,7 @@ import { displayDate } from "../Utils";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { Pressable } from "react-native";
+
 
 export default function Profile() {
   const [data, setData] = useState();
@@ -91,31 +92,58 @@ export default function Profile() {
     return () => clearInterval(intervalId);
   }, []);
   return (
+    <View style={{flex:1}}>
+      <View style={style.header}>
+       <SafeAreaView>
+        <Text style={style.title}>Profil</Text>
+        <View style={{height:10}}></View>
+       <View style={style.row}>
+       <View style={style.circle}>
+          <Image source={require("../assets/avatar.png")} style={style.image}></Image>
+        </View>
+      <View>
+        
+      <Text style={style.name}>{ data ? data.prenoms + " " + data.nom : " " }</Text>
+      <View height={10}></View>
+      {skills ? 
+                        <Text numberOfLines={3} ellipsizeMode="tail" style={{ flexGrow:1, flex:1, textAlign: 'center', alignSelf:"center", alignItems: 'center',justifyContent: 'center', }}>
+                            {
+                            skills.map((skill, index) => (
+                             <View style={{flexWrap:'wrap'}}>
+                               <View key={index} style={style.competence}>
+                              <Text style={{ color: "white"}} > {skill.competence}</Text>
+                              </View>
+                             </View>
+                             
+                                
+                            ))
+                            }
+                        </Text>                      
+                        : (
+                        <Text style={{ 
+                                textAlign: 'center',
+                                // fontSize: 18,
+                            }}
+                        >
+                            Néant
+                        </Text>
+                    )}
+
+      </View>
+       </View>
+       </SafeAreaView>
+      </View>
     <View style={{ flex: 1, padding: 10 }}>
       <ScrollView style={{ flex: 1 }}>
         {data ? (
           <View>
-            <View
-              style={{
-                height: 120,
-                width: 120,
-                borderRadius: 50,
-                // borderColor: "gray",
-                // borderWidth: 1,
-                alignSelf: "center",
-              }}
-            >
-            <Ionicons name="person-circle" size={100} color="gray"  />
-             
-            </View>
-            <Text style={styles.titleText}>
-              {/* <Ionicons name="briefcase" size={25} /> &nbsp; */}
-              {data.nom + " " + data.prenoms}
-            </Text>
-            <View height={10}></View>
+            
+        
+            {/* <View height={10}></View> */}
 
-            {skills ? 
+            {/* {skills ? 
                         <Text numberOfLines={3} ellipsizeMode="tail" style={{ textAlign: 'center', alignSelf:"center", alignItems: 'center',justifyContent: 'center', }}>
+                          
                             {
                             skills.map((skill, index) => (
                               <View key={index} style={{ backgroundColor: "#00bfff",padding:4, borderRadius: 5, margin: 5 }}>
@@ -132,9 +160,9 @@ export default function Profile() {
                                 // fontSize: 18,
                             }}
                         >
-                            Néant
+                            Pas de competence
                         </Text>
-                    )}
+                    )} */}
             {/* <Text style={{
                         borderBottomWidth: 1,
                         // paddingHorizontal: '20%',
@@ -581,7 +609,7 @@ export default function Profile() {
                             try {
                                 axios.get('auth_logout')
                                 await AsyncStorage.multiRemove(['user', 'token'])
-                                navigation.navigate('Auth')
+                                navigation.navigate('Login')
                             } catch (error) {
                                 console.log(error);
                             }
@@ -675,5 +703,64 @@ export default function Profile() {
         {/* </View> */}
       </ScrollView>
     </View>
+    </View>
   );
 }
+
+const style=StyleSheet.create({
+  header: {
+    height:'20%',
+    width: '100%',
+    backgroundColor:'#F38B2B',
+    flexDirection:'column',
+    padding:16
+    
+  },
+  title:{
+    color:'black',
+    fontSize:15,
+    fontWeight:'700'
+
+  },
+  circle:{
+    height:51,
+    width:49,
+    backgroundColor:'white',
+    borderRadius:50,
+    padding:5,
+    marginRight:15
+   
+    
+  },
+  image:{
+    height:'100%',
+    width:'100%',
+    resizeMode:'cover',
+    borderRadius:50
+  },
+  row:{
+    flexDirection:'row',
+    alignItems:'center',
+   
+    marginTop:10
+  },
+  name:{
+    fontWeight:'700',
+    fontSize:14
+  },
+  competence:{
+    paddingHorizontal:5,
+    paddingVertical:2,
+    
+    borderRadius:10,
+    borderWidth:1,
+    borderColor:'white',
+    marginRight:5
+
+  }, 
+  textCompetence:{
+    fontSize:10,
+    fontWeight:'500',
+    color:'white'
+  }
+})  

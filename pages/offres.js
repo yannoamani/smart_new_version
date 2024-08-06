@@ -7,6 +7,7 @@ import {
   ScrollView,
   Alert,
   LogBox,
+  StyleSheet
 } from "react-native";
 import styles from "../styles";
 import style1 from "../offerStyle.js";
@@ -36,6 +37,7 @@ export default function List() {
       }
       const res = await axios.get("list_offres");
       setData(res.data.data);
+      console.log(res.data.data[0]);
       setRefreshing(false);
     } catch (error) {
       console.log(error);
@@ -97,63 +99,25 @@ export default function List() {
   const renderItem = ({ item }) => {
     const time = displayDate(item.created_at);
     return (
-      <View style={offerStyle.card}>
+      <View style={ mystyle.container}>
         <Pressable
           onPress={() => {
             //  navigation.navigate("Offer", { id: item.id, already: item });
             getData(item);
           }}
         >
-         <View style={offerStyle.item}>
-         <View style={offerStyle.image}>
-            <Image
-              source={{
-                uri: "https://new.newpowerjuca.com/templates/empower/images/job.png",
-              }}
-              style={offerStyle.imageSize}
-            />
+          <Text style={mystyle.titleText}>{item.nom_offre.toUpperCase()}</Text>
+          <Text style={mystyle.lieu}>{item.lieu}</Text>
+          
+          <Text style={mystyle.entreprise}>{item.entreprise.nom}</Text>
+          <View style={mystyle.rowinfo}>
+          <View style={mystyle.contimage}>
+            <Image source={require("../assets/emploijeune.png")} style={mystyle.image}></Image>
           </View>
-          <View style={{width:'2%'}}></View>
-          <Text  style={offerStyle.title}  numberOfLines={1}
-        ellipsizeMode="tail">{item.nom_offre.toUpperCase()} - {item.entreprise.nom.toUpperCase()}</Text>
-         </View>
-         <View style={{height:10}}></View>
-         <Text style={offerStyle.categorie}>{item.categorie.categorie}</Text>
-         <View style={{height:10}}></View>
-         <View style={offerStyle.containerRow}>
-         <Ionicons
-                name={ "location-sharp"}
-                color={'gray'}  
-                size={24}
-              ></Ionicons>
-              <View style={{width:5}}></View>
-              <Text style={offerStyle.categorie}>{item.lieu}</Text>
-              
-            
+          <Text  numberOfLines={3} ellipsizeMode="tail" style={mystyle.description}> {item.description.toUpperCase().replace(/<[^>]*>|&nbsp;/g, ' ').trim().toUpperCase().split('  ')}</Text>
 
-         </View>
-         {/* <View style={{height:10}}></View> */}
+          </View>
         
-        {/* <Text style={style1.expire}>L'offre prend fin le {item.fin.split(' ')[0]}</Text> */}
-
-
-
-
-          <Text style={style1.posteItem}>
-            {/* {token}
-                        Offre : {item.nom_offre.toUpperCase()} ({item.categorie.categorie}) {"\n"}
-                        Du {item.debut.split(' ')[0]} au {item.fin.split(' ')[0]} */}
-          </Text>
-          {/* <Text style={styles.itemText}>
-            Lieu : {item.lieu.toUpperCase()}, Employeur :{" "}
-            {item.entreprise.nom.toUpperCase()}
-          </Text>
-          <Text style={styles.itemText}>
-            Posté le : {time.date} à {time.hour}
-          </Text> */}
-          <Text style={offerStyle.publlication}>
-            Posté le {time.date} à {time.hour}
-          </Text>
         </Pressable>
       </View>
     );
@@ -186,3 +150,63 @@ export default function List() {
     </View>
   );
 }
+
+const mystyle = StyleSheet.create({
+  container: {
+  padding: 15,
+  borderRadius: 15,
+  backgroundColor: "white",
+ 
+ 
+ 
+  marginTop: 30,
+  shadowColor: '#000', // Couleur de l'ombre
+  shadowOffset: { width: 0, height: 4 }, // Décalage de l'ombre
+  shadowOpacity: 0.5,
+  shadowRadius: 2, // Rayon de l'ombre
+ 
+
+
+  },
+  titleText: {
+    fontSize: 14,
+    fontWeight: "500",
+    color: "#F38B2B",
+    marginBottom: 7,
+  },
+  lieu: {
+    fontSize: 10,
+    fontWeight: "500",
+    color: "#000",
+    marginBottom: 7,
+  },
+  entreprise: {
+    fontSize: 10,
+    fontWeight: "300",
+    color: "#000",
+    marginBottom: 7,
+  },
+  rowinfo: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  contimage:{
+    width: 43,
+    height: 43,
+   
+    marginRight: 10,
+   
+  },
+  image:{
+  width: "100%",
+  height: "100%",
+ resizeMode: "contain"
+  },
+  description: {
+    fontSize: 10,
+    fontWeight: "300",
+    color: "#000000",
+  flex: 1
+  },
+});

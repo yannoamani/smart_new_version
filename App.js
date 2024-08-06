@@ -23,9 +23,11 @@ import EditSchedule from './pages/editschedule';
 import Schedules from './pages/schedules';
 import Skills from './pages/competences';
 import Abonnement from './pages/abonnement';
+import OnboardingPage from './pages/onboarding_page';
+import SplahScreen from './pages/splah_screen';
 
 export default function App() {
-  axios.defaults.baseURL = 'http://192.168.1.14:8000/api/';
+  axios.defaults.baseURL = 'http://192.168.1.6:8000/api/';
   const setAuthorizationHeader = async () => {
     try {
       const token = await AsyncStorage.getItem('token');
@@ -70,7 +72,7 @@ export default function App() {
     return (
       <OfferStack.Navigator screenOptions={{
         headerStyle: {
-          backgroundColor: '#87CEEB',
+          backgroundColor: '#F38B2B',
         }
       }}>
         <OfferStack.Screen name="Offres" component={OffersList} options={{}} />
@@ -85,7 +87,7 @@ export default function App() {
     return (
       <ContactsStack.Navigator screenOptions={{
         headerStyle: {
-          backgroundColor: '#87CEEB',
+          backgroundColor: '#F38B2B',
         }
       }}>
         <ContactsStack.Screen name="Contacts" component={Contacts} options={{}} />
@@ -100,7 +102,7 @@ export default function App() {
     return (
       <ApplianceStack.Navigator screenOptions={{
         headerStyle: {
-          backgroundColor: '#87CEEB',
+          backgroundColor: '#F38B2B',
         }
       }}>
         <ApplianceStack.Screen name="Appliances" component={AppliancesList} options={{
@@ -118,11 +120,12 @@ export default function App() {
     return (
       <ProfileStack.Navigator screenOptions={{
         headerStyle: {
-          backgroundColor: '#87CEEB',
+          backgroundColor: '#F38B2B',
         }
       }}>
         <ProfileStack.Screen name="Profile" component={Profile} options={{
           headerTitle: "Profil",
+          headerShown: false,
           headerBackTitleVisible: false
         }}/>
         <ProfileStack.Screen name="Skills" component={Skills} options={{
@@ -159,6 +162,8 @@ export default function App() {
   function AuthStackScreen() {
     return (
       <AuthStack.Navigator screenOptions={{headerShown: false}}>
+        <AuthStack.Screen name="Splash" component={SplahScreen} />
+        <AuthStack.Screen name="onboarding" component={OnboardingPage} />
         <AuthStack.Screen name="Login" component={Login} />
         <AuthStack.Screen name="Signin" component={Signin} />
       </AuthStack.Navigator>
@@ -168,7 +173,19 @@ export default function App() {
       <NavigationContainer>
         <Tab.Navigator screenOptions={({ route }) => ({
           headerStyle: {
-            backgroundColor: '#87CEEB',
+            backgroundColor: '#F38B2B',
+          },
+          tabBarStyle: {
+            backgroundColor: '#F38B2B',
+            
+            
+            
+          },
+          tabBarActiveTintColor: '#1A9E47',
+          tabBarInactiveTintColor: 'white',
+          
+          tabBarLabelStyle: {
+            fontSize: 10,
           },
           tabBarIcon: ({ color, size }) => {
             let iconName;
@@ -184,7 +201,7 @@ export default function App() {
             }
 
             // You can return any component here, not just Ionicons!
-            return <Ionicons name={iconName} size={size} color={color} />;
+            return <Ionicons name={iconName} size={size} color={'white'} />;
           },
           tabBarVisible: route.name !== 'Auth',
           })}
@@ -200,6 +217,7 @@ export default function App() {
             <Tab.Screen name="OffresTab" component={OffersStackScreen} options={{
               title: 'Offres',
               headerShown: false,
+              
             }} />
             <Tab.Screen name="AppliancesTab" component={AppliancesStackScreen} options={{
               title: 'Mes Postulations',
