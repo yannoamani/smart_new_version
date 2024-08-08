@@ -1,4 +1,4 @@
-import { FlatList,ActivityIndicator, View, Text, Pressable, Alert } from "react-native";
+import { FlatList,ActivityIndicator, View,  StyleSheet,Text, Pressable, Alert } from "react-native";
 import styles from '../styles';
 import style1 from '../pages/styles/editExp';
 import React, { useEffect, useState } from "react";
@@ -123,19 +123,10 @@ export default function Skills() {
 
     const renderItem2 = ({ item }) => {
         return (
-            <View style={{
-                //width: "98%",
-                borderWidth: 2,
-                borderColor: '#87CEEB',
-                backgroundColor: '#87CEEB',
-                //marginBottom: 5,
-                padding: "4%",
-                margin: "2%",
-                borderRadius: 15,
-                // backgroundColor: 'gray'
-              }}>
+           <View  style={style.card}>
+             
                 <Text style={{
-                    color: 'white',
+                    color: 'black',
                     // textAlign: 'left',
                     paddingHorizontal: "2%",
                     //height: '60%'
@@ -160,22 +151,21 @@ export default function Skills() {
                         ], { cancelable: true })
                         
                     }}
-                    style={{
-                    position: "absolute",
-                    right: '2%',
-                    top: '20%',
-                    //margin: '2%'
-                    }}
+                  
                     name="trash-outline"
-                    size={30}
-                    color="white"
+                    size={20}
+                    color="red"
                 />
-            </View>
+                
+              
+               
+          
+           </View>
         );
     };
 
     return (
-        <View style={{flex: 1,paddingTop: "2%", width: "100%"}}>
+        <View style={{flex: 1,paddingTop: "2%", width: "100%",backgroundColor:'#F1F2F4'}}>
             {data || skills ? (
                     <View style={{flex:1}}>
                         {/* <Text>
@@ -206,7 +196,7 @@ export default function Skills() {
                         <FlatList
                         // style={{width:'100%', height:'100%'}}
                          ListHeaderComponent={<View style={{padding: "2%"}}>
-                         <Text style={style1.title}>Ajouter une competence</Text>
+                         <Text style={style1.title}>Ajouter une competence / supprimer une competence</Text>
                          <View style={{height:20}}></View>
                             <Dropdown 
                  style={style1.dropdown}
@@ -228,7 +218,7 @@ export default function Skills() {
         }}
                 labelField={"competence"}
                  ></Dropdown>
-                  <View style={{height:10}}></View>
+                  <View style={{height:20}}></View>
                   <Pressable style={style1.button}  onPress={ async () => {
                                setLoading(true);
                                 try {
@@ -257,10 +247,10 @@ export default function Skills() {
                   </Pressable>
 
                             
-                            <View style={{height:60}}></View>
-                            <Text style={style1.title}>Mes competences </Text>
+                            <View style={{height:50}}></View>
+                            {/* <Text style={style1.title}>Mes competences </Text> */}
                         </View>}
-                            style={{ width: "100%",height:'100%' }}
+                            style={{ width: "100%",height:'100%', paddingHorizontal: 15 }}
                             renderItem={renderItem2}
                             data={skills}
                             keyExtractor={item => item.id.toString()}
@@ -285,3 +275,23 @@ export default function Skills() {
         </View>
     );
 }
+
+const style= StyleSheet.create({
+    card:{
+        width: "100%",
+         padding: "4%",   
+         backgroundColor: 'white',
+         flexDirection: "row",
+         justifyContent: "space-between",
+         alignItems: "center",
+         borderBottomColor: 'gray',
+         borderBottomWidth: 1,
+         
+        
+
+       
+
+
+        }
+
+})

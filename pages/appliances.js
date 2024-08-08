@@ -61,7 +61,7 @@ export default function AppliancesList() {
                
                    <View >
              {
-                item.pivot.recruit==1?  <Ionicons name="checkmark-circle" size={25} color="#1A9E47"></Ionicons>: <Ionicons name="hourglass" size={25} color="#FFD233"></Ionicons>
+                item.pivot.recruit==1?  <Ionicons name="checkmark-circle" size={25} color="#1A9E47"></Ionicons>: new Date()> new Date(item.fin)? <Ionicons name='close-circle-outline' size={25} color="red"></Ionicons>: <Ionicons name='hourglass' size={25} color='#FFD233'></Ionicons>
              }
                    </View>
                    <View style={{width:3}}></View>

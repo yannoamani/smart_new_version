@@ -269,7 +269,9 @@ alignItems: "center",
 </View>
 <View style={{ height: 110 }}></View>
 <View style={{ flexDirection: "row", justifyContent: "center" }}>
-<Text style={style.noaccont}>Vous n'avez pas de compte ? <Pressable onPress={() => navigation.navigate("Signin")}><Text style={style.link}>S'inscrire</Text></Pressable> </Text>
+<Text style={style.noaccont}>Vous n'avez pas de compte ?
+   <Text onPress={() => navigation.navigate("Signin")}> <Text style={style.link}>S'inscrire</Text>
+ </Text> </Text>
 </View>
 
 {/* 

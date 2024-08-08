@@ -20,6 +20,7 @@ import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import style from "../offerStyle.js";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function List() {
   const navigation = useNavigation();
@@ -28,6 +29,8 @@ export default function List() {
   const [userId, setUserId] = useState(0);
   const [refreshing, setRefreshing] = useState(false);
   const token = AsyncStorage.getItem("token");
+  const [categorie, Setcategorie]=useState([]);
+  const [select, setSelect]=useState("Tout");
   const getOffers = async () => {
     try {
       data;
@@ -35,19 +38,45 @@ export default function List() {
       if (token) {
         axios.defaults.headers.common.Authorization = `Bearer ${token}`;
       }
+      const value = await AsyncStorage.getItem("user");
       const res = await axios.get("list_offres");
       setData(res.data.data);
-      console.log(res.data.data[0]);
+       console.log(res.data.data[0]);
       setRefreshing(false);
+      if (value !== null) {
+        const user = JSON.parse(value);
+        setUserId(user.nom+" "+user.prenoms);
+        
+      }
     } catch (error) {
       console.log(error);
       setRefreshing(false);
     }
   };
+  const getCategorie=async()=>{
+    
+    try {
+     Setcategorie([{ 'id': 0,'categorie':'Tout'}]);
+      const res = await axios.get("seeCategorie");
+      const data=res.data.data;
+      data.forEach((element) => {
+        Setcategorie((oldArray) => [...oldArray, element].sort());
+        
+      })
+    // categorie.push(res.data.data);
+    console.log('La liste des categorie',categorie);
+      
+    } catch (error) {
+      console.log(error);
+      
+    }
+    
+  }
 
   const fetchOffers = () => {
     //setRefreshing(true);
     getOffers();
+    getCategorie();
   };
 
   useEffect(() => {
@@ -67,7 +96,7 @@ export default function List() {
       if (value !== null) {
         // console.log(item);
         const user = JSON.parse(value);
-        setUserId(user.id);
+        // setUserId(user.id);
         const getusersId = [];
         const offres = item.students;
 
@@ -119,12 +148,15 @@ export default function List() {
           </View>
         
         </Pressable>
+        
+    
       </View>
     );
   };
 
   return (
-    <View style={offerStyle.container}>
+   <SafeAreaView style={{flex:1, paddingTop: 15, backgroundColor:'#F1F2F4'}}>
+     <View style={offerStyle.container}>
       <View
       // style={{
       //     width: '100%',
@@ -135,19 +167,53 @@ export default function List() {
           <FlatList
             style={{ width: "100%" }}
             renderItem={renderItem}
-            data={data}
+            data={select!='Tout'? data.filter((item) =>  new Date() <new Date(item.fin) && item.categorie.categorie == select): data.filter((item) =>  new Date() <new Date(item.fin))}
             keyExtractor={(item) => item.id.toString()}
             onRefresh={fetchOffers}
             refreshing={refreshing}
             ListEmptyComponent={
-              <Text style={styles.titleText}>Aucune offre</Text>
+              <Text style={{marginTop: 20, textAlign: "center"}}>Aucune offre</Text>
             }
+            ListHeaderComponent={
+              <View>
+               <View style={mystyle.cardWelcom}>
+        <View>
+        <Text style={mystyle.welcome}>Bienvenue</Text>
+        <Text style={mystyle.welcomeName}>{userId}</Text>
+        </View>
+         <Ionicons name="heart-outline" size={25} color="#F38B2B"></Ionicons>
+               </View>
+               <View style={{height:10}}></View>
+             <ScrollView horizontal>
+             <View style={mystyle.categorie}>
+               {
+                categorie.map((item)=>(
+              
+               <Pressable onPress={()=>{setSelect(item.categorie
+                
+               
+               ) }}  key = {item.categorie}>
+               <View  style={[mystyle.containerCategorie, {backgroundColor: item.categorie == select ? "#F38B2B" : "white"}]}>
+                <Text  style={[mystyle.categorieText, {color: item.categorie == select ? "white" : "black"}]}>{item.categorie}</Text>
+                </View>
+               </Pressable>
+             
+                ))
+               }
+               </View>
+             </ScrollView>
+             <View style={{height:10}}></View>
+             <Text style={mystyle.title}>Liste des offres</Text>
+              </View>
+              
+              }
           />
         ) : (
           <Text style={styles.titleText}>Loading...</Text>
         )}
       </View>
     </View>
+   </SafeAreaView>
   );
 }
 
@@ -209,4 +275,50 @@ const mystyle = StyleSheet.create({
     color: "#000000",
   flex: 1
   },
+  welcome:{
+    fontSize:13,
+    fontWeight:"300",
+    marginBottom:5
+  },
+  name:{
+    fontSize:15,
+    fontWeight:"700",
+    
+    marginBottom:5
+  },
+  cardWelcom:{
+    flexDirection:'row',
+    justifyContent:'space-between',
+    alignItems:'center',
+    marginBottom:10
+  },
+  categorie:{
+    flexDirection:'row',
+    justifyContent:'center',
+   alignItems:'center',
+   
+  },
+  categorieText:{
+    fontSize:14,
+    fontWeight:'300',
+    marginRight:5,
+    textAlign:'center',
+    justifyContent:'center',
+    alignItems:'center',
+
+    },
+  containerCategorie:{
+    padding:8,
+    borderColor:'#F38B2B' ,
+    borderWidth:1,
+    borderRadius:15,
+    marginRight:10,
+    justifyContent:'center',
+    alignItems:'center',
+  },
+  title:{
+    fontSize:24,
+    fontWeight:'700',
+    marginTop:10
+  }
 });

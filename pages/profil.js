@@ -92,7 +92,7 @@ export default function Profile() {
     return () => clearInterval(intervalId);
   }, []);
   return (
-    <View style={{flex:1}}>
+    <View style={{flex:1 , backgroundColor: "#F1F2F4"}}>
       <View style={style.header}>
        <SafeAreaView>
         <Text style={style.title}>Profil</Text>
@@ -105,7 +105,7 @@ export default function Profile() {
         
       <Text style={style.name}>{ data ? data.prenoms + " " + data.nom : " " }</Text>
       <View height={10}></View>
-      {skills ? 
+      {/* {skills ? 
                         <Text numberOfLines={3} ellipsizeMode="tail" style={{ flexGrow:1, flex:1, textAlign: 'center', alignSelf:"center", alignItems: 'center',justifyContent: 'center', }}>
                             {
                             skills.map((skill, index) => (
@@ -122,12 +122,13 @@ export default function Profile() {
                         : (
                         <Text style={{ 
                                 textAlign: 'center',
+                                color:'white'
                                 // fontSize: 18,
                             }}
                         >
-                            Néant
+                          Auncune competence
                         </Text>
-                    )}
+                    )} */}
 
       </View>
        </View>
@@ -174,147 +175,108 @@ export default function Profile() {
                         * Informations personnelles
                     </Text> */}
             <View style={{ height: 20 }}></View>
-            <View
-              style={{
-                backgroundColor: "white",
-                borderRadius: 10,
-                borderWidth: 1,
-                borderColor: "transparent",
-                padding: 10,
-              }}
+           <View>
+           <View
+              style={style.cardInfo}
             >
+             {/* email */}
               <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                }}
-              >
-                <Text style={{ color: "black", fontSize: 15 }}>Email </Text>
-                <Text style={{ color: "gray", fontSize: 14 }}>
-                  {data.email}
-                </Text>
+                style={style.cardItem} >
+                {/* Leading */}
+              <View style={style.leading}>
+                <Ionicons name="mail-outline" size={16}></Ionicons>
+                <Text style={style.libelle}>Email</Text>
               </View>
-              <View style={{ height: 15 }}></View>
-              <View
-                style={{
-                  width: "100%",
-                  color: "gray",
-                  height: 1,
-                  backgroundColor: "#dcdcdc",
-                }}
-              ></View>
-              <View style={{ height: 15 }}></View>
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                }}
-              >
-                <Text style={{ color: "black", fontSize: 15 }}>Diplôme </Text>
-                <Text style={{ color: "gray", fontSize: 14 }}>
-                  {data.diplome}
-                </Text>
+              {/* Trailling */}
+              <View style={style.trailing}>
+                <Text style={style.items}>{data.email}</Text>
+                <Ionicons name="chevron-forward-outline" size={16}></Ionicons>
               </View>
-              <View style={{ height: 15 }}></View>
-              <View
-                style={{
-                  width: "100%",
-                  color: "gray",
-                  height: 1,
-                  backgroundColor: "#dcdcdc",
-                }}
-              ></View>
-              <View style={{ height: 15 }}></View>
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                }}
-              >
-                <Text style={{ color: "black", fontSize: 15 }}>
-                  Habitation{" "}
-                </Text>
-                <Text style={{ color: "gray", fontSize: 14 }}>
-                  {data.commune}
-                </Text>
+              
+            
+            
+              
               </View>
-              <View style={{ height: 15 }}></View>
+              <View style={style.line}></View>
+                {/*Diplôme */}
               <View
-                style={{
-                  width: "100%",
-                  color: "gray",
-                  height: 1,
-                  backgroundColor: "#dcdcdc",
-                }}
-              ></View>
-              <View style={{ height: 15 }}></View>
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                }}
-              >
-                <Text style={{ color: "black", fontSize: 15 }}>
-                  Numero de telephone{" "}
-                </Text>
-                <Text style={{ color: "gray", fontSize: 14 }}>
-                  {data.phone}
-                </Text>
+                style={style.cardItem} >
+                {/* Leading */}
+              <View style={style.leading}>
+                <Ionicons name="school-outline" size={16}></Ionicons>
+                <Text style={style.libelle}>Diplôme</Text>
               </View>
-              {/* <View style={{ height: 15 }}></View> */}
-              <View style={{ height: 15 }}></View>
-              <View
-                style={{
-                  width: "100%",
-                  color: "gray",
-                  height: 1,
-                  backgroundColor: "#dcdcdc",
-                }}
-              ></View>
-              <View style={{ height: 15 }}></View>
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                }}
-              >
-                <Text style={{ color: "black", fontSize: 15 }}>
-                 Abonnement 
-                </Text>
-                <Text style={{ color: "red", fontSize: 14 }}>
-                  {myabonnement}
-                </Text>
+              {/* Trailling */}
+              <View style={style.trailing}>
+                <Text style={style.items}>{data.diplome}</Text>
+                <Ionicons name="chevron-forward-outline" size={16}></Ionicons>
               </View>
+              
+            
+            
+              
+              </View>
+              <View style={style.line}></View>
+                {/*Diplôme */}
+              <View
+                style={style.cardItem} >
+                {/* Leading */}
+              <View style={style.leading}>
+                <Ionicons name="home-outline" size={16}></Ionicons>
+                <Text style={style.libelle}>Habitation</Text>
+              </View>
+              {/* Trailling */}
+              <View style={style.trailing}>
+                <Text style={style.items}>{data.commune}</Text>
+                <Ionicons name="chevron-forward-outline" size={16}></Ionicons>
+              </View>
+               </View>
+              <View style={style.line}></View>
+             
+                {/*Numero */}
+              <View
+                style={style.cardItem} >
+                {/* Leading */}
+              <View style={style.leading}>
+                <Ionicons name="call-outline" size={16}></Ionicons>
+                <Text style={style.libelle}>Numero de téléphone</Text>
+              </View>
+              {/* Trailling */}
+              <View style={style.trailing}>
+                <Text style={style.items}>{data.phone}</Text>
+                <Ionicons name="chevron-forward-outline" size={16}></Ionicons>
+              </View>
+               </View>
+              <View style={style.line}></View>
+                {/*Abonnement */}
+              <View
+                style={style.cardItem} >
+                {/* Leading */}
+              <View style={style.leading}>
+                <Ionicons name="bookmark-outline" size={16}></Ionicons>
+                <Text style={style.libelle}>Abonnement</Text>
+              </View>
+              {/* Trailling */}
+              <View style={style.trailing}>
+                <Text style={style.items}>{myabonnement}</Text>
+                <Ionicons name="chevron-forward-outline" size={16}></Ionicons>
+              </View>
+               </View>
+            
+             
+              
+              
             </View>
+          
+           </View>
             <View style={{ height: 15 }}></View>
-            {/* <View style={styles.roundedContainer}>
-                        <Text style={styles.basicText}>
-                            <Ionicons name="ribbon-outline" size={20} color="#87CEEB" /> &nbsp;
-                            Diplome : {data.diplome}
-                        </Text>
-                        <Text style={styles.basicText}>
-                            <Ionicons name="home-outline" size={20} color="#87CEEB" /> &nbsp;
-                            Habitat : {data.commune}, {data.quartier}
-                        </Text>
-                        <Text style={styles.basicText}>
-                            <Ionicons name="mail-outline" size={20} color="#87CEEB" /> &nbsp;
-                            Email : {data.email}
-                        </Text>
-                        <Text style={styles.basicText}>
-                            <Ionicons name="call-outline" size={20} color="#87CEEB" /> &nbsp;
-                            Contact : {data.phone}
-                        </Text>
-                    </View> */}
+           
             <Text
-              style={{
-                color: "black",
-                fontWeight: "bold",
-                fontSize: 17,
-              }}
+              style={style.experience}
             >
-              * MES EXPERIENCES
+              MES EXPERIENCES
             </Text>
-            <View style={{ height: 15 }}></View>
+            <View style={{ height: 18 }}></View>
             <ScrollView
               style={{
                 backgroundColor: "white",
@@ -340,13 +302,18 @@ export default function Profile() {
                   >
                     <Text
                       style={{
-                        fontSize: 14,
-                        marginBottom: "2%",
+                        fontSize: 13,
+                        
+                        fontWeight: "500",
+                        color:'#F38B2B'
+
                       }}
                     >
-                      - {exp.poste.toUpperCase()} -{" "}
-                      {exp.entreprise.toUpperCase()} {"\n"}
-                      Du{" "}
+                      {exp.poste} -{" "}
+                      {exp.entreprise} {"\n"}
+                   
+                    </Text>
+                    <Text style={{ fontSize: 11 , color:'black', fontWeight:'500'}}>  Du{" "}
                       {
                         new Date(exp.dateDebut)
                           .toLocaleString("en-GB")
@@ -357,8 +324,7 @@ export default function Profile() {
                         new Date(exp.dateFin)
                           .toLocaleString("en-GB")
                           .split(",")[0]
-                      }
-                    </Text>
+                      }</Text>
                     <Ionicons
                       onPress={() => {
                         Alert.alert(
@@ -423,7 +389,7 @@ export default function Profile() {
           <Text style={styles.titleText}>Loading...</Text>
         )}
        
-       
+      {/* Crde  pour les différents options */}
 
          <View style={{ height: 15 }}></View>
         <Pressable
@@ -432,85 +398,51 @@ export default function Profile() {
             // getAbonnement();
           }}
         >
-          <View
-            style={{
-              width: "100%",
-              backgroundColor: "white",
-              padding: 20,
-              borderRadius: 10,
-            }}
-          >
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <View
-                style={{
-                  backgroundColor: "#ffa500",
-                  padding: 10,
-                  borderRadius: 10,
-                }}
-              >
-                <Ionicons name="notifications" size={30} color="white" />
-              </View>
-              <Text
-                style={{
-                  color: "black",
-                  fontWeight: "medium",
-                  fontSize: 17,
-                  marginLeft: 5,
-                  flex: 1,
-                }}
-              >
-                Faire mon abonnement
-              </Text>
+           {/* Faire un abonnemnt  */}
+          <View style={style.cardOption}>
+          <View style={style.leadingOption}>
+            <Ionicons name="notifications" size={20} color="#FFD233" />
+            
+            <Text style={style.libelleOption}>Faire mon abonnement </Text>
+            </View>
+              
               <Ionicons
                 name="chevron-forward-outline"
                 size={20}
                 color="black"
               ></Ionicons>
             </View>
-          </View>
+       
         </Pressable>
+
          <View style={{ height: 20 }}></View>
+          {/* Mes plages horairs */}
         <Pressable
           onPress={async () => {
             navigation.navigate("Scheds");
           }}
         >
           <View
-            style={{
-              width: "100%",
-              backgroundColor: "white",
-              padding: 20,
-              borderRadius: 10,
-            }}
+            style={style.cardOption}
           >
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <View
-                style={{
-                  backgroundColor: "#e6e6fa",
-                  padding: 10,
-                  borderRadius: 10,
-                }}
-              >
-                <Ionicons name="time-outline" size={30} color="black" />
-              </View>
-              <Text
-                style={{
-                  color: "black",
-                  fontWeight: "medium",
-                  fontSize: 17,
-                  marginLeft: 5,
-                  flex: 1,
-                }}
-              >
-                Mes plages horaires
-              </Text>
+         
+           
+               <View style={style.leadingOption}>
+               <Ionicons name="alarm-outline" size={20} color="black" />
+            
+            <Text
+              style={style.libelleOption}
+            >
+              Mes plages horaires
+            </Text>
+               </View>
               <Ionicons
                 name="chevron-forward-outline"
                 size={20}
                 color="black"
               ></Ionicons>
             </View>
-          </View>
+         
         </Pressable>
       
         <View style={{height:20}}></View>
@@ -521,41 +453,26 @@ export default function Profile() {
                 }}
         >
           <View
-            style={{
-              width: "100%",
-              backgroundColor: "white",
-              padding: 20,
-              borderRadius: 10,
-            }}
+            style={style.cardOption}
           >
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <View
-                style={{
-                  backgroundColor: "#add8e6",
-                  padding: 10,
-                  borderRadius: 10,
-                }}
-              >
-                <Ionicons name="flask-outline" size={30} color="black" />
-              </View>
+           
+              <View style={style.leadingOption}>
+                
+              <Ionicons name="flask-outline" size={20} color="black" />
+              
               <Text
-                style={{
-                  color: "black",
-                  fontWeight: "medium",
-                  fontSize: 17,
-                  marginLeft: 5,
-                  flex: 1,
-                }}
+                style={style.libelleOption}
               >
                Ajouter une experience
               </Text>
+              </View>
               <Ionicons
                 name="chevron-forward-outline"
                 size={20}
                 color="black"
               ></Ionicons>
             </View>
-          </View>
+         
         </Pressable>
        <View style={{height:20}}></View>
        
@@ -565,41 +482,26 @@ export default function Profile() {
                 }}
         >
           <View
-            style={{
-              width: "100%",
-              backgroundColor: "white",
-              padding: 20,
-              borderRadius: 10,
-            }}
+            style={style.cardOption}
           >
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <View
-                style={{
-                  backgroundColor: "#ffa07a",
-                  padding: 10,
-                  borderRadius: 10,
-                }}
-              >
-                <Ionicons name="library-outline" size={30} color="black" />
-              </View>
-              <Text
-                style={{
-                  color: "black",
-                  fontWeight: "medium",
-                  fontSize: 17,
-                  marginLeft: 5,
-                  flex: 1,
-                }}
-              >
-               Ajouter une competence
-              </Text>
+            
+            
+             <View style={style.leadingOption}>
+             <Ionicons name="library-outline" size={20} color="black" />
+             
+             <Text
+               style={style.libelleOption}
+             >
+              Ajouter une competence
+             </Text>
+             </View>
               <Ionicons
                 name="chevron-forward-outline"
                 size={20}
                 color="black"
               ></Ionicons>
             </View>
-          </View>
+  
         </Pressable>
         <View style={{height:20}}></View>
         <Pressable
@@ -618,36 +520,20 @@ export default function Profile() {
                 }}
         >
           <View
-            style={{
-              width: "100%",
-              backgroundColor: "white",
-              padding: 20,
-              borderRadius: 10,
-            }}
+            style={style.cardOption}
           >
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <View
-                style={{
-                  backgroundColor: "red",
-                  padding: 10,
-                  borderRadius: 10,
-                }}
-              >
-                <Ionicons name="log-in-outline" size={30} color="white" />
-              </View>
-              <Text
-                style={{
-                  color: "black",
-                  fontWeight: "medium",
-                  fontSize: 17,
-                  marginLeft: 5,
-                  flex: 1,
-                }}
-              >
-              Deconnexion
-              </Text>
+           <View style={style.leadingOption}>
+            
+           <Ionicons name="log-in-outline" size={20} color="red" />
              
-            </View>
+             <Text
+             style={style.libelleOption}
+             >
+             Deconnexion
+             </Text>
+           </View>
+             
+            
           </View>
         </Pressable>
        
@@ -762,5 +648,91 @@ const style=StyleSheet.create({
     fontSize:10,
     fontWeight:'500',
     color:'white'
+  },
+  cardInfo:{
+    backgroundColor: "white",
+    borderRadius: 15,
+    borderWidth: 1,
+    borderColor: "transparent",
+    padding: 10,
+    shadowColor: '#000', 
+    shadowOffset: { width: 4, height: 4 }, 
+    shadowOpacity: 0.2,
+    shadowRadius: 2, 
+   
+    elevation: 10, 
+  
+   
+
+  },
+  cardItem:{
+ flexDirection:'row',
+ alignItems:'center',
+ justifyContent:'space-between',
+ marginBottom:10
+    
+   
+  },
+  leading:{
+    flexDirection:'row',
+    alignItems:'center',
+   
+  },
+  libelle:{
+    fontWeight:'500',
+    fontSize:14,
+    marginLeft:5
+
+  },
+  items:{
+    color:'#0000004D',
+    marginRight:10
+  },
+  trailing:{
+    flexDirection:'row',
+    alignItems:'center',
+  },
+  line:{
+    height:1,
+    width:'100%',
+    backgroundColor:'#0000004D',
+    marginHorizontal:18,
+    marginBottom:10
+   
+  },
+  experience:{
+    fontWeight:'700',
+    fontSize:24
+
+  },
+  cardOption:{
+    width: "100%",
+              backgroundColor: "white",
+              height: 44,
+              paddingHorizontal: 15,
+              borderRadius: 15,
+              flexDirection: "row", 
+              alignItems: "center",
+              justifyContent:'space-between',
+              shadowColor: '#000', // Couleur de l'ombre
+    shadowOffset: { width: 0, height: 4 }, // Décalage de l'ombre
+    shadowOpacity: 0.1, // Opacité de l'ombre réduite à 10%
+    shadowRadius: 6, // Rayon de l'ombre
+    elevation: 4, // Élévation pour Android
+              
+    
+  },
+  leadingOption:{
+    flexDirection:'row',
+    alignItems:'center',
+    
+  },
+  libelleOption:{
+    fontSize:13,
+    marginLeft:15,
+    fontWeight:'700'
+
   }
+
+
 })  

@@ -66,6 +66,30 @@ const style=StyleSheet.create({
       fontWeight:'bold',
       fontSize:20
   },
+  
+  button:{
+    backgroundColor: '#F38B2B',
+    width: '100%',
+    elevation: 5,
+    borderRadius: 10,
+    
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000', 
+    shadowOffset: { width: 0, height: 4 }, 
+    shadowOpacity: 0.5,
+    shadowRadius: 4, 
+   
+    elevation: 10, 
+   
+        
+   
+},
+textbutton:{
+    color:'#FFFFFF',
+    fontSize: 20,
+},
 });
 export default style;
 

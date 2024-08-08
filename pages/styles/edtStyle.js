@@ -2,17 +2,23 @@ import { StyleSheet } from "react-native";
 const style= StyleSheet.create({
     container:{
         flex: 1,
-        padding:10,
+        paddingTop: 15,
+        paddingHorizontal: 15,
     
     },
     card:{
         width: "100%",
-      borderWidth: 1,
-      borderColor: '#00bfff',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 8,
+        elevation: 4,
+        
+     
       backgroundColor: 'white',
       marginBottom: 5,
       padding: 15,
-      borderRadius: 15,
+      borderRadius: 18,
       marginBottom: 20,
     },
     itemCard:{

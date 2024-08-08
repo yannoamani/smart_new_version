@@ -202,150 +202,10 @@ export default function Signin() {
     getProfiles();
   }, []);
   return (
-    // <SafeAreaView style={{ flex: 1 }}>
-    //   <KeyboardAvoidingView
-    //     behavior={Platform.OS === "ios" ? "padding" : "height"}
-    //     style={{ flex: 1 }}
-    //   >
-    //     <View
-    //       style={{
-    //         padding: "5%",
-    //         // alignItems: "center",
-    //         flex: 1,
-    //       }}
-    //     >
-    //       <ScrollView>
-    //         <Text style={style1.headerInscription}>
-    //           Bienvenue sur notre application ! Inscrivez-vous en renseignant
-    //           les champs nécessaires
-    //         </Text>
-    //         <View style={{ height: "3%" }}></View>
-    //         <Text style={style1.labelText}>Nom</Text>
-    //         <View style={{ height: 2 }}></View>
-    //         <TextInput
-    //           style={style1.inputCustom}
-    //           placeholder="koffi ..."
-    //           placeholderTextColor="gray"
-    //           value={name}
-    //           onChangeText={(text) => setName(text)}
-    //         />
-    //         <View style={{ height: "3%" }}></View>
-    //         <Text style={style1.labelText}>Prenom</Text>
-    //         <View style={{ height: 2 }}></View>
-    //         <TextInput
-    //           style={style1.inputCustom}
-    //           placeholder="prenoms"
-    //           placeholderTextColor={"gray"}
-    //           value={fname}
-    //           //keyboardType="email-address"
-    //           //autoCapitalize="none"
-    //           onChangeText={(text) => setfName(text)}
-    //         />
-    //         <View style={{ height: "3%" }}></View>
-    //         <Text style={style1.labelText}>Email</Text>
-    //         <View style={{ height: 2 }}></View>
-    //         <TextInput
-    //           style={style1.inputCustom}
-    //           placeholder="email"
-    //           value={email}
-    //           keyboardType="email-address"
-    //           autoCapitalize="none"
-    //           onChangeText={(text) => setMail(text)}
-    //         />
-    //         <View style={{ height: "3%" }}></View>
-    //         <Text style={style1.labelText}>Phone</Text>
-    //         <View style={{ height: 2 }}></View>
-    //         <TextInput
-    //           style={style1.inputCustom}
-    //           placeholder="phone"
-    //           value={phone}
-    //           keyboardType="numeric"
-    //           //autoCapitalize="none"
-    //           onChangeText={(text) => setPhone(text)}
-    //         />
-    //         <View style={{ height: "3%" }}></View>
-    //         <Text style={style1.labelText}>Mot de passe</Text>
-    //         <View style={{ height: 2 }}></View>
-    //         <TextInput
-    //           style={style1.inputCustom}
-    //           placeholder="password"
-    //           secureTextEntry={true}
-    //           value={pwd}
-    //           onChangeText={(text) => setPwd(text)}
-    //         />
-    //         {/* <TextInput style={styles.textInput}
-    //                     placeholder="Carte d'identité"
-    //                     value={fileName}
-    //                     onPressOut={pickDocument}
-    //                 /> */}
-    //         <View style={{ flexDirection: "row", alignItems: "center" }}>
-    //           <Pressable
-    //             style={{
-    //               backgroundColor: "#147efb",
-    //               padding: 10,
-    //               borderRadius: 5,
-    //               marginRight: 10, // Adjust as needed
-    //             }}
-    //             onPress={pickDocument}
-    //           >
-    //             <Text style={{ color: "white" }}>Choisir un fichier</Text>
-    //           </Pressable>
-    //           <Text numberOfLines={1} ellipsizeMode="tail">
-    //             {fileName}
-    //           </Text>
-    //         </View>
-    //         <Loader loading={loading} />
-    //         <Text style={styles.titleText}>LOCALISATION</Text>
-    //         <Pressable
-    //           style={{
-    //             margin: 5,
-    //           }}
-    //         ></Pressable>
-    //         <TextInput
-    //           style={styles.textInput}
-    //           placeholder="Ville"
-    //           value={city}
-    //           onChangeText={(text) => setCity(text)}
-    //         />
-    //         <TextInput
-    //           style={styles.textInput}
-    //           placeholder="Commune"
-    //           value={municipality}
-    //           onChangeText={(text) => setMunicipality(text)}
-    //         />
-    //         <TextInput
-    //           style={styles.textInput}
-    //           placeholder="Quartier"
-    //           value={hood}
-    //           onChangeText={(text) => setHood(text)}
-    //         />
-    //         <Text style={styles.titleText}>SAVOIR-FAIRE</Text>
-    //         <Pressable
-    //           style={{
-    //             margin: 5,
-    //           }}
-    //         ></Pressable>
-    //         <TextInput
-    //           style={styles.textInput}
-    //           placeholder="Diplôme"
-    //           value={degree}
-    //           onChangeText={(text) => setDegree(text)}
-    //         />
-    //         <Pressable
-    //           style={{
-    //             margin: 5,
-    //           }}
-    //         ></Pressable>
-    //         <Pressable onPress={validationForm} style={styles.Button}>
-    //           <Text style={styles.buttonText}>Sign Up</Text>
-    //         </Pressable>
-    //       </ScrollView>
-    //     </View>
-    //   </KeyboardAvoidingView>
-    // </SafeAreaView>
+   
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={{ flex: 1 }}
+      style={{ flex: 1, backgroundColor: "#F1F2F4" }}
     >
       <SafeAreaView style={{ flex: 1 }}>
         <ScrollView>
@@ -361,8 +221,8 @@ export default function Signin() {
             <Text
               style={{
                 textAlign: "center",
-                fontWeight: "bold",
-                fontSize: 25,
+                fontWeight: "700",
+                fontSize: 36,
                 autoCapitalize: "none",
               }}
             >
@@ -425,10 +285,15 @@ export default function Signin() {
                 flexDirection: "row",
                 alignContent: "space-between",
                 justifyContent: "space-between",
-                height: 55,
-                borderColor: "gray",
+                height: 40,
+                borderColor:'#F38B2B',
                 borderWidth: 1,
                 borderRadius: 10,
+                borderLeftColor: '#F38B2B',
+                borderRightColor: '#1A9E47',
+                
+                borderRightColor: '#1A9E47',
+                borderLeftColor: '#1A9E47',
               }}
             >
               <TextInput
@@ -439,7 +304,7 @@ export default function Signin() {
                 value={pwd}
                 onChangeText={(text) => setPwd(text)}
               />
-              <View style={{ justifyContent: "center", padding: 10 }}>
+              <View style={{ margin: 5 }}>
                 <Pressable onPress={visible}>
                   <Ionicons
                     name={visibility ? "eye" : "eye-off"}
@@ -450,7 +315,12 @@ export default function Signin() {
             </View>
 
             <View style={{ height: 20 }}></View>
-            <Text style={styles.titleText}>LOCALISATION</Text>
+            <Text  style={{
+                textAlign: "center",
+                fontWeight: "700",
+                fontSize: 36,
+                autoCapitalize: "none",
+              }}>HABITATION</Text>
             
             
             
@@ -524,8 +394,13 @@ export default function Signin() {
            
            <View style={{ height: 20 }}></View>
            <Pressable onPress={pickDocument}>
-            <View style={{ height: 200, width: "100%", borderColor: "gray", borderWidth: 1 , alignItems:"center",justifyContent:"center" , borderRadius: 10, padding: 10}}>
-            <Ionicons name="download" size={50} color="black"></Ionicons>
+            <View style={{ height: 200, width: "100%",
+             borderColor: "gray", borderLeftColor: '#F38B2B',
+   borderRightColor: '#1A9E47',
+   borderRightColor: '#1A9E47',
+   borderLeftColor: '#1A9E47',borderColor:'#F38B2B',
+   borderWidth:1, borderWidth: 1 , alignItems:"center",justifyContent:"center" , borderRadius: 10, padding: 10}}>
+            <Ionicons name="download-outline" size={50} color="#F38B2B"></Ionicons>
             <View style={{ height: 20 }}></View>
             <Text>Cliquez pour ajouter votre piece</Text>
             <View style={{ height: 10 }}></View>
@@ -554,6 +429,8 @@ export default function Signin() {
             <Text style={style1.textCustomButton}>S'inscrire</Text>
            </View>
           </Pressable>
+          <View style={{ height: 30 }}></View>
+          <Text style={{textAlign:"center"}}>Vous avez deja un compte ? <Text style={{color:"#F38B2B", fontWeight:"700"}} onPress={() => navigation.navigate('Login')}>Connectez-vous</Text></Text>
 
           
           </View>

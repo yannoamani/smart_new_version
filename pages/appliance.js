@@ -7,6 +7,7 @@ import RenderHtml from 'react-native-render-html';
 import { Ionicons } from '@expo/vector-icons';
 import { displayDate } from "../Utils";
 import Loader from '../components/loader';
+import { Rating, AirbnbRating } from 'react-native-ratings';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
@@ -196,6 +197,14 @@ export default function Appliance({route}) {
                                 <Text style={Monstyles.titleReset}>
                                     Quelle est votre appreciation pour cette offre?  
                                 </Text>
+                                <AirbnbRating
+                                showRating={false}
+                                ratingContainerStyle={{alignItems:'center', backgroundColor:'red'}}
+  count={5}
+  reviews={["Terrible", "Mauvais", "Bien", "très bien", "Excellent", ]}
+  defaultRating={11}
+  size={20}
+/>
                                 <View style={{height:10}}></View>
                                 <Loader loading={loading} />
                                 <View style={{
@@ -235,7 +244,7 @@ export default function Appliance({route}) {
                         
                         {/* && data.offre_student.avis == null */}
                         {
-                            (detailsOffres.pivot.recruit==1 ) ? 
+                            (detailsOffres.pivot.recruit==1 && new Date()>  new Date(detailsOffres.job_fin) ) ? 
                            <Pressable  style={Monstyles.button} onPress={async () => {
                                 try {
                                     setModalVisible(!isModalVisible)

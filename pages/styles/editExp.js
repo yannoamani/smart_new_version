@@ -11,8 +11,8 @@ const style= StyleSheet.create({
 
         fontFamily:'poppins',
         color: "black",
-        fontSize: 20,
-        fontWeight: '600',
+        fontSize: 13,
+        fontWeight: '7  00',
         textAlign: 'center',
         alignContent: 'center',
         justifyContent: 'center',
@@ -30,19 +30,25 @@ const style= StyleSheet.create({
         alignSelf: 'flex-start',
     },
     input:{
-        height:50,
-        borderColor:"black",
-        borderWidth:1,
-        paddingLeft:10,
-        borderRadius:10,
-        width:'100%'
+      borderColor:'#F38B2B',
+      borderWidth:1,
+      borderRadius:10,
+      borderLeftColor: '#F38B2B',
+      borderRightColor: '#1A9E47',
+     //  borderBlockEndColor: '#1A9E47',
+     //  borderBlockStartColor: '#F38B2B',
+      borderRightColor: '#1A9E47',
+      borderLeftColor: '#1A9E47',
+      paddingLeft:20,
+      padding:10,
+      height:40
     },
     textarea:{
         height:100, borderColor:'black',borderWidth:1, 
         borderRadius:10, paddingLeft:10
     },
     button:{
-        backgroundColor:'#00bfff',
+        backgroundColor:'#F38B2B',
         height:50,
         width:"100%",
         borderRadius:10,
@@ -68,18 +74,18 @@ const style= StyleSheet.create({
     
 dropdown: {
     // margin: 16,
-    height: 60,
-    borderBottomColor: 'gray',
-     width:"100%",
-   
-    // alignItems: 'center',
-    // justifyContent: 'center',
-    backgroundColor: 'white',
-    borderRadius: 10,
-    borderColor: "black",
-    borderWidth: 1,
-    padding: 10,
-  
+    borderColor:'#F38B2B',
+    borderWidth:1,
+    borderRadius:10,
+    borderLeftColor: '#F38B2B',
+    borderRightColor: '#1A9E47',
+   //  borderBlockEndColor: '#1A9E47',
+   //  borderBlockStartColor: '#F38B2B',
+    borderRightColor: '#1A9E47',
+    borderLeftColor: '#1A9E47',
+    paddingLeft:20,
+    padding:10,
+    height:40
   
     
   },

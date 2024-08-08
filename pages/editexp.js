@@ -46,6 +46,7 @@ export default function EditExp({route}) {
         style={{
           // alignItems: "center",
           flex: 1,
+          backgroundColor: "#F1F2F4",
           
          
         }}

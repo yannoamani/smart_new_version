@@ -90,7 +90,7 @@ export default function Schedules() {
                         //margin: '2%'
                         }}
                         name="trash-outline"
-                        size={30}
+                        size={25}
                         color="red"
                     />
                 </Pressable>
@@ -114,7 +114,7 @@ export default function Schedules() {
                 )}
                 <Ionicons name="add-circle-outline" onPress={() => goToAddSched()} size={65} style={{
                             position: "absolute",
-                            right: 10, bottom: 10, color: "black"
+                            right: 10, bottom: 10, color: "#F38B2B"
                         }} />
         </View>
     );

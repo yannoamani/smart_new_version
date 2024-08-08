@@ -27,7 +27,7 @@ import OnboardingPage from './pages/onboarding_page';
 import SplahScreen from './pages/splah_screen';
 
 export default function App() {
-  axios.defaults.baseURL = 'http://192.168.1.6:8000/api/';
+  axios.defaults.baseURL = 'http://192.168.1.13:8000/api/';
   const setAuthorizationHeader = async () => {
     try {
       const token = await AsyncStorage.getItem('token');
@@ -75,7 +75,7 @@ export default function App() {
           backgroundColor: '#F38B2B',
         }
       }}>
-        <OfferStack.Screen name="Offres" component={OffersList} options={{}} />
+        <OfferStack.Screen name="Offres" component={OffersList} options={{headerShown: false}}  />
         <OfferStack.Screen name="Offer" component={Offer} options={{
           headerTitle: "Détails de l'offre",
           headerBackTitleVisible: false
@@ -121,7 +121,10 @@ export default function App() {
       <ProfileStack.Navigator screenOptions={{
         headerStyle: {
           backgroundColor: '#F38B2B',
+
         }
+        
+
       }}>
         <ProfileStack.Screen name="Profile" component={Profile} options={{
           headerTitle: "Profil",
