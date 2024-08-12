@@ -199,7 +199,7 @@ export default function Appliance({route}) {
                                 </Text>
                                 <AirbnbRating
                                 showRating={false}
-                                ratingContainerStyle={{alignItems:'center', backgroundColor:'red'}}
+                                ratingContainerStyle={{alignItems:'center', }}
   count={5}
   reviews={["Terrible", "Mauvais", "Bien", "très bien", "Excellent", ]}
   defaultRating={11}

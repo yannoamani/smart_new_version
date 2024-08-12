@@ -25,9 +25,12 @@ import Skills from './pages/competences';
 import Abonnement from './pages/abonnement';
 import OnboardingPage from './pages/onboarding_page';
 import SplahScreen from './pages/splah_screen';
+import AcceuilAbonnement from './acceuilAbonnement';
+import MyAbonnement from './pages/myabonnement';
+import Favories from './pages/favories';
 
 export default function App() {
-  axios.defaults.baseURL = 'http://192.168.1.13:8000/api/';
+  axios.defaults.baseURL = 'http://192.168.1.5:8000/api/';
   const setAuthorizationHeader = async () => {
     try {
       const token = await AsyncStorage.getItem('token');
@@ -80,6 +83,10 @@ export default function App() {
           headerTitle: "Détails de l'offre",
           headerBackTitleVisible: false
         }} />
+        <OfferStack.Screen name="favories" component={Favories} options={{
+          headerTitle: "mes favories",
+          headerBackTitleVisible: false
+        }} />
       </OfferStack.Navigator>
     );
   }
@@ -95,6 +102,8 @@ export default function App() {
           headerTitle: "Détails de l'offre",
           headerBackTitleVisible: false
         }} />
+       
+
       </ContactsStack.Navigator>
     );
   }
@@ -140,7 +149,15 @@ export default function App() {
            headerBackTitleVisible: false
         }} />
         <ProfileStack.Screen name="Abonnement" component={Abonnement} options={{
+           headerTitle: "Souscrire a un abonnement",
+           headerBackTitleVisible: false
+        }} />
+        <ProfileStack.Screen name="acceuil_Abonnement" component={AcceuilAbonnement} options={{
            headerTitle: "Abonnement",
+           headerBackTitleVisible: false
+        }} />
+        <ProfileStack.Screen name="MyAbonnement" component={MyAbonnement} options={{
+           headerTitle: "Mes abonnements",
            headerBackTitleVisible: false
         }} />
         <ProfileStack.Screen name="AddSched" component={AddSchedule} options={{
@@ -165,6 +182,7 @@ export default function App() {
   function AuthStackScreen() {
     return (
       <AuthStack.Navigator screenOptions={{headerShown: false}}>
+       
         <AuthStack.Screen name="Splash" component={SplahScreen} />
         <AuthStack.Screen name="onboarding" component={OnboardingPage} />
         <AuthStack.Screen name="Login" component={Login} />

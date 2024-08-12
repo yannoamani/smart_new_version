@@ -1,4 +1,4 @@
-import { FlatList, View, loader,Text,Image, StyleSheet,ScrollView,useWindowDimensions, Pressable, Alert } from "react-native";
+import { FlatList, View, loader,Text,Image, StyleSheet,ScrollView,useWindowDimensions, Pressable, Alert,ActivityIndicator } from "react-native";
 
 import styles from '../pages/styles/offerStyle';
 
@@ -21,23 +21,41 @@ export default function Offer({route}) {
     const [desc, setDesc] = useState();
     const [loadin, setLoadin] = useState(false);
     const navigation = useNavigation()
+    const [exist, setExist] = useState(false);
     // const conversion=()=>{
     //  return   setDesc(detailsOffres.description.replace(/<[^>]*>|&nbsp;/g, ' ').trim().toUpperCase().split('  '))
     // }
     const getOffer = async () => {
         try {
             const token = await AsyncStorage.getItem('token')
-            // const user = await AsyncStorage.getItem('user')
+             const user = await AsyncStorage.getItem('user')
+             const idUser = JSON.parse(user);
             if (token) {
                 axios.defaults.headers.common.Authorization = `Bearer ${token}`;
             }
             // console.log(JSON.parse(user));
             const offer = await axios.get('detail_offre/'+ id)
             setData(offer.data.data);
-            //console.log(offer.data);
+            console.log(offer.data);
             const res = await axios.get('get_offres_postule');
-            console.log("res",res.data.data.offres);
-            console.log(already);
+            // console.log("res",offer.data.data.offre_student);
+            const getusersId = [];
+            const ofert= offer.data.data.students
+            ofert.forEach((offre) => {
+               getusersId.push(offre['pivot']['student_id']);
+             });
+            console.log("getusersId",getusersId);
+
+            if (getusersId.includes(idUser.id)) {
+              setExist(false);  
+             
+            } else {
+              setExist(true);            }
+        
+
+
+            
+
             //return console.log(already);
             if (offer.data.data.description[0] === '<') {
                 setDesc(offer.data.data.description.replace(/<[^>]*>|&nbsp;/g, ' ').trim().toUpperCase().split('  '))
@@ -138,39 +156,42 @@ export default function Offer({route}) {
         {/* <Text style={{color:'black', flex: 1, fontSize: 15,}}>{desc}</Text> */}
      
         <View style={{height:20}}></View>
+        
        {
-        already==false && new Date(detailsOffres.debut) > new Date() ? <View style={{  width:'100%', backgroundColor:'blue', height:50, borderRadius: 10}}>
-            <Pressable style={{flex:1, justifyContent:'center', alignItems:'center'}}
-            onPress={
-                async () => {
-                    setLoadin(true)
-                            try {
-                                const token = await AsyncStorage.getItem('token')
-                                if (token) {
-                                    axios.defaults.headers.common.Authorization = `Bearer ${token}`;
-                                }
+        data?
+      (  exist==true && new Date(detailsOffres.debut) > new Date() ? <View style={Monstyles.button}>
+      <Pressable 
+      onPress={
+          async () => {
+              setLoadin(true)
+                      try {
+                          const token = await AsyncStorage.getItem('token')
+                          if (token) {
+                              axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+                          }
 
-                                const dat = await axios.post('postule_offre', {offre_id: detailsOffres.id})
-                               
-                                Alert.alert("Réussi", "Vous avez postulé", [{ text: 'OK'}])
-                                // navigation.goBack()
-                                setLoadin(false)
-                               
-                                console.log(dat)
-                            } catch (error) {
-                                navigation.goBack();
-                                Alert.alert("Echec", JSON.stringify(error.response.data.message), [{ text: 'OK'}])
-                                setLoadin(false)
-                            
-                                console.log(error);
-                                
-                            }}
-            }
-            
-            >
-                <Text style={{color:'white', fontSize: 15,fontWeight:'500',}}>Postuler maintenant</Text>
-            </Pressable>
-        </View> : null
+                          const dat = await axios.post('postule_offre', {offre_id: detailsOffres.id})
+                         
+                          Alert.alert("Réussi", "Vous avez postulé", [{ text: 'OK'}])
+                          // navigation.goBack()
+                          setLoadin(false)
+                         
+                          console.log(dat)
+                          getOffer();
+                      } catch (error) {
+                          navigation.goBack();
+                          Alert.alert("Echec", JSON.stringify(error.response.data.message), [{ text: 'OK'}])
+                          setLoadin(false)
+                      
+                          console.log(error);
+                          
+                      }}
+      }
+      
+      >
+          <Text style={Monstyles.textbutton}>Postuler maintenant</Text>
+      </Pressable>
+  </View> : null):<ActivityIndicator color={'#F38B2B'} size="large" />
        }
     
         
@@ -238,5 +259,29 @@ const Monstyles = StyleSheet.create({
         fontWeight:'500',
         fontSize: 24,
         textAlign:'center'
-      }
+      },
+
+   button:{
+    backgroundColor: '#F38B2B',
+    width: '100%',
+    elevation: 5,
+    borderRadius: 10,
+    
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000', 
+    shadowOffset: { width: 0, height: 4 }, 
+    shadowOpacity: 0.5,
+    shadowRadius: 4, 
+   
+    elevation: 10, 
+   
+        
+   
+},
+textbutton:{
+    color:'#FFFFFF',
+    fontSize: 20,
+},
 })

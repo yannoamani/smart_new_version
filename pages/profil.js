@@ -42,20 +42,26 @@ export default function Profile() {
   };
   const getAbonnement = async () => {
     try {
+      const token = await AsyncStorage.getItem('token')
+            if (token) {
+                axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+            }
       const abonnement = await axios.get("seeMyAbonnement");
-     console.log(abonnement.data)
+    //  console.log(abonnement.data[0]);
       const data=abonnement.data.data;
       if (data.length > 0) {
-        setMyabonnement("PREMIUM");
+        setMyabonnement(abonnement.data.data[0]['abonement']['libelle']);
+        console.log(data);
         
       }
      else{
         setMyabonnement("AUCUN ABONNEMENT");
      }
       setRefreshing(false);
-      // console.log( "skills",abonnement.data.data.competences);
+       console.log( "Mes abonement",abonnement.data.data);
     } catch (error) {
-      console.log(error);
+      const token = await AsyncStorage.getItem('token')
+      console.log('Erreur abonnement',error, token);
       setRefreshing(false);
     }
   };
@@ -105,6 +111,23 @@ export default function Profile() {
         
       <Text style={style.name}>{ data ? data.prenoms + " " + data.nom : " " }</Text>
       <View height={10}></View>
+     <ScrollView horizontal>
+     <View  style={{flexDirection:'row',}}>
+        { skills?
+           skills.map((skill, index) => (
+            <View style={{flexShrink:1}} key={index}>
+              <View  style={style.competence}>
+             <Text style={{ color: "white", }} > {skill.competence}</Text>
+             </View>
+            </View>
+            
+               
+           )):
+           <Text>Pas de competence</Text>
+        }
+      </View>
+     </ScrollView>
+      
       {/* {skills ? 
                         <Text numberOfLines={3} ellipsizeMode="tail" style={{ flexGrow:1, flex:1, textAlign: 'center', alignSelf:"center", alignItems: 'center',justifyContent: 'center', }}>
                             {
@@ -394,7 +417,7 @@ export default function Profile() {
          <View style={{ height: 15 }}></View>
         <Pressable
           onPress={async () => {
-             navigation.navigate("Abonnement");
+             navigation.navigate("acceuil_Abonnement");
             // getAbonnement();
           }}
         >
@@ -403,7 +426,7 @@ export default function Profile() {
           <View style={style.leadingOption}>
             <Ionicons name="notifications" size={20} color="#FFD233" />
             
-            <Text style={style.libelleOption}>Faire mon abonnement </Text>
+            <Text style={style.libelleOption}> Abonnement </Text>
             </View>
               
               <Ionicons
@@ -637,6 +660,7 @@ const style=StyleSheet.create({
   competence:{
     paddingHorizontal:5,
     paddingVertical:2,
+    flexShrink:1,
     
     borderRadius:10,
     borderWidth:1,

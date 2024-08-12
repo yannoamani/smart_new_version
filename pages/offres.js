@@ -31,6 +31,8 @@ export default function List() {
   const token = AsyncStorage.getItem("token");
   const [categorie, Setcategorie]=useState([]);
   const [select, setSelect]=useState("Tout");
+  const [like, setLike]=useState(false);
+  
   const getOffers = async () => {
     try {
       data;
@@ -42,12 +44,18 @@ export default function List() {
       const res = await axios.get("list_offres");
       setData(res.data.data);
        console.log(res.data.data[0]);
+       const favoris=res.data.data.favoris;
+
+      
+    
       setRefreshing(false);
       if (value !== null) {
         const user = JSON.parse(value);
         setUserId(user.nom+" "+user.prenoms);
+
         
       }
+      console.log(res.data.data);
     } catch (error) {
       console.log(error);
       setRefreshing(false);
@@ -60,17 +68,37 @@ export default function List() {
       const res = await axios.get("seeCategorie");
       const data=res.data.data;
       data.forEach((element) => {
+        key=element.categorie
         Setcategorie((oldArray) => [...oldArray, element].sort());
         
       })
     // categorie.push(res.data.data);
-    console.log('La liste des categorie',categorie);
+    console.log('La liste des categorie',categorie[0]);
       
     } catch (error) {
       console.log(error);
       
     }
     
+  }
+  const addfavori=async(id)=>{
+    try {
+      const token = await AsyncStorage.getItem("token");
+      if (token) {
+        axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+        
+      }
+      const res = await axios.post("toogleFavoris",{
+        'offre_id':id
+      });
+      getOffers();
+      console.log(res.data);
+      
+    } catch (error) {
+      console.log(error);
+      
+    }
+
   }
 
   const fetchOffers = () => {
@@ -127,15 +155,31 @@ export default function List() {
 
   const renderItem = ({ item }) => {
     const time = displayDate(item.created_at);
+    const fav=item.favoris.length===0 ? false :true
+
     return (
       <View style={ mystyle.container}>
         <Pressable
           onPress={() => {
             //  navigation.navigate("Offer", { id: item.id, already: item });
-            getData(item);
+              getData(item);
+           // console.log(item.favoris)
+            
+           
           }}
         >
-          <Text style={mystyle.titleText}>{item.nom_offre.toUpperCase()}</Text>
+         <View style={mystyle.rate}> 
+         <Text style={mystyle.titleText}>{item.nom_offre.toUpperCase()}</Text>
+        {
+          fav? <Ionicons name="heart" size={20} color="#F38B2B" onPress={() => {
+            
+            addfavori(item.id);
+          }}></Ionicons>: <Ionicons name="heart-outline" size={20} color="#F38B2B"  onPress={() => {
+            
+            addfavori(item.id);
+          }}></Ionicons>
+        }
+         </View>
           <Text style={mystyle.lieu}>{item.lieu}</Text>
           
           <Text style={mystyle.entreprise}>{item.entreprise.nom}</Text>
@@ -181,7 +225,7 @@ export default function List() {
         <Text style={mystyle.welcome}>Bienvenue</Text>
         <Text style={mystyle.welcomeName}>{userId}</Text>
         </View>
-         <Ionicons name="heart-outline" size={25} color="#F38B2B"></Ionicons>
+         <Ionicons name="heart-outline" size={25} color="#F38B2B" onPress={() => navigation.navigate('favories')}></Ionicons>
                </View>
                <View style={{height:10}}></View>
              <ScrollView horizontal>
@@ -239,6 +283,7 @@ const mystyle = StyleSheet.create({
     fontWeight: "500",
     color: "#F38B2B",
     marginBottom: 7,
+    flexShrink: 1 
   },
   lieu: {
     fontSize: 10,
@@ -320,5 +365,17 @@ const mystyle = StyleSheet.create({
     fontSize:24,
     fontWeight:'700',
     marginTop:10
+  },
+  rate:{
+    flexDirection:'row',
+    justifyContent:'space-between',
+    alignItems:'center',
+    
+   flex:1
+   
+  },
+  heart:{
+    marginLeft:10
+    
   }
 });
