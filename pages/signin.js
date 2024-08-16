@@ -1,6 +1,6 @@
 import styles from "../styles";
 import style1 from "../modification_design";
-import React, { useEffect } from "react";
+import React, { useState,useEffect } from "react";
 import { Dropdown } from 'react-native-element-dropdown';
 import {
   Text,
@@ -45,6 +45,9 @@ export default function Signin() {
   const[url, setUrl] = React.useState();
   
   const navigation = useNavigation();
+  const [policeBold, setPolices] = useState("Poppins_700Bold");
+  const [policeRegular, setPoliceRegular] = useState("Poppins_400Regular");
+  const [policeLight, setPoliceLight] = useState("Poppins_300Light_Italic");
   const visible = () => {
     return setVisibility(!visibility);
   };
@@ -210,27 +213,22 @@ export default function Signin() {
       <SafeAreaView style={{ flex: 1 }}>
         <ScrollView>
           <View style={{ flex: 1, padding: 10 }}>
-            <Text style={style1.headerInscription}>
+            <Text style={[style1.headerInscription,{fontFamily:policeBold}]}>
               Bienvenue sur Smart Connect
             </Text>
             <View style={{ height: 5 }}></View>
-            <Text style={style1.labelText}>
-              ! Inscrivez-vous en renseignant les champs nécessaires
+            <Text style={[style1.labelText,{fontFamily:policeRegular}]}>
+              Inscrivez-vous en renseignant les champs nécessaires
             </Text>
             <View style={{ height: 20 }}></View>
             <Text
-              style={{
-                textAlign: "center",
-                fontWeight: "700",
-                fontSize: 36,
-                autoCapitalize: "none",
-              }}
+              style={[styles.titleText,{fontFamily:policeBold}]}
             >
                  IDENTIFIANT
             </Text>
             <View style={{ height: 10 }}></View>
 
-            <Text style={style1.labelText}>Nom</Text>
+            <Text style={[style1.labelText,{fontFamily:policeRegular}]}>Nom</Text>
             <View style={{ height: 2 }}></View>
             <Loader loading={loading} />
             <TextInput
@@ -241,10 +239,10 @@ export default function Signin() {
               onChangeText={(text) => setName(text)}
             />
             <View style={{ height: 20 }}></View>
-            <Text style={style1.labelText}>Prenom</Text>
+            <Text style={[style1.labelText,{fontFamily:policeRegular}]}>Prenom</Text>
             <View style={{ height: 2 }}></View>
             <TextInput
-              style={style1.inputCustom}
+              style={[style1.inputCustom,{fontFamily:policeRegular}]}
               placeholder="Kouame nguessan coul"
               placeholderTextColor={"gray"}
               value={fname}
@@ -253,7 +251,7 @@ export default function Signin() {
               onChangeText={(text) => setfName(text)}
             />
             <View style={{ height: 20 }}></View>
-            <Text style={style1.labelText}>Phone</Text>
+            <Text style={[style1.labelText,{fontFamily:policeRegular}]}>Phone</Text>
             <View style={{ height: 2 }}></View>
             <TextInput
               style={style1.inputCustom}
@@ -266,7 +264,7 @@ export default function Signin() {
             />
 
             <View style={{ height: 20 }}></View>
-            <Text style={style1.labelText}>Email</Text>
+            <Text style={[style1.labelText,{fontFamily:policeRegular}]}>Email</Text>
             <View style={{ height: 2 }}></View>
             <TextInput
               style={style1.inputCustom}
@@ -278,7 +276,7 @@ export default function Signin() {
               onChangeText={(text) => setMail(text)}
             />
             <View style={{ height: 20 }}></View>
-            <Text style={style1.labelText}>Mot de passe</Text>
+            <Text  style={[style1.labelText,{fontFamily:policeRegular}]}>Mot de passe</Text>
             <View style={{ height: 2 }}></View>
             <View
               style={{
@@ -315,17 +313,12 @@ export default function Signin() {
             </View>
 
             <View style={{ height: 20 }}></View>
-            <Text  style={{
-                textAlign: "center",
-                fontWeight: "700",
-                fontSize: 36,
-                autoCapitalize: "none",
-              }}>HABITATION</Text>
+            <Text   style={[styles.titleText,{fontFamily:policeBold}]}>HABITATION</Text>
             
             
             
             <View style={{ height: 20 }}></View>
-            <Text style={style1.labelText}>Ville</Text>
+            <Text  style={[style1.labelText,{fontFamily:policeRegular}]}>Ville</Text>
             <View style={{ height: 2 }}></View>
             <TextInput
               style={style1.inputCustom}
@@ -335,7 +328,7 @@ export default function Signin() {
               onChangeText={(text) => setCity(text)}
             />
              <View style={{ height: 20 }}></View>
-            <Text style={style1.labelText}>Commune </Text>
+            <Text  style={[style1.labelText,{fontFamily:policeRegular}]}>Commune </Text>
             <View style={{ height: 2 }}></View>
             <TextInput
               style={style1.inputCustom}
@@ -345,7 +338,7 @@ export default function Signin() {
               onChangeText={(text) => setMunicipality(text)}
             />
               <View style={{ height: 20 }}></View>
-            <Text style={style1.labelText}>Quartier </Text>
+            <Text  style={[style1.labelText,{fontFamily:policeRegular}]}>Quartier </Text>
             <View style={{ height: 2 }}></View>
             <TextInput
               style={style1.inputCustom}
@@ -355,12 +348,12 @@ export default function Signin() {
               onChangeText={(text) => setHood(text)}
             />
             <View style={{ height: 20 }}></View>
-            <Text style={styles.titleText}>SAVOIR-FAIRE</Text>
+            <Text style={[styles.titleText,{fontFamily:policeBold}]}>QUALIFICATION</Text>
             
             <View style={{ height: 20 }}></View>
          
-             <Text style={style1.labelText}>Diplôme </Text>
-             <View style={{ height: 2 }}></View>
+             <Text style={[style1.labelText,{fontFamily:policeRegular}]}>Diplôme </Text>
+             <View style={{ height: 3 }}></View>
              <View  >
                 <Dropdown 
                  style={style1.dropdown}
@@ -402,7 +395,7 @@ export default function Signin() {
    borderWidth:1, borderWidth: 1 , alignItems:"center",justifyContent:"center" , borderRadius: 10, padding: 10}}>
             <Ionicons name="download-outline" size={50} color="#F38B2B"></Ionicons>
             <View style={{ height: 20 }}></View>
-            <Text>Cliquez pour ajouter votre piece</Text>
+            <Text style={{fontFamily:policeRegular}}>Cliquez pour ajouter votre piece</Text>
             <View style={{ height: 10 }}></View>
             {
                 idcard ? (<View>
@@ -430,7 +423,7 @@ export default function Signin() {
            </View>
           </Pressable>
           <View style={{ height: 30 }}></View>
-          <Text style={{textAlign:"center"}}>Vous avez deja un compte ? <Text style={{color:"#F38B2B", fontWeight:"700"}} onPress={() => navigation.navigate('Login')}>Connectez-vous</Text></Text>
+          <Text style={{textAlign:"center", fontFamily:policeRegular}}>Vous avez deja un compte ? <Text style={{color:"#F38B2B", fontWeight:'bold', fontFamily:policeBold}} onPress={() => navigation.navigate('Login')}>Connectez-vous</Text></Text>
 
           
           </View>

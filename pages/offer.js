@@ -26,6 +26,7 @@ export default function Offer({route}) {
     //  return   setDesc(detailsOffres.description.replace(/<[^>]*>|&nbsp;/g, ' ').trim().toUpperCase().split('  '))
     // }
     const getOffer = async () => {
+      console.log('offer',id)
         try {
             const token = await AsyncStorage.getItem('token')
              const user = await AsyncStorage.getItem('user')

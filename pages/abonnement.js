@@ -16,6 +16,9 @@ export default function Abonnement() {
     const [selectAbonnement , setSelecAbonnement] = useState();
     const [loading, setLoading] = useState(false);
     const [charging, setCharging] = useState(false);
+    const [policeBold, setPolices] = useState("Poppins_700Bold");
+    const [policeRegular, setPoliceRegular] = useState("Poppins_400Regular");
+    const [policeLight, setPoliceLight] = useState("Poppins_300Light_Italic");
     const reseau=[
         {'nom':'ORANGE MONEY', 'logo':require('../assets/Orange-Money-logo.png')},
         {'nom':'MTN MONEY', 'logo':require('../assets/mtn-1-1200x900.jpg')},
@@ -166,7 +169,7 @@ onPress={()=>{
         </View>
        }
 
-       />: <ActivityIndicator  style={{ flex: 1 ,alignItems: 'center', justifyContent: 'center'}}size="large" color="white" />
+       />: <ActivityIndicator  style={{ flex: 1 ,alignItems: 'center', justifyContent: 'center'}}size="large" color="#F38B2B" />
         }
             
        

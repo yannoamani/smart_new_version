@@ -1,17 +1,21 @@
 import { View , Text, StyleSheet, Pressable} from "react-native"
 import { useNavigation } from "@react-navigation/native";
+import React, { useState } from "react";
 
 
 const AcceuilAbonnement=()=>{
+    const [policeBold, setPolices] = useState("Poppins_700Bold");
+    const [policeRegular, setPoliceRegular] = useState("Poppins_400Regular");
+    const [policeLight, setPoliceLight] = useState("Poppins_300Light_Italic");
     const navigation = useNavigation();
     return(
      <View style={style.container}>
-        <Pressable style={style.button} onPress={() => navigation.navigate("Abonnement")}> 
-                <Text style={style.textbutton}>Faire un abonnement</Text>
+        <Pressable style={[style.button,]} onPress={() => navigation.navigate("Abonnement")}> 
+                <Text style={[style.textbutton, {fontFamily:policeRegular}]}>Faire un abonnement</Text>
         </Pressable>
         <View height={50}></View>
         <Pressable style={style.button} onPress={() => navigation.navigate("MyAbonnement")}> 
-                <Text style={style.textbutton}>Mes  abonnements </Text>
+                <Text style={[style.textbutton, {fontFamily:policeRegular}]}>Mes  abonnements </Text>
         </Pressable>
         
 

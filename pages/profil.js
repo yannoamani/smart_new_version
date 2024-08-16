@@ -16,6 +16,9 @@ export default function Profile() {
   const [refreshing, setRefreshing] = useState(false);
   const navigation = useNavigation();
   const [myabonnement, setMyabonnement] = useState('Attente');
+  const [policeBold, setPolices] = useState("Poppins_700Bold");
+  const [policeRegular, setPoliceRegular] = useState("Poppins_400Regular");
+  const [policeLight, setPoliceLight] = useState("Poppins_300Light_Italic");
   const getUser = async () => {
     try {
       const temp = await AsyncStorage.getItem("user");
@@ -101,7 +104,7 @@ export default function Profile() {
     <View style={{flex:1 , backgroundColor: "#F1F2F4"}}>
       <View style={style.header}>
        <SafeAreaView>
-        <Text style={style.title}>Profil</Text>
+        <Text style={[style.title, { fontFamily: policeBold }]}>Profil</Text>
         <View style={{height:10}}></View>
        <View style={style.row}>
        <View style={style.circle}>
@@ -109,7 +112,7 @@ export default function Profile() {
         </View>
       <View>
         
-      <Text style={style.name}>{ data ? data.prenoms + " " + data.nom : " " }</Text>
+      <Text style={[style.title, { fontFamily: policeRegular }]}>{ data ? data.prenoms + " " + data.nom : " " }</Text>
       <View height={10}></View>
      <ScrollView horizontal>
      <View  style={{flexDirection:'row',}}>
@@ -123,7 +126,7 @@ export default function Profile() {
             
                
            )):
-           <Text>Pas de competence</Text>
+           <Text style={{ color: "white", fontFamily: policeRegular, textAlign: 'center', alignSelf:"center", alignItems: 'center',justifyContent: 'center',}}>Pas de competence</Text>
         }
       </View>
      </ScrollView>
@@ -426,7 +429,7 @@ export default function Profile() {
           <View style={style.leadingOption}>
             <Ionicons name="notifications" size={20} color="#FFD233" />
             
-            <Text style={style.libelleOption}> Abonnement </Text>
+            <Text style={[style.libelleOption,{fontFamily:policeRegular}]}> Abonnement </Text>
             </View>
               
               <Ionicons
@@ -454,7 +457,7 @@ export default function Profile() {
                <Ionicons name="alarm-outline" size={20} color="black" />
             
             <Text
-              style={style.libelleOption}
+             style={[style.libelleOption,{fontFamily:policeRegular}]}
             >
               Mes plages horaires
             </Text>
@@ -484,7 +487,7 @@ export default function Profile() {
               <Ionicons name="flask-outline" size={20} color="black" />
               
               <Text
-                style={style.libelleOption}
+               style={[style.libelleOption,{fontFamily:policeRegular}]}
               >
                Ajouter une experience
               </Text>
@@ -513,7 +516,7 @@ export default function Profile() {
              <Ionicons name="library-outline" size={20} color="black" />
              
              <Text
-               style={style.libelleOption}
+              style={[style.libelleOption,{fontFamily:policeRegular}]}
              >
               Ajouter une competence
              </Text>
@@ -550,9 +553,9 @@ export default function Profile() {
            <Ionicons name="log-in-outline" size={20} color="red" />
              
              <Text
-             style={style.libelleOption}
+            style={[style.libelleOption,{fontFamily:policeRegular}]}
              >
-             Deconnexion
+             Déconnexion
              </Text>
            </View>
              

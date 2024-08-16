@@ -1,4 +1,4 @@
-import { FlatList, View, Text, Pressable, ScrollView } from "react-native";
+import { FlatList, View,StyleSheet, Text,Image, Pressable, ScrollView } from "react-native";
 import styles from '../styles';
 import React, { useEffect, useState } from "react";
 import axios from "axios";
@@ -23,7 +23,7 @@ export default function Contacts() {
             const res = await axios.get('get_who_contact_student');
             setData(res.data.entreprises);
             setLoading(false)
-            console.log("contacts", res.data.entreprises);
+            console.log("contacts", res.data);
             console.log("count", data.length);
             setRefreshing(false);
         } catch (error) {
@@ -49,49 +49,45 @@ export default function Contacts() {
     }, []);
 
     const renderItem = ({ item }) => {
-        const time = displayDate(item.pivot.offre.created_at);
-        return (
-            <View style={styles.item}>
-                <Pressable onPress={() => {
-                    navigation.navigate("Contact", { data: item });
-                }}>
-                    <Text style={styles.itemText}>
-                        {/* {token} */}
-                        Offre : {item.pivot.offre.nom_offre.toUpperCase()} ({item.pivot.offre.categorie.categorie}) {"\n"}
-                        Du {item.pivot.offre.debut} au {item.pivot.offre.fin}
-                    </Text>
-                    <Text style={styles.itemText}>
-                        Lieu : {item.pivot.offre.lieu.toUpperCase()}, Employeur : {item.nom.toUpperCase()}
-                    </Text>
-                    <Text style={styles.itemText}>
-                        Posté le : {time.date} à {time.hour}
-                    </Text>
-                    <Text style={{
-                            position: "absolute",
-                            right: '3%',
-                            bottom: '3%'
-                        }}>
-                    {
-                        item.pivot.recruit == 1 ?
-                        <Ionicons color={"darkgreen"} name="checkmark-done-circle-outline" size={35} /> :
-                        item.pivot.recruit == 2 ?
-                        <Ionicons color={"red"} name="close-circle-outline" size={35} /> :
-                        null
-                    }
-                    </Text>
-                </Pressable>
-            </View>
-        );
-    };
+    const time = displayDate(item.created_at);
+  
 
     return (
-        <View style={styles.container}>
-            <View
-                style={{
-                    width: '100%',
-                    padding: '0.5%',
-                }}
-            >
+      <View style={ style.container}>
+        <Pressable
+          onPress={() => {
+            navigation.navigate("Contact", { data: item });
+            
+           // console.log(item.favoris)
+            
+           
+          }}
+        >
+         <View style={style.rate}> 
+         <Text style={style.titleText}>{item.pivot.offre.nom_offre.toUpperCase()}</Text>
+      
+         </View>
+          <Text style={style.lieu}>{item.pivot.offre.nom_offre.lieu}</Text>
+          
+          <Text style={style.entreprise}>{item.nom}</Text>
+          <View style={style.rowinfo}>
+          <View style={style.contimage}>
+            <Image source={require("../assets/emploijeune.png")} style={style.image}></Image>
+          </View>
+          <Text  numberOfLines={3} ellipsizeMode="tail" style={style.description}> {item.pivot.offre.description.toUpperCase().replace(/<[^>]*>|&nbsp;/g, ' ').trim().toUpperCase().split('  ')}</Text>
+
+          </View>
+        
+        </Pressable>
+        
+    
+      </View>
+    );
+  };
+
+    return (
+        <View style={style.allContainer}>
+    
                 {data ? (
                     <FlatList
                         style={{ width: "100%" }}
@@ -110,7 +106,85 @@ export default function Contacts() {
                 ) : (
                     <Text style={styles.titleText}>Aucune donnée</Text>
                 )}
-            </View>
+    
         </View>
     );
 }
+const style = StyleSheet.create({
+    allContainer: {
+        paddingTop: 20,
+        flex: 1,
+        backgroundColor: "#F1F2F4",
+        paddingHorizontal: 10,
+        
+    },
+    container: {
+  padding: 15,
+  borderRadius: 15,
+  backgroundColor: "white",
+ 
+ 
+ 
+  marginTop: 30,
+  shadowColor: '#000', // Couleur de l'ombre
+  shadowOffset: { width: 0, height: 4 }, // Décalage de l'ombre
+  shadowOpacity: 0.5,
+  shadowRadius: 2, // Rayon de l'ombre
+ 
+
+
+  },
+  titleText: {
+    fontSize: 14,
+    fontWeight: "500",
+    color: "#F38B2B",
+    marginBottom: 7,
+    flexShrink: 1 
+  },
+  lieu: {
+    fontSize: 10,
+    fontWeight: "500",
+    color: "#000",
+    marginBottom: 7,
+  },
+  entreprise: {
+    fontSize: 10,
+    fontWeight: "300",
+    color: "#000",
+    marginBottom: 7,
+  },
+  rowinfo: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  contimage:{
+    width: 43,
+    height: 43,
+   
+    marginRight: 10,
+   
+  },
+  image:{
+  width: "100%",
+  height: "100%",
+ resizeMode: "contain"
+  },
+  description: {
+    fontSize: 10,
+    fontWeight: "300",
+    color: "#000000",
+  flex: 1
+  },
+  welcome:{
+    fontSize:13,
+    fontWeight:"300",
+    marginBottom:5
+  },
+  name:{
+    fontSize:15,
+    fontWeight:"700",
+    
+    marginBottom:5
+  },
+})

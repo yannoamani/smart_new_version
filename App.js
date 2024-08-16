@@ -12,7 +12,7 @@ import { Image,Pressable,Text } from 'react-native';
 import Profile from './pages/profil';
 import Offer from './pages/offer';
 import Appliance from './pages/appliance';
-import Contact from './pages/contact';
+import Contact from './pages/contact';  
 import Contacts from './pages/contacts';
 import AppliancesList from './pages/appliances';
 import EditSelf from './pages/editself';
@@ -28,9 +28,16 @@ import SplahScreen from './pages/splah_screen';
 import AcceuilAbonnement from './acceuilAbonnement';
 import MyAbonnement from './pages/myabonnement';
 import Favories from './pages/favories';
-
+import StepOne from './pages/steppers/StepOne';
+import { useFonts, Poppins_900Black, Poppins_400Regular, Poppins_700Bold, Poppins_300Light_Italic } from '@expo-google-fonts/poppins';
+import StepTwo from './pages/steppers/StepTwo';
+import StepThree from './pages/steppers/stepThree';
+import cinetpay from './pages/cinetpay';
+import Cinetpay from './pages/cinetpay';
+import { CinetPay } from 'node-cinetpay';
+import Cinetpays from './pages/cinetpay';
 export default function App() {
-  axios.defaults.baseURL = 'http://192.168.1.5:8000/api/';
+  axios.defaults.baseURL = 'http://192.168.1.9:8000/api/';
   const setAuthorizationHeader = async () => {
     try {
       const token = await AsyncStorage.getItem('token');
@@ -59,6 +66,7 @@ export default function App() {
           }
         });
         setFinal(cpt)
+        console.log('compte',cpt,res.data.entreprises)
     } catch (error) {
         return null;
     }
@@ -183,13 +191,25 @@ export default function App() {
     return (
       <AuthStack.Navigator screenOptions={{headerShown: false}}>
        
+        <AuthStack.Screen name="cinetpay" component={Cinetpays} />
         <AuthStack.Screen name="Splash" component={SplahScreen} />
-        <AuthStack.Screen name="onboarding" component={OnboardingPage} />
+        <AuthStack.Screen name="stepone" component={StepOne} />
+        <AuthStack.Screen name="StepTwo" component={StepTwo} />
+        <AuthStack.Screen name="StepThree" component={StepThree} />
         <AuthStack.Screen name="Login" component={Login} />
         <AuthStack.Screen name="Signin" component={Signin} />
       </AuthStack.Navigator>
     );
   }
+
+  let [fontsLoaded] = useFonts({
+    Poppins_900Black, Poppins_400Regular, Poppins_300Light_Italic, Poppins_700Bold
+  }, [Poppins_900Black, Poppins_400Regular, Poppins_300Light_Italic, Poppins_700Bold]);
+
+  if (!fontsLoaded) {
+    return null
+  }
+
   return (
       <NavigationContainer>
         <Tab.Navigator screenOptions={({ route }) => ({

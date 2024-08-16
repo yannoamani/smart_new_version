@@ -17,10 +17,10 @@ export default  function SplahScreen() {
         if (token) {
             navigation.navigate('OffresTab');
         } else {
-            navigation.navigate('onboarding');
+            navigation.replace('stepone');
         }
         
-      }, 3000);
+      }, 100);
     }
     useEffect(() => {   
         redirection();
