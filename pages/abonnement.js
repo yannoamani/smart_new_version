@@ -19,6 +19,7 @@ export default function Abonnement() {
     const [policeBold, setPolices] = useState("Poppins_700Bold");
     const [policeRegular, setPoliceRegular] = useState("Poppins_400Regular");
     const [policeLight, setPoliceLight] = useState("Poppins_300Light_Italic");
+    const [infoUser, setinfoUser] = useState({}); 
     const reseau=[
         {'nom':'ORANGE MONEY', 'logo':require('../assets/Orange-Money-logo.png')},
         {'nom':'MTN MONEY', 'logo':require('../assets/mtn-1-1200x900.jpg')},
@@ -27,6 +28,20 @@ export default function Abonnement() {
 
     ]
   
+    const getinfoUser = async () => {
+    
+
+        try {
+          const user= await AsyncStorage.getItem("user");
+      setinfoUser(JSON.parse(user));
+      console.log('Info utilisateur',JSON.stringify(user))
+          
+        } catch (error) {
+          console.log(error);
+          
+        }
+    }
+    
 
     const getAbonnement= async()=>{
         try {
@@ -50,7 +65,84 @@ export default function Abonnement() {
         }
         
     }
+    const payementCinetPay = async ( trans_id, idAmount) => {
+        var data = JSON.stringify({
+          apikey: "29323203565f8d1235633c4.08272143",
+          site_id: "5869904",
+          transaction_id: trans_id,
+          mode: "PRODUCTION", //
+          amount: idAmount,
+          currency: "XOF",
+          close_after_response: true,
+          alternative_currency: "",
+          description: " TEST INTEGRATION ",
+          customer_id: infoUser.id,
+          customer_name: infoUser.nom,
+          customer_surname: infoUser.prenoms,
+          customer_email: infoUser.email,
+          customer_phone_number: infoUser.phone,
+          customer_address: infoUser.commune,
+          customer_city: infoUser.quartier,
+          customer_country: "CM",
+          customer_state: "CM",
+          customer_zip_code: "065100",
+          notify_url: "http://192.168.1.9:8000/api/cintepay/verification_paiement/"+trans_id,
+          return_url: "https://google.com",
+          channels: "ALL",
+          metadata: "user1",
+          lang: "FR",
+          lock_phone_number: false,
+        });
+    
+        var config = {
+          method: "post",
+          url: "https://api-checkout.cinetpay.com/v2/payment",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          data: data,
+        };
+    
+        await axios(config)
+          .then(function (response) {
+            console.log(JSON.stringify(response.data));
+            console.log(response.data.data.payment_url);
+            Linking.openURL(response.data.data.payment_url);
+    
+            if (response.code == 201) {
+              Linking.openURL(response.data.data.payment_url);
+            }
+          })
+          .catch(function (error) {
+            console.log("error", error);
+          });
+      };
 
+      const dopaiement = async () => {
+        try {
+         
+         const token = await AsyncStorage.getItem('token');
+         if (token) {
+           axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+         }
+         console.log(token);
+         const res = await axios.post("cintepay/paiement", {
+           abonement_id: selectedIndex,
+           channels: moyenPayement,
+         });
+         console.log(res.status);
+         if (res.status==201||res.status==200) {
+             console.log(res.data);
+             payementCinetPay(res.data.data.transaction_id, res.data.data.montant);
+             
+         }
+       
+         
+        } catch (error) {
+         console.log(error);
+         
+        }
+       };
     const buyAbonnement = async () => {
         setCharging(true);
         try {
@@ -153,7 +245,7 @@ export default function Abonnement() {
 <Pressable
 onPress={()=>{
    if(moyenPayement && abonnement){
-    Alert.alert('Attention','Abonnement '+ abonnement+" Payer par : "+moyenPayement+" ", [{ text: 'Oui', onPress: () => {buyAbonnement()} },{ text: 'Annuler', onPress: () => console.log('Annuler') }], { cancelable: true });
+    Alert.alert('Attention','Abonnement '+ abonnement+" Payer par : "+moyenPayement+" ", [{ text: 'Oui', onPress: () => {dopaiement()} },{ text: 'Annuler', onPress: () => console.log('Annuler') }], { cancelable: true });
    }
    else{
     Alert.alert('Attention','Veuillez choisir un abonnement ', [,{ text: 'Annuler', onPress: () => console.log('OK') }], { cancelable: true });

@@ -1,4 +1,4 @@
-import { FlatList, View,StyleSheet, Text,Image, Pressable, ScrollView } from "react-native";
+import { FlatList, View,StyleSheet, Text,Image, Pressable, ScrollView,ActivityIndicator } from "react-native";
 import styles from '../styles';
 import React, { useEffect, useState } from "react";
 import axios from "axios";
@@ -104,7 +104,10 @@ export default function Contacts() {
                         }
                     />
                 ) : (
-                    <Text style={styles.titleText}>Aucune donnée</Text>
+                  <View style={{height:'100%',justifyContent:'center',alignItems:'center', }}>
+        <ActivityIndicator size="large" color="#F38B2B" />
+
+        </View>
                 )}
     
         </View>

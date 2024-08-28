@@ -64,14 +64,14 @@ const MyAbonnement=()=>{
        <View style={style.container}>
 
      {
-        myabonnement?   <FlatList
+       ! myabonnement?   <FlatList
         data={myabonnement}
         renderItem={render}
         keyExtractor={(item) => item.id}
         refreshing={refreshing}
         onRefresh={getAbonnement}
         />:
-         <ActivityIndicator size="large" color="#F38B2B" style={{flex: 1, justifyContent: 'center', alignItems: 'center'}} />  
+        ( <ActivityIndicator size="large" color="#F38B2B" style={{flex: 1, justifyContent: 'center', alignItems: 'center'}} />  )
      }
        </View>
         

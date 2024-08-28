@@ -28,7 +28,7 @@ export default  function SplahScreen() {
 
     return (
         <View style={style.container}>
-            <Text style={style.title}>Smart Connect</Text>
+            <Text style={style.title}></Text>
         </View>
     )
 }

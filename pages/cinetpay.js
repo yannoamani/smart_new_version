@@ -1,8 +1,10 @@
 import { StyleSheet, Text, View, Pressable, Linking } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import { Ionicons } from "@expo/vector-icons";
 import Reactc, { useState, useEffect } from "react";
 import axios from "axios";
+import { MotiView } from "moti";
+import { Easing } from 'react-native-reanimated';
 
 const Cinetpays = () => {
   const [infoUser, setinfoUser] = useState({}); 
@@ -101,17 +103,54 @@ const Cinetpays = () => {
    }
   };
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text>Cinetpay</Text>
-      <View style={{ height: 40 }}></View>
-      <Pressable onPress={() => payement2()} style={{ backgroundColor: "blue" , padding:10}}>
-        <Text>Cinetpay</Text>
-      </Pressable>
-      <Text>{JSON.stringify(infoUser.nom)}</Text>
+    // <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+    //   <Text>Cinetpay</Text>
+    //   <View style={{ height: 40 }}></View>
+    //   <Pressable onPress={() => payement2()} style={{ backgroundColor: "blue" , padding:10}}>
+    //     <Text>Cinetpay</Text>
+    //   </Pressable>
+    //   <Text>{JSON.stringify(infoUser.nom)}</Text>
+    // </View>
+    <View style={{flex: 1, justifyContent: "center", alignItems: "center" }}>
+    <View style={styles.dot}>
+    <View style={{flex: 1, justifyContent: "center", alignItems: "center" , height: 100, width: 100}}>
+   {
+    [...Array(3).keys()].map((i) => {
+      return <MotiView
+      from={{ opacity: 1, scale: 1 }}
+      transition={{
+        repeatReverse: false,  
+         type: "timing", duration: 2000,delay:i*400,loop: true, easing: Easing.out(Easing.ease) }}
+      animate={{ opacity: 0, scale: 4 , }}
+       key={i} style={[StyleSheet.absoluteFillObject, styles.dot , ] }
+
+      />
+      
+
+      
+    })
+
+   }
+   <Ionicons name="call" size={50} color="white" ></Ionicons>
+
+    </View>
+    
+   
+
+
+    </View>
+
     </View>
   );
 };
 
 export default Cinetpays;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  dot:{
+    width:150,
+    height:150,
+    borderRadius:150/2,
+    backgroundColor:'red'
+  }
+});

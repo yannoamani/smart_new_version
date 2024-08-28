@@ -32,7 +32,7 @@ const StepOne = () => {
             </View>
         </View>
         <View style={{flex:1, justifyContent:"space-around", alignItems:"center", flexDirection:"row"}}>
-            <Text style={{color:"gray", fontFamily:policeLight}} onPress={() => navigation.navigate('StepThree')}>Skip</Text>
+            <Text style={{color:"gray", fontFamily:policeLight}} onPress={() => navigation.navigate('StepThree')}>Passer</Text>
             <TouchableOpacity
                  onPress={() => navigation.navigate('StepTwo')}
                 style={{
@@ -41,6 +41,9 @@ const StepOne = () => {
                     backgroundColor:"#F38B2B", 
                     borderRadius:10, 
                     padding:5,
+                    flexDirection:"row",
+                    justifyContent:'space-around',
+                    alignItems:'center',
                     shadowColor: "#000",
                     shadowOffset: {
                         width: 0,
@@ -51,6 +54,7 @@ const StepOne = () => {
                     elevation: 5,
                 }}
             >
+            <Text style={{color:"white", fontFamily:policeRegular, fontSize:15}}>Suivant</Text>
                 <MaterialCommunityIcons name="arrow-right-thin" size={27} color="white" style={{alignSelf:'flex-end'}} />
             </TouchableOpacity>
         </View>

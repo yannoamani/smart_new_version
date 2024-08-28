@@ -191,7 +191,7 @@ export default function App() {
     return (
       <AuthStack.Navigator screenOptions={{headerShown: false}}>
        
-        <AuthStack.Screen name="cinetpay" component={Cinetpays} />
+       {/* <AuthStack.Screen name="cinetpay" component={Cinetpays} /> */}
         <AuthStack.Screen name="Splash" component={SplahScreen} />
         <AuthStack.Screen name="stepone" component={StepOne} />
         <AuthStack.Screen name="StepTwo" component={StepTwo} />

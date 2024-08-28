@@ -4,6 +4,11 @@ import LinearGradient from "react-native-linear-gradient";
 import { Checkbox, IconButton } from 'react-native-paper';
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 
+
+
+
+
+
 import {
   Text,
   View,
@@ -34,7 +39,7 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [email, setMail] = React.useState("");
   const [resetPwdEmail, setPwdEmail] = useState("");
-  const [pwd, setPwd] = React.useState("12345678");
+  const [pwd, setPwd] = React.useState("");
   const [isModalVisible, setModalVisible] = useState(false);
   const [isPwdModalVisible, setPwdModalVisible] = useState(false);
   const [checked, setChecked] = useState(false);
@@ -82,7 +87,7 @@ export default function Login() {
   };
 
   const Log = async () => {
-     navigation.navigate("OffresTab");
+    navigation.navigate("OffresTab");
     setLoading(true);
 
     try {
@@ -176,8 +181,8 @@ export default function Login() {
               <TextInput
                 style={{ width: "100%" }}
                 secureTextEntry={!isPwdModalVisible}
-                placeholder=""
-                placeholderTextColor={"grey"}
+                placeholder="Mot de passe..."
+                placeholderTextColor={"#0000004D"}
                 value={pwd}
                 onChangeText={(text) => setPwd(text)}
               />
@@ -226,8 +231,11 @@ export default function Login() {
               <Text style={[style.textbutton, { fontFamily: policeRegular }]}>Se connecter</Text>
             </Pressable>
 
+
             <View style={{ height: 40 }}></View>
-            <View
+            
+          
+            {/* <View
               style={{
                 flexDirection: "row",
                 alignItems: "center",
@@ -243,8 +251,8 @@ export default function Login() {
               <View
                 style={{ height: 1, backgroundColor: "black", flex: 1 }}
               ></View>
-            </View>
-
+            </View> */}
+{/* 
             <View style={{ height: 20 }}></View>
             <View style={style.connectCard}>
               <View style={style.cards}>
@@ -259,7 +267,7 @@ export default function Login() {
               <MaterialCommunityIcons name="google" size={24}   />
                 <Text style={[style.cardText, { fontFamily: policeRegular }]}>Google</Text>
               </View>
-            </View>
+            </View> */}
             <View style={{ height: 110 }}></View>
             <View style={{ flexDirection: "row", justifyContent: "center" }}>
               <Text style={[style.noaccont, { fontFamily: policeRegular }]}>

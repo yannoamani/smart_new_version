@@ -1,4 +1,4 @@
-import { FlatList, View, Text, Pressable,  Image,ScrollView } from "react-native";
+import { FlatList, View, Text, Pressable,  Image,ScrollView ,ActivityIndicator} from "react-native";
 import styles from '../pages/styles/offerStyle';
 
 import React, { useEffect, useState } from "react";
@@ -112,7 +112,10 @@ export default function AppliancesList() {
                         refreshing={refreshing}
                     />
                 ) : (
-                    <Text style={styles.titleText}>Loading...</Text>
+                    <View style={{height:'100%',justifyContent:'center',alignItems:'center', }}>
+        <ActivityIndicator size="large" color="#F38B2B" />
+
+        </View>
                 )}
             {/* </ScrollView> */}
         </View>

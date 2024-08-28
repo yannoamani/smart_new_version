@@ -7,6 +7,7 @@ import {
   ScrollView,
   Alert,
   LogBox,
+ActivityIndicator, 
   StyleSheet,
 } from "react-native";
 import styles from "../styles";
@@ -335,7 +336,11 @@ export default function List() {
               }
             />
           ) : (
-            <Text style={styles.titleText}>Loading...</Text>
+        
+        <View style={{height:'100%',justifyContent:'center',alignItems:'center', }}>
+        <ActivityIndicator size="large" color="#F38B2B" />
+
+        </View>
           )}
         </View>
       </View>

@@ -22,7 +22,7 @@ const StepTwo = () => {
             <Image source={require('../../assets/remove1.png')} style={{width:430, height:430, }} />
             <View style={{justifyContent:"center", alignItems:"center", padding:10, position:"relative", bottom:"5%"}}>
  
-                <Text style={{fontFamily:policeBold, fontSize:20, color:"#F38B2B", marginBottom:"1à%", textAlign:"center"}}>Trouvez des petits boulots en un clin d'œil !</Text>
+                <Text style={{fontFamily:policeBold, fontSize:20, color:"#F38B2B", marginBottom:"1%", textAlign:"center"}}>Trouvez des petits boulots en un clin d'œil !</Text>
                 <Text style={{fontFamily:policeRegular, fontSize:12, lineHeight:21, textAlign:"center", marginTop:"2%"}}>Connectez-vous facilement avec des entreprises pour des projets enrichissants pendant votre temps libre.  Inscrivez-vous, explorez les offres et décrochez un job en quelques minutes seulement.</Text>
                 <View style={{flexDirection:"row", marginTop:"8%"}}>
                    
@@ -34,7 +34,7 @@ const StepTwo = () => {
             </View>
         </View>
         <View style={{flex:1, justifyContent:"space-around", alignItems:"center", flexDirection:"row", marginTop:"10%"}}>
-            <Text style={{color:"gray", fontFamily:policeLight}}>Skip</Text>
+            <Text style={{color:"gray", fontFamily:policeLight}}  onPress={() => navigation.navigate('StepThree')}>Suivant</Text>
             <TouchableOpacity
                  onPress={() => navigation.navigate('StepThree')}
                 style={{
@@ -43,6 +43,9 @@ const StepTwo = () => {
                     backgroundColor:"#F38B2B", 
                     borderRadius:10, 
                     padding:5,
+                    flexDirection:"row",
+                    justifyContent:'space-around',
+                    alignItems:'center',
                     shadowColor: "#000",
                     shadowOffset: {
                         width: 0,
@@ -53,6 +56,7 @@ const StepTwo = () => {
                     elevation: 5,
                 }}
             >
+               <Text style={{color:"white", fontFamily:policeRegular, fontSize:15}}>Suivant</Text>
                 <MaterialCommunityIcons name="arrow-right-thin" size={27} color="white" style={{alignSelf:'flex-end'}} />
             </TouchableOpacity>
         </View>

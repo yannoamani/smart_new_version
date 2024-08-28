@@ -3,6 +3,8 @@ import React, { useState } from 'react'
 import { Button, IconButton } from 'react-native-paper'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { useNavigation } from "@react-navigation/native";
+import { MotiView } from 'moti'
+import { Easing } from 'react-native-reanimated';
 
 const StepThree = () => {
     const [policeBold, setPolices] = useState("Poppins_700Bold")
@@ -57,12 +59,17 @@ const StepThree = () => {
                     elevation: 5,
                 }}
             >
+
             <Text style={{fontFamily:policeRegular, fontSize:15, color:'white'}}>Commencer</Text>
                 <MaterialCommunityIcons name="arrow-right-thin" size={27} color="white" style={{alignSelf:'flex-end'}} />
             </TouchableOpacity>
         </View>
+       
         </View>
+        
+      
     </View>
+    
   )
 }
 
