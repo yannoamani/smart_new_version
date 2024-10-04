@@ -1,10 +1,11 @@
-import { FlatList,Image,ActivityIndicator, View,useWindowDimensions,  StyleSheet, Text, ScrollView, Alert, Pressable } from "react-native";
+import { FlatList,Image,ActivityIndicator, View,useWindowDimensions,  StyleSheet, Text, ScrollView, Alert, Pressable, Linking } from "react-native";
 import style, { styles } from '../pages/styles/Abonnement.js';
 import React, { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { Ionicons } from "@expo/vector-icons";
 import RenderHtml from 'react-native-render-html';
+import { WebView } from 'react-native-webview';
 
 
 export default function Abonnement() {
@@ -20,6 +21,8 @@ export default function Abonnement() {
     const [policeRegular, setPoliceRegular] = useState("Poppins_400Regular");
     const [policeLight, setPoliceLight] = useState("Poppins_300Light_Italic");
     const [infoUser, setinfoUser] = useState({}); 
+    const [trans_id, setTrans_id] = useState('');
+
     const reseau=[
         {'nom':'ORANGE MONEY', 'logo':require('../assets/Orange-Money-logo.png')},
         {'nom':'MTN MONEY', 'logo':require('../assets/mtn-1-1200x900.jpg')},
@@ -42,6 +45,25 @@ export default function Abonnement() {
         }
     }
     
+ const verifPaiement = async (trans_id) => {
+  try {
+    setTimeout(async() => {
+      console.log("Fonction paiement");
+      const res = await axios.post("cintepay/verification_paiement/"+trans_id);
+      const donne= res.data;
+      console.log('REPONSE Paiement',donne);
+      setTrans_id("");
+    }, 1000)
+   
+    
+  } catch (error) {
+    console.log(error);
+    
+  }
+ 
+}
+    
+
 
     const getAbonnement= async()=>{
         try {
@@ -66,35 +88,34 @@ export default function Abonnement() {
         
     }
     const payementCinetPay = async ( trans_id, idAmount) => {
-        var data = JSON.stringify({
-          apikey: "29323203565f8d1235633c4.08272143",
-          site_id: "5869904",
-          transaction_id: trans_id,
-          mode: "PRODUCTION", //
-          amount: idAmount,
-          currency: "XOF",
-          close_after_response: true,
-          alternative_currency: "",
-          description: " TEST INTEGRATION ",
-          customer_id: infoUser.id,
+      console.log("ALLO",trans_id);
+      console.log("ALLOIDAMOUNT",idAmount);
+    console.log("infoUser",infoUser)
+      let data = JSON.stringify({
+            apikey: "29323203565f8d1235633c4.08272143",
+            site_id: "5869904",
+            transaction_id:trans_id,
+            amount: idAmount,
+            currency: "XOF",
+            notify_url:"http://back-smart-connect.lce-ci.com/api/cintepay/verification_paiement/"+trans_id,
+            return_url: "https://lce-ci.com",
+            cancel_url: "https://lce-ci.com",
+            close_after_response: true,
+            alternative_currency: "XOF",
+            description: " TEST INTEGRATION",
+            customer_id: infoUser.id,
           customer_name: infoUser.nom,
           customer_surname: infoUser.prenoms,
           customer_email: infoUser.email,
           customer_phone_number: infoUser.phone,
           customer_address: infoUser.commune,
           customer_city: infoUser.quartier,
-          customer_country: "CM",
-          customer_state: "CM",
-          customer_zip_code: "065100",
-          notify_url: "http://192.168.1.9:8000/api/cintepay/verification_paiement/"+trans_id,
-          return_url: "https://google.com",
-          channels: "ALL",
-          metadata: "user1",
-          lang: "FR",
-          lock_phone_number: false,
-        });
-    
-        var config = {
+            channels: "ALL",
+            lock_phone_number: false,
+            lang: "FR",
+});
+console.log("DATA454",data)
+        let config = {
           method: "post",
           url: "https://api-checkout.cinetpay.com/v2/payment",
           headers: {
@@ -102,16 +123,15 @@ export default function Abonnement() {
           },
           data: data,
         };
-    
+     
         await axios(config)
           .then(function (response) {
-            console.log(JSON.stringify(response.data));
+            console.log(response.data);
             console.log(response.data.data.payment_url);
+            // Linking.openURL(response.data.data.payment_url);
             Linking.openURL(response.data.data.payment_url);
-    
-            if (response.code == 201) {
-              Linking.openURL(response.data.data.payment_url);
-            }
+            setTrans_id(trans_id);
+           
           })
           .catch(function (error) {
             console.log("error", error);
@@ -119,6 +139,7 @@ export default function Abonnement() {
       };
 
       const dopaiement = async () => {
+        const trans_id=Math.floor(Math.random() * 100000000).toString();
         try {
          
          const token = await AsyncStorage.getItem('token');
@@ -126,19 +147,23 @@ export default function Abonnement() {
            axios.defaults.headers.common.Authorization = `Bearer ${token}`;
          }
          console.log(token);
+       
          const res = await axios.post("cintepay/paiement", {
            abonement_id: selectedIndex,
            channels: moyenPayement,
+           transaction_id:trans_id
          });
          console.log(res.status);
          if (res.status==201||res.status==200) {
+          
              console.log(res.data);
-             payementCinetPay(res.data.data.transaction_id, res.data.data.montant);
+            payementCinetPay(res.data.data.transaction_id, res.data.data.montant);
              
          }
        
          
         } catch (error) {
+          Alert.alert("Echec", JSON.stringify(error.response.data.message), [{text: 'OK', onPress: () => console.log('OK')}], { cancelable: true })
          console.log(error);
          
         }
@@ -170,7 +195,20 @@ export default function Abonnement() {
     }
     useEffect(() => {
         getAbonnement();
-    }, [])
+        const interval = setInterval(() => { 
+          if(trans_id){
+            try{
+              verifPaiement(trans_id);
+              console.log(trans_id);
+            }catch(error){
+              console.log(error);
+           }
+            
+           }else{
+            return;}
+    }, 1000);
+    return () => clearInterval(interval);
+    }, [trans_id])
     const cardAbonnement=({item})=>{
         
 
@@ -210,14 +248,14 @@ export default function Abonnement() {
        ListFooterComponent={
         <View style={{flex:1, flexDirection:'column',}} >
         <View style={{height:15}}></View>
-            <Text style={newstyle.title}>MOYENS DE PAYEMENT</Text>
+            <Text style={newstyle.title}>MOYENS DE PAYEMENT {trans_id}</Text>
             <View style={{height:10}}></View>
             {reseau.map((resea, index) => (
      <Pressable onPress={()=>{
         setMoyenPayement(resea.nom)
         // setSelecAbonnement(resea.nom)
        
-     }}>
+     }} key={index}>
      <View style={{margin:4}}>
    <View key={index} style={style.wallet}>
         <View style={{width: 40, height: 40}}>
@@ -241,6 +279,8 @@ export default function Abonnement() {
      
 ))}
 <View height={40}></View>
+
+       <View height={40}></View>
 
 <Pressable
 onPress={()=>{

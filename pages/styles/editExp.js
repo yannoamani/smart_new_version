@@ -12,7 +12,7 @@ const style= StyleSheet.create({
         fontFamily:'poppins',
         color: "black",
         fontSize: 13,
-        fontWeight: '7  00',
+        fontWeight: '700',
         textAlign: 'center',
         alignContent: 'center',
         justifyContent: 'center',

@@ -37,7 +37,7 @@ import Cinetpay from './pages/cinetpay';
 import { CinetPay } from 'node-cinetpay';
 import Cinetpays from './pages/cinetpay';
 export default function App() {
-  axios.defaults.baseURL = 'http://192.168.1.9:8000/api/';
+  axios.defaults.baseURL = 'http://back-smart-connect.lce-ci.com/api/';
   const setAuthorizationHeader = async () => {
     try {
       const token = await AsyncStorage.getItem('token');

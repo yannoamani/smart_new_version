@@ -25,33 +25,35 @@ const Cinetpays = () => {
     getinfoUser();
   }, []);
   
-  const payement = async ( trans_id, idAmount) => {
+  const payement = async ( ) => {
     var data = JSON.stringify({
       apikey: "29323203565f8d1235633c4.08272143",
       site_id: "5869904",
-      transaction_id: trans_id,
-      mode: "PRODUCTION", //
-      amount: idAmount,
-      currency: "XOF",
-      close_after_response: true,
-      alternative_currency: "",
-      description: " TEST INTEGRATION ",
-      customer_id: infoUser.id,
-      customer_name: infoUser.nom,
-      customer_surname: infoUser.prenoms,
-      customer_email: infoUser.email,
-      customer_phone_number: infoUser.phone,
-      customer_address: infoUser.commune,
-      customer_city: infoUser.quartier,
-      customer_country: "CM",
-      customer_state: "CM",
-      customer_zip_code: "065100",
-      notify_url: "http://192.168.1.9:8000/api/cintepay/verification_paiement/"+trans_id,
-      return_url: "https://google.com",
-      channels: "ALL",
-      metadata: "user1",
-      lang: "FR",
-      lock_phone_number: false,
+     "transaction_id":  Math.floor(Math.random() * 100000000).toString(), //
+      "amount": 100,
+      "currency": "XOF",
+      "alternative_currency": "",
+      "description": " TEST INTEGRATION ",
+      "customer_id": "172",
+      "customer_name": "KOUADIO",
+      "customer_surname": "Francisse",
+      "customer_email": "harrissylver@gmail.com",
+      "customer_phone_number": "+225004315545",
+      "customer_address": "Antananarivo",
+      "customer_city": "Antananarivo",
+      "customer_country": "CM",
+      "customer_state": "CM",
+      "customer_zip_code": "065100",
+      "notify_url": "https://webhook.site/d1dbbb89-52c7-49af-a689-b3c412df820d",
+      "return_url": "https://webhook.site/d1dbbb89-52c7-49af-a689-b3c412df820d",
+      "channels": "ALL",
+      "metadata": "user1",
+      "lang": "FR",
+      "invoice_data": {
+        "Donnee1": "",
+        "Donnee2": "",
+        "Donnee3": ""
+      }
     });
 
     var config = {
@@ -70,6 +72,7 @@ const Cinetpays = () => {
         Linking.openURL(response.data.data.payment_url);
 
         if (response.code == 201) {
+          Linking.openURL(response.data.data.payment_url);
           Linking.openURL(response.data.data.payment_url);
         }
       })
@@ -103,44 +106,44 @@ const Cinetpays = () => {
    }
   };
   return (
-    // <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-    //   <Text>Cinetpay</Text>
-    //   <View style={{ height: 40 }}></View>
-    //   <Pressable onPress={() => payement2()} style={{ backgroundColor: "blue" , padding:10}}>
-    //     <Text>Cinetpay</Text>
-    //   </Pressable>
-    //   <Text>{JSON.stringify(infoUser.nom)}</Text>
-    // </View>
-    <View style={{flex: 1, justifyContent: "center", alignItems: "center" }}>
-    <View style={styles.dot}>
-    <View style={{flex: 1, justifyContent: "center", alignItems: "center" , height: 100, width: 100}}>
-   {
-    [...Array(3).keys()].map((i) => {
-      return <MotiView
-      from={{ opacity: 1, scale: 1 }}
-      transition={{
-        repeatReverse: false,  
-         type: "timing", duration: 2000,delay:i*400,loop: true, easing: Easing.out(Easing.ease) }}
-      animate={{ opacity: 0, scale: 4 , }}
-       key={i} style={[StyleSheet.absoluteFillObject, styles.dot , ] }
-
-      />
-      
-
-      
-    })
-
-   }
-   <Ionicons name="call" size={50} color="white" ></Ionicons>
-
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <Text>Cinetpay</Text>
+      <View style={{ height: 40 }}></View>
+      <Pressable onPress={() => payement()} style={{ backgroundColor: "blue" , padding:10}}>
+        <Text>Cinetpay</Text>
+      </Pressable>
+      <Text>gn,</Text>
     </View>
+  //   <View style={{flex: 1, justifyContent: "center", alignItems: "center" }}>
+  //   <View style={styles.dot}>
+  //   <View style={{flex: 1, justifyContent: "center", alignItems: "center" , height: 100, width: 100}}>
+  //  {
+  //   [...Array(3).keys()].map((i) => {
+  //     return <MotiView
+  //     from={{ opacity: 1, scale: 1 }}
+  //     transition={{
+  //       repeatReverse: false,  
+  //        type: "timing", duration: 2000,delay:i*400,loop: true, easing: Easing.out(Easing.ease) }}
+  //     animate={{ opacity: 0, scale: 4 , }}
+  //      key={i} style={[StyleSheet.absoluteFillObject, styles.dot , ] }
+
+  //     />
+      
+
+      
+  //   })
+
+  //  }
+  //  <Ionicons name="call" size={50} color="white" ></Ionicons>
+
+  //   </View>
     
    
 
 
-    </View>
+  //   </View>
 
-    </View>
+  //   </View>
   );
 };
 

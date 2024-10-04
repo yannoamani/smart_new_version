@@ -140,7 +140,7 @@ export default function Offer({route}) {
   }
    </View>
    <View style={{height:15}}></View>
-   <Text style={Monstyles.date}>Date de cloture {detailsOffres.fin}</Text>
+   <Text style={Monstyles.date}>Date : Du  {detailsOffres.fin} au  {detailsOffres.fin}</Text>
         
       
      

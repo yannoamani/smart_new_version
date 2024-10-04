@@ -49,7 +49,7 @@ export default function List() {
       const value = await AsyncStorage.getItem("user");
       const res = await axios.get("list_offres");
       setData(res.data.data);
-      console.log(res.data.data[0]);
+      console.log('La liste des offres',res.data.data);
       const favoris = res.data.data.favoris;
 
       setRefreshing(false);
