@@ -1,4 +1,4 @@
-import { FlatList,Image,ActivityIndicator, View,useWindowDimensions,  StyleSheet, Text, ScrollView, Alert, Pressable, Linking } from "react-native";
+import { FlatList,Image,ActivityIndicator, View,useWindowDimensions, Modal,  StyleSheet, Text, ScrollView, Alert, Pressable, Linking } from "react-native";
 import style, { styles } from '../pages/styles/Abonnement.js';
 import React, { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -22,6 +22,9 @@ export default function Abonnement() {
     const [policeLight, setPoliceLight] = useState("Poppins_300Light_Italic");
     const [infoUser, setinfoUser] = useState({}); 
     const [trans_id, setTrans_id] = useState('');
+    const [modalVisible, setModalVisible] = useState(false);
+    const [isSuccess, setIsSuccess] = useState(false);
+    const [veri, setveri] = useState('');
 
     const reseau=[
         {'nom':'ORANGE MONEY', 'logo':require('../assets/Orange-Money-logo.png')},
@@ -52,6 +55,17 @@ export default function Abonnement() {
       const res = await axios.post("cintepay/verification_paiement/"+trans_id);
       const donne= res.data;
       console.log('REPONSE Paiement',donne);
+    if (donne.includes("Echec")) {
+      console.log("Echec");
+      setIsSuccess(false);
+      
+      
+    }
+    else{
+      console.log("Succes");
+      setIsSuccess(true);
+    }
+      setModalVisible(true);
       setTrans_id("");
     }, 1000)
    
@@ -110,7 +124,7 @@ export default function Abonnement() {
           customer_phone_number: infoUser.phone,
           customer_address: infoUser.commune,
           customer_city: infoUser.quartier,
-            channels: "ALL",
+            channels:moyenPayement,
             lock_phone_number: false,
             lang: "FR",
 });
@@ -252,10 +266,40 @@ console.log("DATA454",data)
             <View style={{height:10}}></View>
             {reseau.map((resea, index) => (
      <Pressable onPress={()=>{
-        setMoyenPayement(resea.nom)
+        setMoyenPayement(resea.nom!="WAVE"?'MOBILE_MONEY':'WALLET')
+        setveri(resea.nom)
         // setSelecAbonnement(resea.nom)
        
      }} key={index}>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert('Modal has been closed.');
+          setModalVisible(!modalVisible);
+        }}>
+        <View style={newstyle.centeredView}>
+          <View style={newstyle.modalView}>
+            <View style={[newstyle.modalView, isSuccess ? newstyle.successCard : newstyle.failCard]}>
+            <Text style={newstyle.modalText}>
+            {isSuccess ? 'Paiement Réussi !' : 'Échec du Paiement'}
+          </Text>
+          <Text style={newstyle.detailText}>
+            {isSuccess
+              ? 'Félicitations, votre paiement a été traité avec succès'
+              : 'Le paiement n\'a pas pu être traité, veuillez réessayer.'}
+          </Text>
+          <Pressable
+            style={[newstyle.button, isSuccess ? newstyle.buttonSuccess : newstyle.buttonFail]}
+            onPress={() => setModalVisible(!modalVisible)}>
+            <Text style={newstyle.textStyle}>Fermer</Text>
+          </Pressable>
+
+            </View>
+          </View>
+        </View>
+      </Modal>
      <View style={{margin:4}}>
    <View key={index} style={style.wallet}>
         <View style={{width: 40, height: 40}}>
@@ -270,7 +314,7 @@ console.log("DATA454",data)
         <View width={10}></View>
 
        {
-        resea.nom==moyenPayement? <Ionicons name="checkmark" size={30} color={'red'}></Ionicons>: <View></View>
+        resea.nom==veri? <Ionicons name="checkmark" size={30} color={'red'}></Ionicons>: <View></View>
        }
         
     </View>
@@ -333,6 +377,69 @@ const newstyle= StyleSheet.create({
      title:{
         fontSize: 24,
         fontWeight: '700',
-     }
+     },
+     centeredView: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: 'rgba(0, 0, 0, 0.5)', // Arrière-plan semi-transparent
+    },
+    modalView: {
+      width: 300,
+      margin: 20,
+      borderRadius: 20,
+      padding: 35,
+      alignItems: 'center',
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.25,
+      shadowRadius: 4,
+      elevation: 5,
+    },
+    button: {
+      borderRadius: 20,
+      padding: 10,
+      elevation: 2,
+    },
+    successCard: {
+      backgroundColor: '#d4edda', // Vert clair pour succès
+      borderColor: '#c3e6cb',
+      borderWidth: 1,
+    },
+    failCard: {
+      backgroundColor: '#f8d7da', // Rouge clair pour échec
+      borderColor: '#f5c6cb',
+      borderWidth: 1,
+    },
+    modalText: {
+      fontSize: 20,
+      fontWeight: 'bold',
+      textAlign: 'center',
+      marginBottom: 15,
+    },
+    detailText: {
+      fontSize: 16,
+      textAlign: 'center',
+      color: '#555',
+      marginBottom: 20,
+    },
+    button: {
+      borderRadius: 20,
+      padding: 10,
+      width: 150,
+      alignItems: 'center',
+      elevation: 2,
+    },
+    buttonSuccess: {
+      backgroundColor: 'green',
+    },
+    buttonFail: {
+      backgroundColor: 'red',
+    },
+    textStyle: {
+      color: 'white',
+      fontWeight: 'bold',
+      textAlign: 'center',
+    },
 
 })

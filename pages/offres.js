@@ -353,7 +353,7 @@ const offersStyle = (policeBold, policeRegular) => {
 
 const mystyle = StyleSheet.create({
   container: {
-    padding: 15,
+    padding: 10,
     borderRadius: 15,
     backgroundColor: "white",
 
@@ -371,13 +371,13 @@ const mystyle = StyleSheet.create({
     flexShrink: 1,
   },
   lieu: {
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: "500",
     color: "#000",
     marginBottom: 7,
   },
   entreprise: {
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: "500",
     color: "#000",
     marginBottom: 7,

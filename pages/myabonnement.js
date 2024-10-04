@@ -9,6 +9,7 @@ const MyAbonnement=()=>{
     const [refreshing, setRefreshing] = useState(false);
     const [myabonnement, setMyabonnement] = useState([]);
     const getAbonnement = async () => {
+      setRefreshing(true);
         try {
           const token = await AsyncStorage.getItem('token')
                 if (token) {
@@ -40,6 +41,7 @@ const MyAbonnement=()=>{
                 <Text style={style.title} >Moyen de paiement </Text>
                 <Text style={style.title}>Montant</Text>
                 <Text style={style.title}>Reference</Text>
+                <Text style={style.title}>Statut</Text>
                 <Text style={style.title}>Date de paiement</Text>
                 <Text style={style.title}>Date de fin</Text>
                </View>
@@ -47,9 +49,10 @@ const MyAbonnement=()=>{
                 <Text style={style.subtitle}>{item.abonement.libelle}</Text>
                 <Text style={style.subtitle} numberOfLines={1} >{item.moyen_paiement}</Text>
                 <Text style={style.subtitle} numberOfLines={1}>{item.abonement.prix}FCFA</Text>
-                <Text style={style.subtitle}>{item.reference}</Text>
+                <Text style={style.subtitle}>{item.transaction_id}</Text>
+                <Text style={[style.subtitle,{color:'green'}]}>{item.statut}</Text>
                 <Text style={style.subtitle}>{time.date} </Text>
-                <Text style={style.subtitle}>{item.echeance} à {item.heure_echeance}</Text>
+                <Text style={style.subtitle}>{item.echeance} </Text>
 
                </View>
             </View>
@@ -64,7 +67,7 @@ const MyAbonnement=()=>{
        <View style={style.container}>
 
      {
-       ! myabonnement?   <FlatList
+        !refreshing?   <FlatList
         data={myabonnement}
         renderItem={render}
         keyExtractor={(item) => item.id}
@@ -122,7 +125,7 @@ const style= StyleSheet.create({
         marginRight: 20
     },
     subtitle:{
-        fontSize: 13,
+        fontSize: 12,
         fontWeight: '500',
         color: '#0000004D',
         marginBottom: 12,

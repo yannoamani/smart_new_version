@@ -63,7 +63,7 @@ export default function Appliance({route}) {
             }
             console.log(payload);
             const offer = await axios.post('rate_entreprise', payload)
-            // setModalVisible(!isModalVisible)
+        setModalVisible(!isModalVisible)
            
             
             Alert.alert("Info", offer.data.message, [{text: 'OK', onPress: () => console.log('OK')}], { cancelable: true })
@@ -189,7 +189,7 @@ export default function Appliance({route}) {
                         >
                             <View style={Monstyles.header}>
                                 <Ionicons name="arrow-back-outline" onPress={() => setModalVisible(false)} size={30} color="white" style={Monstyles.back}></Ionicons>
-                                <Text style={Monstyles.headerText}>Commenter offre</Text>
+                                <Text style={Monstyles.headerText}>Commenter offre {note}</Text>
                             </View>
                            
                             <View style={{flex:1,padding:10,alignItems:'center',justifyContent:'center'}}>
@@ -198,8 +198,11 @@ export default function Appliance({route}) {
                                     Quelle est votre appreciation pour cette offre?  
                                 </Text>
                                 <AirbnbRating
+                               
+
                                 showRating={false}
                                 ratingContainerStyle={{alignItems:'center', }}
+                                onFinishRating={(value) => setNote(value)}
   count={5}
   reviews={["Terrible", "Mauvais", "Bien", "très bien", "Excellent", ]}
   defaultRating={11}
