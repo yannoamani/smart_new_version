@@ -49,7 +49,7 @@ export default function List() {
       const value = await AsyncStorage.getItem("user");
       const res = await axios.get("list_offres");
       setData(res.data.data);
-      console.log('La liste des offres',res.data.data);
+      // console.log('La liste des offres',res.data.data);
       const favoris = res.data.data.favoris;
 
       setRefreshing(false);
@@ -57,9 +57,9 @@ export default function List() {
         const user = JSON.parse(value);
         setUserId(user.nom + " " + user.prenoms);
       }
-      console.log(res.data.data);
+      // console.log(res.data.data);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       setRefreshing(false);
     }
   };
@@ -73,7 +73,7 @@ export default function List() {
         Setcategorie((oldArray) => [...oldArray, element].sort());
       });
       // categorie.push(res.data.data);
-      console.log("La liste des categorie", categorie[0]);
+      // console.log("La liste des categorie", categorie[0]);
     } catch (error) {
       console.log(error);
     }

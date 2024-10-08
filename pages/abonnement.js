@@ -50,28 +50,32 @@ export default function Abonnement() {
     
  const verifPaiement = async (trans_id) => {
   try {
-    setTimeout(async() => {
+ 
       console.log("Fonction paiement");
       const res = await axios.post("cintepay/verification_paiement/"+trans_id);
       const donne= res.data;
       console.log('REPONSE Paiement',donne);
-    if (donne.includes("Echec")) {
-      console.log("Echec");
-      setIsSuccess(false);
+    // if (donne.includes("Echec")) {
+    //   console.log("Echec");
+      // setIsSuccess(false);
       
       
-    }
-    else{
+    // }
+    // else{
       console.log("Succes");
       setIsSuccess(true);
-    }
+    // }
       setModalVisible(true);
       setTrans_id("");
-    }, 1000)
+   
    
     
   } catch (error) {
+
     console.log(error);
+    setModalVisible(true);
+    setIsSuccess(false);
+    setTrans_id("");
     
   }
  
@@ -212,8 +216,11 @@ console.log("DATA454",data)
         const interval = setInterval(() => { 
           if(trans_id){
             try{
+             setTimeout(() => {
               verifPaiement(trans_id);
-              console.log(trans_id);
+              
+             }, 1000);
+              // console.log(trans_id);
             }catch(error){
               console.log(error);
            }
@@ -288,7 +295,7 @@ console.log("DATA454",data)
           <Text style={newstyle.detailText}>
             {isSuccess
               ? 'Félicitations, votre paiement a été traité avec succès'
-              : 'Le paiement n\'a pas pu être traité, veuillez réessayer.'}
+              : 'Votre paiement a echoué.'}
           </Text>
           <Pressable
             style={[newstyle.button, isSuccess ? newstyle.buttonSuccess : newstyle.buttonFail]}
