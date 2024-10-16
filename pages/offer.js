@@ -9,7 +9,7 @@ import axios from "axios";
 import HTML from 'react-native-render-html';
 import { Ionicons } from '@expo/vector-icons';
 import Loader from "../components/loader";
-import { displayDate } from "../Utils";
+import { displayDate, isDateTimeGreaterThanCurrent } from "../Utils";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Offer({route}) {
@@ -65,9 +65,47 @@ export default function Offer({route}) {
             console.log(error);
         }
     }
+    const verifierabonement = async () => {
+    try {
+      // data;
+      const token = await AsyncStorage.getItem("token");
+      if (token) {
+        axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+      }
+
+      const res = await axios.get("handleAbonnementExpired");
+      setData(res.data.data);
+     console.log('verification de mon paiement',res.data);
+    } catch (error) {
+      console.log(error);
+       console.log("verifier paiement",error.response.data.message);
+     
+    }
+    
+  }
 
     useEffect(() => {
         getOffer()
+        const interval= setInterval(async () => {
+      const abonement = await AsyncStorage.getItem('abonnement');
+        // console.log("abonnement",abonement);
+   if (abonement) {
+    const mabonnement = JSON.parse(abonement);
+    console.log("abonnement",mabonnement);
+    
+    if (isDateTimeGreaterThanCurrent(mabonnement.echeance)) {
+      // console.log("Vous ", abonement);
+      verifierabonement();
+      clearInterval(interval);
+      
+    }
+    else{
+    return ;
+    }
+   }
+
+    
+  }, 1000);
     }, []);
 
     return (
@@ -180,8 +218,8 @@ export default function Offer({route}) {
                           console.log(dat)
                           getOffer();
                       } catch (error) {
-                          navigation.goBack();
-                          Alert.alert("Echec", JSON.stringify(error.response.data.message), [{ text: 'OK'}])
+                          navigation.navigate('Abonnement');
+                          Alert.alert("Echec", JSON.stringify(error.response.data.message), [{ text: 'OK'},  ])
                           setLoadin(false)
                       
                           console.log(error);

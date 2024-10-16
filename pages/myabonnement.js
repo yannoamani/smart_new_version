@@ -50,7 +50,7 @@ const MyAbonnement=()=>{
                 <Text style={style.subtitle} numberOfLines={1} >{item.moyen_paiement}</Text>
                 <Text style={style.subtitle} numberOfLines={1}>{item.abonement.prix}FCFA</Text>
                 <Text style={style.subtitle}>{item.transaction_id}</Text>
-                <Text style={[style.subtitle,{color:'green'}]}>{item.statut=="ACCEPTED"?'Paiement accepté':'En attente'}</Text>
+                <Text style={[style.subtitle,{color:'green'}]}>{item.statut=="ACCEPTED"?'Paiement accepté':item.statut}</Text>
                 <Text style={style.subtitle}>{time.date} </Text>
                 <Text style={style.subtitle}>{item.echeance} </Text>
 

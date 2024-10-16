@@ -15,7 +15,7 @@ import style1 from "../offerStyle.js";
 import offerStyle from "../pages/styles/offerStyle.js";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { displayDate } from "../Utils";
+import { displayDate, displayDates, isDateTimeGreaterThanCurrent, isTimeGreaterThanCurrent } from "../Utils";
 
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -41,7 +41,7 @@ export default function List() {
 
   const getOffers = async () => {
     try {
-      data;
+      // data;
       const token = await AsyncStorage.getItem("token");
       if (token) {
         axios.defaults.headers.common.Authorization = `Bearer ${token}`;
@@ -49,8 +49,15 @@ export default function List() {
       const value = await AsyncStorage.getItem("user");
       const res = await axios.get("list_offres");
       setData(res.data.data);
-      // console.log('La liste des offres',res.data.data);
+    //  console.log('La liste des offres',res.data.data);
       const favoris = res.data.data.favoris;
+
+      // data.forEach((element) => {
+      //   if () {
+          
+      //   }
+      // });
+        
 
       setRefreshing(false);
       if (value !== null) {
@@ -59,7 +66,7 @@ export default function List() {
       }
       // console.log(res.data.data);
     } catch (error) {
-      // console.log(error);
+     console.log(error);
       setRefreshing(false);
     }
   };
@@ -93,16 +100,101 @@ export default function List() {
       console.log(error);
     }
   };
+  // la fonction qui te permettra de 
+
+  const verifierabonement = async () => {
+    try {
+      // data;
+      const token = await AsyncStorage.getItem("token");
+      if (token) {
+        axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+      }
+
+      const res = await axios.get("handleAbonnementExpired");
+      setData(res.data.data);
+     console.log('verification de mon paiement',res.data);
+    } catch (error) {
+      console.log(error);
+       console.log("verifier paiement",error.response.data.message);
+     
+    }
+    
+  }
+
+// la fonction qui me permettre de liste er mes abonnements
+const getAbonnement = async () => {
+     
+        try {
+          const token = await AsyncStorage.getItem('token')
+                if (token) {
+                    axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+                }
+          const abonnement = await axios.get("seeMyAbonnement");
+          console.log(abonnement.data[0]);
+          const data=abonnement.data.data;
+        
+         
+             console.log(data);
+            
+            data.forEach((element) => {
+
+              const date = new Date();
+              if (element.statut=="ACCEPTED") {
+              
+                if (!isDateTimeGreaterThanCurrent(element.echeance)) {
+                  console.log("Vous avez un abonnement expiré ", )
+                  // verifierabonement();
+                  
+                }else{
+                  console.log("Vous n'avez pas d'bonnes abonnement",isDateTimeGreaterThanCurrent(element.echeance) )
+                }
+                
+              }
+            })
+      
+       
+      
+          //  console.log( "Mes abonement",abonnement.data.data);
+        } catch (error) {
+          const token = await AsyncStorage.getItem('token')
+          console.log('Erreur abonnement',error, token);
+      
+        }
+      };
 
   const fetchOffers = () => {
     //setRefreshing(true);
     getOffers();
-    getCategorie();
+
+    // verifierabonement();
   };
 
   useEffect(() => {
     // Fetch offers when the component mounts
     fetchOffers();
+ 
+    const interval= setInterval(async () => {
+      const abonement = await AsyncStorage.getItem('abonnement');
+        console.log("abonnement",abonement);
+   if (abonement) {
+    const mabonnement = JSON.parse(abonement);
+    // console.log("abonnement",mabonnement);
+    
+    if (isDateTimeGreaterThanCurrent(mabonnement.echeance)) {
+      console.log("Vous ", abonement);
+      verifierabonement();
+      clearInterval(interval);
+      
+    }
+    else{
+        console.log("abonnement expire");
+    }
+   }
+
+    
+  }, 5000);
+
+  //  verifierabonement();
 
     // Set up an interval to fetch offers every 1 minute
     // const intervalId = setInterval(fetchOffers, 60000);
@@ -259,6 +351,8 @@ export default function List() {
               onRefresh={()=>{
                 getOffers();
                 getCategorie();
+                // verifierabonement();
+                getAbonnement();
               }}
               refreshing={refreshing}
               ListEmptyComponent={

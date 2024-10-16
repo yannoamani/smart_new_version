@@ -119,6 +119,46 @@ export function createFormattedDate(dateInput) {
       let hour = data.split('T')[1].split('.')[0]
       return {date: date, hour: hour}
   }
+  export function displayDates (data) {
+     
+      let hour = data.split('T')[1].split(':')[0]
+      return { hour: hour}
+  }
 
+
+  export  function  isTimeGreaterThanCurrent  (inputTime)  {
+  const currentDate = new Date(); 
+  const [inputHours, inputMinutes, inputSeconds] = inputTime.split(':').map(Number); 
+
+
+  const inputDate = new Date();
+  inputDate.setHours(inputHours, inputMinutes, inputSeconds, 0); 
+
+
+if ( inputDate > currentDate) {
+  return false;
+  
+}
+else{
+  return true;
+}
+};
+
+
+
+export function  isDateTimeGreaterThanCurrent  (inputDateTime) {
+  const currentDate = new Date(); 
+
+
+  const [datePart, timePart] = inputDateTime.split(' ');
+  const [year, month, day] = datePart.split('-').map(Number);
+  const [hours, minutes, seconds] = timePart.split(':').map(Number); 
+
+ 
+  const inputDate = new Date(year, month - 1, day, hours, minutes, seconds); 
+
+
+  return inputDate < currentDate;
+};
 
 

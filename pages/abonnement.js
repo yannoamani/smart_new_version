@@ -269,7 +269,7 @@ console.log("DATA454",data)
        ListFooterComponent={
         <View style={{flex:1, flexDirection:'column',}} >
         <View style={{height:15}}></View>
-            <Text style={newstyle.title}>MOYENS DE PAYEMENT {trans_id}</Text>
+            <Text style={newstyle.title}>MOYENS DE PAIEMENT </Text>
             <View style={{height:10}}></View>
             {reseau.map((resea, index) => (
      <Pressable onPress={()=>{

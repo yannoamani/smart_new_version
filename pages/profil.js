@@ -621,7 +621,7 @@ export default function Profile() {
 
 const style=StyleSheet.create({
   header: {
-    height:'20%',
+    // height:'20%',
     width: '100%',
     backgroundColor:'#F38B2B',
     flexDirection:'column',

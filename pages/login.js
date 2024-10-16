@@ -87,7 +87,7 @@ export default function Login() {
   };
 
   const Log = async () => {
-    navigation.navigate("OffresTab");
+    // navigation.navigate("OffresTab");
     setLoading(true);
 
     try {
@@ -97,30 +97,49 @@ export default function Login() {
         password: "0812",
         //  pwd,
       });
-      const token = await AsyncStorage.setItem("token", res.data.access_token);
+      if (res.status==200) {
+        setLoading(false);
+        
+        const token = await AsyncStorage.setItem("token", res.data.access_token);
       res.data.user.details = res.data.compte;
       await AsyncStorage.setItem("user", JSON.stringify(res.data.user));
+      navigation.navigate("OffresTab");
       // Alert.alert('Connecté','',{text: 'OK', onPress: () => console.log('OK')})
       console.log(res.data);
       const offres = [];
-      res.data.user.offres.forEach((offre) => {
-        offres.push(offre.id);
+      // res.data.user.offres.forEach((offre) => {
+      //   offres.push(offre.id);
+      // });
+      const abonne=res.data.user.user.abonement;
+   if (abonne) {
+
+      abonne.forEach(async (offre) => {
+        if (offre.statut=='ACCEPTED') {
+          console.log("Objet de abonnement ",offre);
+          await AsyncStorage.setItem('abonnement', JSON.stringify(offre));
+          
+        }
       });
-      await AsyncStorage.setItem("offres", JSON.stringify(offres));
-      setLoading(false);
+    
+   }
+      console.log("je suis abonne", abonne)
+      await AsyncStorage.setItem("offres", JSON.stringify(offres));      setLoading(false);
       setMail("");
       setPwd("");
       if (token) {
         axios.defaults.headers.common.Authorization = `Bearer ${token}`;
       }
-      setTimeout(() => {
-        // Set loading to false to hide the loader when the task is complete
-        setLoading(false);
-      }, 3000);
+      // setTimeout(() => {
+      //   // Set loading to false to hide the loader when the task is complete
+       
+      // }, 3000);
       Alert.alert("Connexion réussie", "", [
         { text: "OK", onPress: () => console.log("OK") },
       ]);
-      navigation.navigate("OffresTab");
+     
+        
+      }
+      
     } catch (error) {
       Alert.alert(JSON.stringify(error.response.data.message), "", [
         { text: "OK", onPress: () => console.log("OK") },

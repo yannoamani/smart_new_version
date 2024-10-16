@@ -1,5 +1,5 @@
 // App.js
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import Login from './pages/login';
 import Signin from './pages/signin';
 import axios from 'axios';
@@ -36,8 +36,10 @@ import cinetpay from './pages/cinetpay';
 import Cinetpay from './pages/cinetpay';
 import { CinetPay } from 'node-cinetpay';
 import Cinetpays from './pages/cinetpay';
+import { displayDate, displayDates, isDateTimeGreaterThanCurrent, isTimeGreaterThanCurrent } from "./Utils";
 export default function App() {
-  axios.defaults.baseURL = 'http://back-smart-connect.lce-ci.com/api/';
+  axios.defaults.baseURL = 'http://192.168.1.5:8000/api/';
+  // http://back-smart-connect.lce-ci.com/api/
   const setAuthorizationHeader = async () => {
     try {
       const token = await AsyncStorage.getItem('token');
@@ -56,6 +58,24 @@ export default function App() {
   };
   const token = setAuthorizationHeader();
   const [final, setFinal] = useState()
+  const verifierabonement = async () => {
+    try {
+      // data;
+      const token = await AsyncStorage.getItem("token");
+      if (token) {
+        axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+      }
+
+      const res = await axios.get("handleAbonnementExpired");
+      setData(res.data.data);
+     console.log('verification de mon paiement',res.data);
+    } catch (error) {
+      console.log(error);
+       console.log("verifier paiement",error.response.data.message);
+     
+    }
+    
+  }
   const getAlarmNumber = async () => {
     try {
         const res = await axios.get('get_who_contact_student');
@@ -79,6 +99,29 @@ export default function App() {
   const ApplianceStack = createNativeStackNavigator();
   const ProfileStack = createNativeStackNavigator();
   const Tab = createBottomTabNavigator();
+
+  useEffect(() => {
+    const interval= setInterval(async () => {
+      const abonement = await AsyncStorage.getItem('abonnement');
+        console.log("abonnement",abonement);
+   if (abonement) {
+    const mabonnement = JSON.parse(abonement);
+    // console.log("abonnement",mabonnement);
+    
+    if (isDateTimeGreaterThanCurrent(mabonnement.echeance)) {
+      console.log("Vous ", abonement);
+      verifierabonement();
+      clearInterval(interval);
+      
+    }
+    else{
+        console.log("abonnement expire");
+    }
+   }
+
+    
+  }, 5000);
+  },[])
   function OffersStackScreen() {
     return (
       <OfferStack.Navigator screenOptions={{

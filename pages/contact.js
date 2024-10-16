@@ -4,9 +4,10 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import RenderHtml from 'react-native-render-html';
 import { Ionicons } from '@expo/vector-icons';
-import { displayDate } from "../Utils";
+import { displayDate, isDateTimeGreaterThanCurrent } from "../Utils";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
+
 
 export default function Contact({route}) {
     const { width } = useWindowDimensions();
@@ -15,6 +16,9 @@ export default function Contact({route}) {
     const { already } = route.params;
     //const [data, setData] = useState();
     const [desc, setDesc] = useState();
+    const [policeBold, setPolices] = useState("Poppins_700Bold");
+  const [policeRegular, setPoliceRegular] = useState("Poppins_400Regular");
+  const [policeLight, setPoliceLight] = useState("Poppins_300Light_Italic");
     
     const getOffer = async () => {
         try {
@@ -26,9 +30,48 @@ export default function Contact({route}) {
             console.log(error.message);
         }
     }
+    const verifierabonement = async () => {
+    try {
+      // data;
+      const token = await AsyncStorage.getItem("token");
+      if (token) {
+        axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+      }
+
+      const res = await axios.get("handleAbonnementExpired");
+      setData(res.data.data);
+     console.log('verification de mon paiement',res.data);
+    } catch (error) {
+      console.log(error);
+       console.log("verifier paiement",error.response.data.message);
+     
+    }
+    
+  }
 
     useEffect(() => {
-        getOffer()
+        getOffer();
+        const interval= setInterval(async () => {
+      const abonement = await AsyncStorage.getItem('abonnement');
+        // console.log("abonnement",abonement);
+   if (abonement) {
+    const mabonnement = JSON.parse(abonement);
+    console.log("abonnement",mabonnement);
+    
+    if (isDateTimeGreaterThanCurrent(mabonnement.echeance)) {
+      console.log("Vous ", abonement);
+      verifierabonement();
+      clearInterval(interval);
+      
+    }
+    else{
+    return ;
+    }
+   }
+
+    
+  }, 1000);
+
     }, []);
 
     return (
@@ -140,16 +183,45 @@ export default function Contact({route}) {
                             </Text>
                         </Pressable> : 
                         new Date(data.pivot.offre.fin) < (new Date()) ?
-                        <Text> L'offre à expiré </Text>:
+                        <Text style={{
+  textAlign: 'center',
+  fontSize: 22,
+  fontWeight: '600',
+  color: '#F44336', 
+  backgroundColor: '#FFEBEE',
+  padding: 15,
+  marginVertical: 10,
+  borderRadius: 8, 
+  shadowColor: '#000',
+  shadowOffset: { width: 0, height: 4 },
+  shadowOpacity: 0.3,
+  shadowRadius: 4,
+  elevation: 5, 
+}}>
+  L'offre a expiré
+</Text>
+:
+                        <Text style={{
+  textAlign: 'center',
+  fontFamily: policeRegular,
+  fontSize: 20,
+  fontWeight: 'bold',
+  color: data.pivot.contrat == 1 ? '#4CAF50' : '#F44336', 
+  backgroundColor: data.pivot.contrat == 1 ? '#E8F5E9' : '#FFEBEE', 
+  padding: 15,
+  marginVertical: 10,
+  borderRadius: 8, 
+  shadowColor: '#000', 
+  shadowOffset: { width: 0, height: 4 },
+  shadowOpacity: 0.3,
+  shadowRadius: 4,
+  elevation: 5, 
+}}>
+  Vous avez {data.pivot.contrat == 1 ? 'accepté' : 'refusé'} cette offre
+
 
                        
-                        <Text style={{
-                            textAlign: 'center',
-                            fontSize: 30,
-                            fontWeight: 'bold',
-                            color: 'red'
-                        }}>
-                            Vous avez {data.pivot.contrat == 1 ? 'accepté' : 'refusé'} cette offre
+            
                         </Text>
                     }
                 </View>

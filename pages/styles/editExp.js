@@ -9,7 +9,7 @@ const style= StyleSheet.create({
     },
     title:{
 
-        fontFamily:'poppins',
+        // fontFamily:'poppins',
         color: "black",
         fontSize: 13,
         fontWeight: '700',
@@ -20,7 +20,7 @@ const style= StyleSheet.create({
     },
     label:{
 
-        fontFamily:'poppins',
+        // fontFamily:'poppins',
         color: "gray",
         fontSize: 13,
         fontWeight: '600',

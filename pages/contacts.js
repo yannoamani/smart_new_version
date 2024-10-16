@@ -2,7 +2,7 @@ import { FlatList, View,StyleSheet, Text,Image, Pressable, ScrollView,ActivityIn
 import styles from '../styles';
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { displayDate } from "../Utils";
+import { displayDate, isDateTimeGreaterThanCurrent } from "../Utils";
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
@@ -31,6 +31,24 @@ export default function Contacts() {
             setRefreshing(false);
         }
     };
+    const verifierabonement = async () => {
+    try {
+      // data;
+      const token = await AsyncStorage.getItem("token");
+      if (token) {
+        axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+      }
+
+      const res = await axios.get("handleAbonnementExpired");
+      setData(res.data.data);
+     console.log('verification de mon paiement',res.data);
+    } catch (error) {
+      console.log(error);
+       console.log("verifier paiement",error.response.data.message);
+     
+    }
+    
+  }
 
     const fetchOffers = () => {
         //setRefreshing(true);
@@ -40,6 +58,28 @@ export default function Contacts() {
     useEffect(() => {
         // Fetch offers when the component mounts
         fetchOffers();
+        const interval= setInterval(async () => {
+      const abonement = await AsyncStorage.getItem('abonnement');
+        // console.log("abonnement",abonement);
+   if (abonement) {
+    const mabonnement = JSON.parse(abonement);
+    // console.log("abonnement",mabonnement);
+    
+    if (isDateTimeGreaterThanCurrent(mabonnement.echeance)) {
+      console.log("Vous ", abonement);
+      verifierabonement();
+      clearInterval(interval);
+      
+    }
+    else{
+    return ;
+    }
+   }
+
+    
+  }, 1000);
+
+        
 
         // Set up an interval to fetch offers every 1 minute
         //const intervalId = setInterval(fetchOffers, 60000);
