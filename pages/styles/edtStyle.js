@@ -29,7 +29,7 @@ const style= StyleSheet.create({
         textAlign: 'left',
         alignContent: 'flex-start',
         justifyContent: 'flex-start',
-        alignSelf: 'start',
+        // alignSelf: 'start',
     }
     
 })

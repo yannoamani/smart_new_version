@@ -1,0 +1,106 @@
+{
+   "titleStepOne":"Bienvenue Sur",
+   "soutitreStepOne":"Connectez-vous facilement avec des entreprises pour des projets enrichissants pendant votre temps libre.",
+   "titleStepTwo":"Trouvez des petits boulots en un clin d'œil !",
+   "soutitreStepTwo":"Connectez-vous facilement avec des entreprises pour des projets enrichissants pendant votre temps libre.  Inscrivez-vous, explorez les offres et décrochez un job en quelques minutes seulement.",
+   "titleStepThree":"Votre prochain job est à portée de main",
+   "soutitreStepThree":"Explorez une multitude de petits boulots disponibles instantanément. Ne perdez plus de temps, commencez dès maintenant !",
+    "passer":"passer",
+    "Suivant":"Suivant",
+    "Commencer":"Commencer",
+
+    "connexion":"CONNEXION",
+    "SeSouvenir":"Se souvenir de moi",
+    "Mot de passe oublie":"Mot de passe oublie ?",
+    "SeConnecter":"Se connecter",
+    "noAccount":"Vous n'avez pas de compte ?",
+    "Inscrire":"Inscrire",
+
+    "titleInscription":"Bienvenue sur Smart Connect",
+    "soutitreInscription":"Inscrivez-vous en renseignant les champs nécessaires",
+    "Identifiant":"IDENTIFIANT",
+    "Habitation":"HABITATION",
+    "Qualification":"QUALIFICATION",
+    "inscrire":"S'inscrire",
+    "HaveAccount":"Vous avez deja un compte ?",
+    "Connect":"Connectez-vous",
+    "cliquez-ici":"Cliquez pour ajouter votre piece",
+    "nom":"Nom",
+    "prenom":"Prenom",
+    "phone":"Phone",
+    "Email":"Email",
+    "Mot de passe":"Mot de passe",
+    "Ville":"Ville",
+    "Commune":"Commune",
+    "Quartier":"Quartier",
+    "diplome":"Diplome",
+
+   
+    "Welcome":"Bienvenue",
+    "titleOffres":"Offres disponible",
+    "details":"Detail de l'offre",
+    "postuler":"Postuler maintenant",
+    "pas-de-offre":"Pas d'offre disponible",
+     "offres":"Offres",
+     "Tout":"Tout",
+     "pasPostuler":"Pas encore postuler",
+     "dejaPostuler":"Deja postuler",
+    
+    
+    
+     "Abonnement":"Abonnement",
+     "experiences":"MES EXPERIENCES",
+     "pasExperience":"Pas d'experience",
+     "plages horaires":"Mes plages horaires",
+     "AjouExperience":"Ajouter une experience",
+     "ajoutCompetence":"Ajouter une competence",
+     "noCompetence":"Pas de competence",
+     "Deconnexion":"Deconnexion",
+     "ChangeLanguage":"Changer la langue",
+
+
+   
+
+     "Faire un abonnement": "Faire un abonnement",
+     "Mes abonnements": "Mes abonnements",
+     "methode de paiement": "Methode de paiement",
+     "Payer":"Payer",
+
+     "Attention":"Attention",
+     "sousAttention":"Veillez selectionner une methode de paiement",
+     "Annuler":"Annuler",
+     "Payer avec":"Payer avec",
+     "Oui":"Oui",
+     "Non":"Non",
+
+
+
+   
+       "mes Postulations":"Mes Postulations",
+       "mes contacts":"Mes contacts",
+       "contacts":"Contacts",
+       "profil":"Profil",
+       "Details de l'offre":"Details de l'offre",
+
+
+
+       // Mes pages se trouvant dans le fichier Appp
+       "detailsOffre":"Details de l'offre",
+       "Favoris":"Mes Favoris",
+       "addskills":"Ajouter/Supprimer une comptence",
+       "addexperience":"Ajouter une experience",
+       "Suscribe":"Souscrire à un abonnement",
+       "MySubscription":"Mon abonnement",
+       "changeLanguage":"Changer la langue",
+       "AddPlageHoraire":"Ajouter plage horaires",
+       "EditPlagehoraire":"Modifier plage horaires",
+       "PlagesHoraires":"Plages horaires",
+       "EditExp":"Modifier une experience ",
+       "french":"Français",
+       "english":"Anglais",
+       "Signin":"Inscription"
+
+
+
+
+}

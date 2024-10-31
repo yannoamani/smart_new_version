@@ -18,13 +18,56 @@ import {
   createFormattedTime,
   calculateTimeDifference,
 } from "../Utils";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import translateText from "../pages/store/TranslationUtils"
+import { useSelector } from 'react-redux';
 import { useNavigation } from "@react-navigation/native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+
 
 export default function AddSchedule() {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [loading, setLoading] = useState(false);
+  const lang = useSelector((state) => state.translate.lang);
+  const [TextTranslation, setTextTransaction] = useState({
+    Title:"Ajouter votre emploi du temps",
+    HeureDeb:"Heure de Début",
+    HeureFin:"Heure de Fin",
+    Date:"Date",
+    Ajouter:"Ajouter",
+    Succes:"Succes",
+    Echec:"Echec",
+    bodySucces:"Plage horaire ajoutée avec succès",
+    valeurValide:"Entrez des valeurs valides."
+  });
+  const Translation =async() => {
+
+    const title=await translateText("Ajouter votre plage horaire",lang);
+
+    const heureDeb=await translateText("Heure de Début",lang);
+    const heureFin=await translateText("Heure de Fin", lang);
+    const date=await translateText("Date", lang);
+    const ajouter=await translateText("Ajouter", lang);
+    const succes=await translateText("Succes", lang);
+    const echec=await translateText("Echec", lang);
+    const bodySucces=await translateText("Plage horaire ajoutée avec succès", lang);
+    const valeurValide=await translateText("Entrez des valeurs valides.", lang);
+
+    setTextTransaction({
+      Title:title,  
+      HeureDeb:heureDeb,
+      HeureFin:heureFin,
+      Date:date,
+      Ajouter:ajouter,
+      Succes:succes,
+      Echec:echec,
+      bodySucces:bodySucces,
+      valeurValide:valeurValide
+    })
+
+ 
+
+    
+  }
 
   const hideshowDatePicker = () => {
     if (isDatePickerVisible) {
@@ -66,24 +109,27 @@ export default function AddSchedule() {
   };
 
   const navigation = useNavigation();
-  useEffect(() => {}, []);
+  useEffect(() => {
+    Translation();
+  }, [
+    lang
+  ]);
   return (
     <KeyboardAvoidingView
         style={{
           // alignItems: "center",
-          flex: 1,
-          flex:1,padding:10 
+           flex:1,padding:10 
          
         }}
         behavior={"height"}
       >
     <View style={{flex:1,alignContent:'center',justifyContent:'center'}}>
     
-      <Text style={styles.title}>Ajouter votre emploi du temps  </Text>
+      <Text style={styles.title}>{TextTranslation.Title} </Text>
       <View style={{height:30}}></View>
      
       {/* <View style={{height:15}}></View> */}
-      <Text style={styles.label}>Heure de début </Text>
+      <Text style={styles.label}>{TextTranslation.HeureDeb} </Text>
       <View style={{height:5}}></View>
         <TextInput
           style={styles.input}
@@ -98,7 +144,7 @@ export default function AddSchedule() {
           onChangeText={handleTimeConfirm}
         />
         <View style={{height:20}}></View>
-        <Text style={styles.label}>Heure de fin </Text>
+        <Text style={styles.label}>{TextTranslation.HeureFin} </Text>
         <View style={{height:5}}></View>
         <TextInput
         readOnly={true}
@@ -113,7 +159,7 @@ export default function AddSchedule() {
           onChangeText={handleTimeConfirm}
         />
         <View style={{height:20}}></View>
-        <Text style={styles.label}>Date</Text>
+        <Text style={styles.label}>{TextTranslation.Date}</Text>
         <View style={{height:5}}></View>
         <TextInput
           readOnly={true}
@@ -151,8 +197,8 @@ export default function AddSchedule() {
               ) {
                 setLoading(false);
                 Alert.alert(
-                  "Erreur",
-                  "Entrez des valeurs valides.",
+                  TextTranslation.Echec,
+                  TextTranslation.valeurValide,
                   [{ text: "OK", onPress: () => console.log("Invalide") }],
                   { cancelable: true }
                 );
@@ -169,8 +215,8 @@ export default function AddSchedule() {
                 handleHourStartChange("");
                 handleDateChange("");
                 Alert.alert(
-                  "Succès",
-                  "Plage horaire ajoutée avec succès.",
+                 TextTranslation.Succes,
+                  TextTranslation.bodySucces,
                   [{ text: "OK", onPress: () => console.log("OK") }],
                   { cancelable: true }
                 );
@@ -185,7 +231,7 @@ export default function AddSchedule() {
           }}
           style={styles.button}
         >
-        {loading ? <ActivityIndicator size="small" color="white" /> :  <Text style={styles.textButton}>Ajouter</Text>}
+        {loading ? <ActivityIndicator size="small" color="white" /> :  <Text style={styles.textButton}>{TextTranslation.Ajouter}</Text>}
          
         </Pressable>
      

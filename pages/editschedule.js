@@ -7,8 +7,23 @@ import { createFormattedDate, createFormattedTime, calculateTimeDifference } fro
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import translateText from "../pages/store/TranslationUtils"
+import { useSelector } from 'react-redux';
 
 export default function EditSchedule({route}) {
+  const lang = useSelector((state) => state.translate.lang);
+  const [TextTranslate, setTextTranslate] = useState({
+    ModifierPlage:"Modifier plage Horaire",
+    HeureDeb:"Heure de Début",
+    HeureFin:"Heure de Fin",
+    Date:"Date",
+    Modifier:"Modifier",
+    Succes:"Succes",
+    Echec:"Echec",
+
+    bodySucces:"Plage horaire modifiée avec succès",
+    valeurValide:"Entrez des valeurs valides."
+  });
     const { expR } = route.params || {};
   
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
@@ -24,6 +39,7 @@ export default function EditSchedule({route}) {
     const handleConfirm = (date) => {
       const platform = Platform
       if (platform.OS == 'ios') {
+
         handleDateChange(JSON.stringify(date).split('"')[1].split('T')[0])
       } else {
         handleDateChange(JSON.stringify(date).split('"')[1])
@@ -52,10 +68,33 @@ export default function EditSchedule({route}) {
       }
       hideshowTimePicker();
     };
+    const translation =async ()=>{
+      const title=await translateText("Modifier votre plage horaire",lang);
+      const heureDeb=await translateText("Heure de Début",lang);
+      const heureFin=await translateText("Heure de Fin", lang);
+      const date=await translateText("Date", lang);
+      const ajouter=await translateText("Modifier", lang);
+      const succes=await translateText("Succes", lang);
+      const echec=await translateText("Echec", lang);
+      const bodySucces=await translateText("Plage horaire modifiée avec succès", lang);
+      const valeurValide=await translateText("Entrez des valeurs valides.", lang);
+      setTextTranslate({
+        ModifierPlage:title,
+        HeureDeb:heureDeb,
+        HeureFin:heureFin,
+        Date:date,
+        Modifier:ajouter,
+        Succes:succes,
+        Echec:echec,
+        bodySucces:bodySucces,
+        valeurValide:valeurValide
+      })
+    }
   
       const navigation = useNavigation()
       useEffect(() => {
-      }, []);
+        translation()
+      }, [lang]);
       return (
         <KeyboardAvoidingView 
                   style={{
@@ -65,9 +104,9 @@ export default function EditSchedule({route}) {
                   behavior={'height'}>
           <View style={styles.container} >
              
-                  <Text style={styles.title}>Modifier ma plage horaire</Text>
+                  <Text style={styles.title}>{TextTranslate.ModifierPlage}</Text>
                   <View style={{height:20}}></View>
-                  <Text style={styles.label}>Heure de début </Text>
+                  <Text style={styles.label}>{TextTranslate.HeureDeb} </Text>
                   <View style={{height:2}}></View>
                   <TextInput 
                    readOnly={true}
@@ -82,7 +121,7 @@ export default function EditSchedule({route}) {
                       onChangeText={handleTimeConfirm}
                   />
                   <View style={{height:20}}></View>
-                  <Text style={styles.label}>Heure de fin </Text>
+                  <Text style={styles.label}>{TextTranslate.HeureFin} </Text>
                   <View style={{height:2}}></View>
                   <TextInput 
                    readOnly={true}
@@ -127,8 +166,8 @@ export default function EditSchedule({route}) {
                               try {
                                  const date = start.split('T')[0]
                                   if (createFormattedDate(date) === 'Invalid' || createFormattedTime(hourstart) === 'Invalid' || createFormattedTime(hourend) === 'Invalid') {
-                                      Alert.alert('Warning', 'Entrez des valeurs valides.', [
-                                          { text: 'OK', onPress: () => console.log('Invalide') }
+                                      Alert.alert(TextTranslate.Echec, TextTranslate.valeurValide, [
+                                          { text: 'OK', onPress: () => console.log('Invalide'+start) }
                                         ],
                                         { cancelable: true })
                                   } else {
@@ -140,11 +179,11 @@ export default function EditSchedule({route}) {
                                       handleHourEndChange('')
                                       handleHourStartChange('')
                                       handleDateChange('')
-                                      Alert.alert('Succès', 'Plage horaire modifiée avec succès.', [
+                                      Alert.alert(TextTranslate.Succes, TextTranslate.bodySucces, [
                                           { text: 'OK', onPress: () => console.log('OK') }
                                         ],
                                         { cancelable: true })
-                                      navigation.navigate('Profile')
+                                      navigation.goBack();
                                       console.log(req);
                                   }
                               } catch (error) {
@@ -158,7 +197,7 @@ export default function EditSchedule({route}) {
                           style={styles.button}
                       >
                           <Text style={styles.textButton}>
-                             Modifier
+                          {TextTranslate.Modifier}
                           </Text>
                       </Pressable>
              

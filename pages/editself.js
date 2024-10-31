@@ -4,13 +4,15 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Ionicons } from '@expo/vector-icons';
 import { createFormattedDate, createFormattedDateExp } from "../Utils";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import * as DocumentPicker from "expo-document-picker";
+import translateText from "../pages/store/TranslationUtils"
+import { useSelector } from 'react-redux';
 
 
 export default function EditSelf() {
+    const lang = useSelector((state) => state.translate.lang);
     const [data, setData] = useState();
     const [job, setJob] = Platform.OS == 'ios' ? useState('Poste') : useState();
     const [place, setPlace] = Platform.OS == 'ios' ? useState('Localisation') : useState();
@@ -53,8 +55,57 @@ export default function EditSelf() {
       console.log("Error picking document:", error);
     }
   };
-    useEffect(() => {
-    }, []);
+  const [TextTranslation, setTextTransaction] = useState({
+    Title: "Ajouter une nouvelle experience",
+Poste :"Poste",
+Ajouter:"Ajouter",
+Entreprise:"Entreprise",
+Lieu:"Lieu",
+DateDebut:"Date de debut",
+DateFin:"Date de fin",
+Description:"Description",
+Modifier:"Modifier",
+Ajouterpiece:"Ajouter une piece jointe ici",
+Attention:"Attention",
+ReponseErreur:"Entrer des Dates Valides",
+Succes:"Expérience enregistrée avec succès"
+   
+  });
+  const translation = async()=>{
+    const title= await translateText(TextTranslation.Title, lang);
+    const poste= await translateText(TextTranslation.Poste, lang);
+    const Entreprise= await translateText(TextTranslation.Entreprise, lang);
+    const Lieu= await translateText(TextTranslation.Lieu, lang);
+    const DateDebut= await translateText(TextTranslation.DateDebut, lang);
+    const DateFin= await translateText(TextTranslation.DateFin, lang);
+    const Description= await translateText(TextTranslation.Description, lang);
+    const Modifier= await translateText(TextTranslation.Modifier, lang);
+    const Ajouterpiece= await translateText(TextTranslation.Ajouterpiece, lang);
+    const ajouter= await translateText(TextTranslation.Ajouter, lang);
+    const attention= await translateText(TextTranslation.Attention, lang);
+    const reponseErreur= await translateText(TextTranslation.ReponseErreur, lang);
+    const succes= await translateText(TextTranslation.Succes, lang);
+    setTextTransaction({
+      Title: title,
+      Poste:poste,
+      Entreprise:Entreprise,
+      Lieu:Lieu,
+      DateDebut:DateDebut,
+      DateFin:DateFin,
+      Description:Description,
+      Modifier:Modifier,
+      Ajouterpiece:Ajouterpiece,
+      Ajouter:ajouter,
+      Attention:attention,
+      ReponseErreur:reponseErreur,
+      Succes:succes
+    })
+  }
+
+
+
+    useEffect(() => {translation()
+    }, [lang]);
     return (
        
             <View 
@@ -66,9 +117,9 @@ export default function EditSelf() {
                 >
                  <ScrollView 
             style={{flex:1}} >
-            <Text style={styles.title}>Ajoutez une nouvelle experience </Text>
+            <Text style={styles.title}>{TextTranslation.Title} </Text>
             <View style={{height:20}}></View>
-            <Text style={styles.label}>Poste</Text>
+            <Text style={styles.label}>{TextTranslation.Poste}</Text>
             <View style={{height:2}}></View>
                 <TextInput 
                     style={styles.input}
@@ -77,7 +128,7 @@ export default function EditSelf() {
                     onChangeText={(text) => {setJob(text)}}
                 />
                <View style={{height:20}}></View>
-            <Text style={styles.label}>Entreprise</Text>
+            <Text style={styles.label}>{TextTranslation.Entreprise}</Text>
             <View style={{height:2}}></View>
                 <TextInput 
                     style={styles.input}
@@ -86,7 +137,7 @@ export default function EditSelf() {
                     onChangeText={(text) => {setCompany(text)}}
                 />
                   <View style={{height:20}}></View>
-            <Text style={styles.label}>Description</Text>
+            <Text style={styles.label}>{TextTranslation.Description}</Text>
             <View style={{height:2}}></View>
                 <TextInput
                     style={styles.textarea}
@@ -97,7 +148,7 @@ export default function EditSelf() {
                     onChangeText={setExp}
                 />
                  <View style={{height:20}}></View>
-            <Text style={styles.label}>Lieu</Text>
+            <Text style={styles.label}>{TextTranslation.Lieu}</Text>
             <View style={{height:2}}></View>
                 <TextInput 
                     style={styles.input}
@@ -106,7 +157,7 @@ export default function EditSelf() {
                     onChangeText={(text) => {setPlace(text)}}
                 />
                  <View style={{height:20}}></View>
-            <Text style={styles.label}>Date de début</Text>
+            <Text style={styles.label}>={TextTranslation.DateDebut}</Text>
             <View style={{height:2}}></View>
                 <TextInput
                  readOnly
@@ -122,7 +173,7 @@ export default function EditSelf() {
                     //maxLength={10} // MM/DD/YYYY has 10 characters
                 />
                  <View style={{height:20}}></View>
-            <Text style={styles.label}>Date de fin</Text>
+            <Text style={styles.label}>{TextTranslation.DateFin}</Text>
             <View style={{height:2}}></View>
                 <TextInput
                 readOnly
@@ -148,7 +199,7 @@ export default function EditSelf() {
                   <View style={styles.carre}>
                     <Ionicons name="download" size={44} color="black"></Ionicons>
                     <View style={{height:10}}></View>
-                    <Text>Ajoutez un document ici </Text>
+                    <Text>{TextTranslation.Ajouterpiece} </Text>
                     {
                         ficher==null?'': <Text>{ficher.name}</Text>
                     }
@@ -160,7 +211,7 @@ export default function EditSelf() {
                         onPress={async () => {
                             try {
                                 if (createFormattedDateExp(hourstart) === 'Invalid' || createFormattedDateExp(hourend) === 'Invalid') {
-                                    Alert.alert('Warning', 'Entrez des dates valides.', [
+                                    Alert.alert( TextTranslation.Attention, TextTranslation.ReponseErreur, [
                                         { text: 'OK', onPress: () => console.log('OK Pressed') }
                                       ],
                                       { cancelable: false })
@@ -173,11 +224,7 @@ export default function EditSelf() {
                                         dateFin: createFormattedDateExp(hourend),
                                         experience: exp,
                                         entreprise: company,
-                                        proof: {
-                                            uri: ficher.uri,
-                                            type: ficher.type,
-                                            name: ficher.name,
-                                        }
+                                      
                                     })
                                     console.log(req.data)
                                     setCompany('')
@@ -186,7 +233,7 @@ export default function EditSelf() {
                                     setPlace('')
                                     handleHourStartChange('')
                                     handleHourEndChange('')
-                                    Alert.alert('Succès', 'Expérience ajoutée avec succès.', [
+                                    Alert.alert("Réussi", TextTranslation.Succes, [
                                         { text: 'OK', onPress: () => console.log('OK') }
                                       ],
                                       { cancelable: true })
@@ -199,7 +246,7 @@ export default function EditSelf() {
                         style={styles.button}
                     >
                         <Text style={styles.textButton}>
-                            Ajouter
+                            {TextTranslation.Ajouter}
                         </Text>
                     </Pressable>
                     </ScrollView>

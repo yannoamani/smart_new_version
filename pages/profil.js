@@ -1,4 +1,4 @@
-import { FlatList, View, SafeAreaView,Image, Text, ScrollView,StyleSheet, Alert } from "react-native";
+import { FlatList,StatusBar, View, SafeAreaView,Image, Text, ScrollView,StyleSheet, Alert } from "react-native";
 import styles from "../styles";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
@@ -7,9 +7,15 @@ import { displayDate } from "../Utils";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { Pressable } from "react-native";
+import { useTranslation } from 'react-i18next';
+import { changeLanguage } from "i18next";
+import translateText from "../pages/store/TranslationUtils"
+import { useSelector } from 'react-redux';
 
 
 export default function Profile() {
+  const lang = useSelector((state) => state.translate.lang);
+  const { t } = useTranslation();
   const [data, setData] = useState();
   const [skills, setSkills] = useState(null);
   const [exps, setExps] = useState(null);
@@ -19,12 +25,36 @@ export default function Profile() {
   const [policeBold, setPolices] = useState("Poppins_700Bold");
   const [policeRegular, setPoliceRegular] = useState("Poppins_400Regular");
   const [policeLight, setPoliceLight] = useState("Poppins_300Light_Italic");
+  const [TextTranslate, setTextTranslate] = useState({ 
+    Profile:"Profil",
+    NoCompetence:"Pas de competence",
+    Competence:"Email",
+    Diplome:"Diplome",
+    Habitation:"Habitation",
+    Phone:"Numéro",
+    NoExperience:"Pas d'experience",
+    Abonnement:"Abonnement",
+    MesExperiences:"Mes experiences",
+    plagesHoraires:"Mes plages horaires",
+    AddExperience:"Ajouter une experience",
+    AddSkill:"Ajouter une competence",
+    ChangeLang:"Changer la langue",
+    Deconnexion:" se Deconnecter",
+    Email:"Email",
+    Verifier:"Voulez-vous vous deconnecter",
+    Yes:"Oui",
+    No:"Non",
+    Attention:"Attention",
+    TextAttention:"êtes vous-sur de suprimer experience",
+    Echec:"Echec",
+
+  })
   const getUser = async () => {
     try {
       const temp = await AsyncStorage.getItem("user");
       setData(JSON.parse(temp));
       setRefreshing(false);
-      console.log("je sui", temp);
+      // console.log("je sui", temp);
     } catch (error) {
       console.log(error);
       setRefreshing(false);
@@ -34,7 +64,16 @@ export default function Profile() {
     try {
       const skills = await axios.get("getCompetenceByStudents");
       if (skills.data.data.competences.length > 0) {
-        setSkills(skills.data.data.competences);
+        const data = skills.data.data.competences;
+        const translateAll= await Promise.all(
+          data.map(async (skill) => {
+           return{
+             ...skill,
+             competence: await translateText(skill.competence,lang)
+           }
+          })
+        )
+        setSkills(translateAll);
       }
       setRefreshing(false);
       console.log( "skills",skills.data.data.competences);
@@ -81,6 +120,58 @@ export default function Profile() {
       setRefreshing(false);
     }
   };
+const translate = async() => {
+  const Profile = await translateText("Profil",lang);
+  const email= await translateText("Email",lang);
+  const diplome = await translateText("Diplome",lang);
+  const habitation = await translateText("Habitation",lang);
+  const phone = await translateText("Numéro",lang);
+  const abonnement = await translateText("Abonnement",lang);
+  const MesExperiences = await translateText("Mes experiences",lang);
+  const plagesHoraires = await translateText("Mes plages horaires",lang);
+  const AddExperience = await translateText("Ajouter une experience",lang);
+  const AddSkill = await translateText("Ajouter une competence",lang);
+  const ChangeLang = await translateText("Changer la langue",lang);
+  const Deconnexion = await translateText("Se deconnecter",lang);
+  const noCompetence= await translateText("Pas de competence",lang);
+  const competence= await translateText("Pas de competence",lang);
+  const seDeonneter= await translateText("Se Deonnecter",lang);
+  const verifier= await translateText("Voulez-vous vous deconnecter",lang);
+  const yes= await translateText("Oui",lang);
+  const no= await translateText("Non",lang);
+  const Attention= await translateText("Attention",lang);
+  const TextAttention= await translateText("êtes vous-sur de suprimer cette experience",lang);
+  const Echec= await translateText("Echec",lang);
+  const noExperience= await translateText("Pas d'experience",lang);
+
+  setTextTranslate({
+    Profile:Profile,
+    Competence:competence,
+    Diplome:diplome,
+    Habitation:habitation,
+    Phone:phone,
+    Abonnement:abonnement,
+    MesExperiences:MesExperiences,
+    plagesHoraires:plagesHoraires,
+    AddExperience:AddExperience,
+    AddSkill:AddSkill,
+    ChangeLang:ChangeLang,
+    Deconnexion:Deconnexion,
+    NoCompetence:noCompetence,
+    Email:email,
+    SeDeonnecter:seDeonneter,
+    Verifier:verifier,
+    Yes:yes,
+    No:no,
+    Attention:Attention,
+    TextAttention:TextAttention,
+    Echec:Echec,
+    NoExperience:noExperience
+
+
+  });
+  
+}
 
   const fetchData = () => {
     setRefreshing(true);
@@ -88,23 +179,25 @@ export default function Profile() {
     getExps();
     getSkills();
     getAbonnement();
+    translate();
   };
 
   useEffect(() => {
     // Fetch offers when the component mounts
     fetchData();
+    translate();
+    // setInterval(() => {
+    //   fetchData();
+    // }, 60000);
 
-    // Set up an interval to fetch offers every 1 minute
-    const intervalId = setInterval(fetchData, 60000);
 
-    // Clean up the interval when the component unmounts
-    return () => clearInterval(intervalId);
-  }, []);
+  
+  }, [lang]);
   return (
     <View style={{flex:1 , backgroundColor: "#F1F2F4"}}>
       <View style={style.header}>
-       <SafeAreaView>
-        <Text style={[style.title, { fontFamily: policeBold }]}>Profil</Text>
+       <SafeAreaView >
+        <Text style={[style.title, { fontFamily: policeBold }]}>{TextTranslate.Profile}</Text>
         <View style={{height:10}}></View>
        <View style={style.row}>
        <View style={style.circle}>
@@ -126,10 +219,11 @@ export default function Profile() {
             
                
            )):
-           <Text style={{ color: "white", fontFamily: policeRegular, textAlign: 'center', alignSelf:"center", alignItems: 'center',justifyContent: 'center',}}>Pas de competence</Text>
+           <Text style={{ color: "white", fontFamily: policeRegular, textAlign: 'center', alignSelf:"center", alignItems: 'center',justifyContent: 'center',}}>{TextTranslate.NoCompetence}</Text>
         }
       </View>
      </ScrollView>
+     <StatusBar />
       
       {/* {skills ? 
                         <Text numberOfLines={3} ellipsizeMode="tail" style={{ flexGrow:1, flex:1, textAlign: 'center', alignSelf:"center", alignItems: 'center',justifyContent: 'center', }}>
@@ -211,12 +305,12 @@ export default function Profile() {
                 {/* Leading */}
               <View style={style.leading}>
                 <Ionicons name="mail-outline" size={16}></Ionicons>
-                <Text style={style.libelle}>Email</Text>
+                <Text style={[style.libelle,{fontFamily:policeRegular}]}>{TextTranslate.Email}</Text>
               </View>
               {/* Trailling */}
               <View style={style.trailing}>
-                <Text style={style.items}>{data.email}</Text>
-                <Ionicons name="chevron-forward-outline" size={16}></Ionicons>
+                <Text style={[style.items,{fontFamily:policeRegular}]}>{data.email}</Text>
+                {/* <Ionicons name="chevron-forward-outline" size={16}></Ionicons> */}
               </View>
               
             
@@ -230,12 +324,12 @@ export default function Profile() {
                 {/* Leading */}
               <View style={style.leading}>
                 <Ionicons name="school-outline" size={16}></Ionicons>
-                <Text style={style.libelle}>Diplôme</Text>
+                <Text style={[style.libelle,{fontFamily:policeRegular}]}>{TextTranslate.Diplome}</Text>
               </View>
               {/* Trailling */}
               <View style={style.trailing}>
-                <Text style={style.items}>{data.diplome}</Text>
-                <Ionicons name="chevron-forward-outline" size={16}></Ionicons>
+                <Text style={[style.items,{fontFamily:policeRegular}]}>{data.diplome}</Text>
+                {/* <Ionicons name="chevron-forward-outline" size={16}></Ionicons> */}
               </View>
               
             
@@ -249,12 +343,12 @@ export default function Profile() {
                 {/* Leading */}
               <View style={style.leading}>
                 <Ionicons name="home-outline" size={16}></Ionicons>
-                <Text style={style.libelle}>Habitation</Text>
+                <Text style={[style.libelle,{fontFamily:policeRegular}]}>{TextTranslate.Habitation}</Text>
               </View>
               {/* Trailling */}
               <View style={style.trailing}>
-                <Text style={style.items}>{data.commune}</Text>
-                <Ionicons name="chevron-forward-outline" size={16}></Ionicons>
+                <Text style={[style.items,{fontFamily:policeRegular}]}>{data.commune}</Text>
+                {/* <Ionicons name="chevron-forward-outline" size={16}></Ionicons> */}
               </View>
                </View>
               <View style={style.line}></View>
@@ -265,12 +359,12 @@ export default function Profile() {
                 {/* Leading */}
               <View style={style.leading}>
                 <Ionicons name="call-outline" size={16}></Ionicons>
-                <Text style={style.libelle}>Numero de téléphone</Text>
+                <Text style={[style.libelle,{fontFamily:policeRegular}]}>{TextTranslate.Phone}</Text>
               </View>
               {/* Trailling */}
               <View style={style.trailing}>
-                <Text style={style.items}>{data.phone}</Text>
-                <Ionicons name="chevron-forward-outline" size={16}></Ionicons>
+                <Text style={[style.items,{fontFamily:policeRegular}]}>{data.phone}</Text>
+                {/* <Ionicons name="chevron-forward-outline" size={16}></Ionicons> */}
               </View>
                </View>
               <View style={style.line}></View>
@@ -280,12 +374,12 @@ export default function Profile() {
                 {/* Leading */}
               <View style={style.leading}>
                 <Ionicons name="bookmark-outline" size={16}></Ionicons>
-                <Text style={style.libelle}>Abonnement</Text>
+                <Text style={[style.libelle,{fontFamily:policeRegular}]}>{TextTranslate.Abonnement}</Text>
               </View>
               {/* Trailling */}
               <View style={style.trailing}>
-                <Text style={style.items}>{myabonnement}</Text>
-                <Ionicons name="chevron-forward-outline" size={16}></Ionicons>
+                <Text style={[style.items,{fontFamily:policeRegular}]}>{myabonnement}</Text>
+                {/* <Ionicons name="chevron-forward-outline" size={16}></Ionicons> */}
               </View>
                </View>
             
@@ -300,7 +394,7 @@ export default function Profile() {
             <Text
               style={style.experience}
             >
-              MES EXPERIENCES
+            {TextTranslate.MesExperiences}
             </Text>
             <View style={{ height: 18 }}></View>
             <ScrollView
@@ -354,20 +448,25 @@ export default function Profile() {
                     <Ionicons
                       onPress={() => {
                         Alert.alert(
-                          "?",
-                          "Voulez-vous supprimer cette expérience ?",
+                      TextTranslate.Attention,
+                          TextTranslate.TextAttention,
                           [
+                            
                             {
-                              text: "OUI",
+                              text: TextTranslate.No,
+                              onPress: async () => console.log("NON"),
+                            },
+                            {
+                              text: TextTranslate.Yes,
                               onPress: async () => {
                                 try {
                                   const del = await axios.delete(
                                     "deleteMyExperience/" + exp.id
                                   );
-                                  fetchData();
+                                  getExps();
                                 } catch (error) {
                                   Alert.alert(
-                                    "Echec",
+                                   TextTranslate.Echec,
                                     error.message,
                                     [
                                       {
@@ -379,10 +478,6 @@ export default function Profile() {
                                   );
                                 }
                               },
-                            },
-                            {
-                              text: "NON",
-                              onPress: async () => console.log("NON"),
                             },
                           ],
                           { cancelable: true }
@@ -406,7 +501,7 @@ export default function Profile() {
                     fontSize: 18,
                   }}
                 >
-                  Aucune experience
+                 {TextTranslate.NoExperience}
                 </Text>
               )}
             </ScrollView>
@@ -429,7 +524,7 @@ export default function Profile() {
           <View style={style.leadingOption}>
             <Ionicons name="notifications" size={20} color="#FFD233" />
             
-            <Text style={[style.libelleOption,{fontFamily:policeRegular}]}> Abonnement </Text>
+            <Text style={[style.libelleOption,{fontFamily:policeRegular}]}> {TextTranslate.Abonnement} </Text>
             </View>
               
               <Ionicons
@@ -459,7 +554,7 @@ export default function Profile() {
             <Text
              style={[style.libelleOption,{fontFamily:policeRegular}]}
             >
-              Mes plages horaires
+            {TextTranslate.plagesHoraires} 
             </Text>
                </View>
               <Ionicons
@@ -489,7 +584,7 @@ export default function Profile() {
               <Text
                style={[style.libelleOption,{fontFamily:policeRegular}]}
               >
-               Ajouter une experience
+              {TextTranslate.AddExperience}
               </Text>
               </View>
               <Ionicons
@@ -518,7 +613,36 @@ export default function Profile() {
              <Text
               style={[style.libelleOption,{fontFamily:policeRegular}]}
              >
-              Ajouter une competence
+             {TextTranslate.AddSkill}
+             </Text>
+             </View>
+              <Ionicons
+                name="chevron-forward-outline"
+                size={20}
+                color="black"
+              ></Ionicons>
+            </View>
+  
+        </Pressable>
+        <View style={{height:20}}></View>
+       
+        <Pressable
+        onPress={async () => {
+                    navigation.navigate('Traduction')
+                }}
+        >
+          <View
+            style={style.cardOption}
+          >
+            
+            
+             <View style={style.leadingOption}>
+             <Ionicons name="globe" size={20} color="black" />
+             
+             <Text
+              style={[style.libelleOption,{fontFamily:policeRegular}]}
+             >
+            {TextTranslate.ChangeLang}
              </Text>
              </View>
               <Ionicons
@@ -532,8 +656,8 @@ export default function Profile() {
         <View style={{height:20}}></View>
         <Pressable
         onPress={async () => {
-                    Alert.alert('Se déconnecter', 'Voulez-vous vous déconnecter', [
-                        {text: 'OUI', onPress: async () => {
+                    Alert.alert(TextTranslate.Deconnexion, TextTranslate.Verifier, [
+                       {text: TextTranslate.No},  {text: TextTranslate.Yes, onPress: async () => {
                             try {
                                 axios.get('auth_logout')
                                 await AsyncStorage.multiRemove(['user', 'token'])
@@ -541,7 +665,7 @@ export default function Profile() {
                             } catch (error) {
                                 console.log(error);
                             }
-                        }}, {text: 'NON'}
+                        }},
                     ], {cancelable: true})
                 }}
         >
@@ -555,13 +679,15 @@ export default function Profile() {
              <Text
             style={[style.libelleOption,{fontFamily:policeRegular}]}
              >
-             Déconnexion
+           {TextTranslate.Deconnexion}
              </Text>
            </View>
              
             
           </View>
         </Pressable>
+        <View style={{height:20}}></View>
+        <View style={{height:100}}></View>
        
 
         {/* <View style={styles.credits}> */}
@@ -625,7 +751,8 @@ const style=StyleSheet.create({
     width: '100%',
     backgroundColor:'#F38B2B',
     flexDirection:'column',
-    padding:16
+    padding:16,
+    
     
   },
   title:{
@@ -706,7 +833,7 @@ const style=StyleSheet.create({
    
   },
   libelle:{
-    fontWeight:'500',
+    fontWeight:'normal',
     fontSize:14,
     marginLeft:5
 
@@ -755,9 +882,9 @@ const style=StyleSheet.create({
     
   },
   libelleOption:{
-    fontSize:13,
+    fontSize:15,
     marginLeft:15,
-    fontWeight:'700'
+    fontWeight:"500"
 
   }
 

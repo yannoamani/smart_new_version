@@ -8,10 +8,15 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { createFormattedDateExp } from "../Utils";
 // import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
+import { useSelector } from 'react-redux';
+import translateText from "../pages/store/TranslationUtils"
+
 
 export default function EditExp({route}) {
     const { expR } = route.params || {};
+
     const navigation = useNavigation()
+    const lang = useSelector((state) => state.translate.lang);
     // Check if expR is defined before accessing its properties
     const [job, setJob] = useState(expR ? expR.poste : "");
     const [place, setPlace] = useState(expR ? expR.lieu : "");
@@ -29,6 +34,39 @@ export default function EditExp({route}) {
   const [hourstart, handleHourStartChange] = useState(expR ? expR.dateDebut : "");
   const [hourend, handleHourEndChange] = useState(expR ? expR.dateFin : "");
   const [timer, setTimer] = useState(false);
+  const [TextTranslation, setTextTransaction] = useState({
+    Title: "Modifier votre experience",
+Poste :"Poste",
+Entreprise:"Entreprise",
+Lieu:"Lieu",
+DateDebut:"Date de debut",
+DateFin:"Date de fin",
+Description:"Description",
+Modifier:"Modifier",
+
+   
+  });
+
+  const Translation = async()=>{
+ const title= await translateText(TextTranslation.Title, lang);
+ const poste= await translateText(TextTranslation.Poste, lang);
+ const Entreprise= await translateText(TextTranslation.Entreprise, lang);
+ const Lieu= await translateText(TextTranslation.Lieu, lang);
+ const DateDebut= await translateText(TextTranslation.DateDebut, lang);
+ const DateFin= await translateText(TextTranslation.DateFin, lang);
+ const Description= await translateText(TextTranslation.Description, lang);
+ const Modifier= await translateText(TextTranslation.Modifier, lang);
+ setTextTransaction({
+  Title: title,
+  Poste:poste,
+  Entreprise:Entreprise,
+  Lieu:Lieu,
+  DateDebut:DateDebut,
+  DateFin:DateFin,
+  Description:Description,
+  Modifier:Modifier
+ })
+  }
   const handleTimeConfirm = (time) => {
     const platform = Platform
     if (timer) {
@@ -39,8 +77,9 @@ export default function EditExp({route}) {
     hideshowTimePicker();
   };
     useEffect(() => {
-        //console.log('expR : ', expR);
-    }, []);
+
+    Translation();
+    }, [lang]);
     return (
         <KeyboardAvoidingView
         style={{
@@ -56,7 +95,7 @@ export default function EditExp({route}) {
         <ScrollView 
             style={{flex:1}}
         >
-        <Text style={experienceStyle.title}>Modifier votre experience</Text>
+        <Text style={experienceStyle.title}>{TextTranslation.Title}</Text>
             <View 
                 style={{
                     // alignItems: "center",
@@ -65,7 +104,7 @@ export default function EditExp({route}) {
                 //behavior={'height'}
                 >
                 <View style={{height:20}}></View>
-                <Text style={experienceStyle.label}>Poste </Text>
+                <Text style={experienceStyle.label}>{TextTranslation.Poste}</Text>
                 <View style={{height:5}}></View>
                 <TextInput 
                     style={experienceStyle.input}
@@ -74,7 +113,7 @@ export default function EditExp({route}) {
                     onChangeText={(text) => {setJob(text)}}
                 />
                 <View style={{height:20}}></View>
-                 <Text style={experienceStyle.label}>Entreprise </Text>
+                 <Text style={experienceStyle.label}>{TextTranslation.Entreprise} </Text>
                 <View style={{height:5}}></View>
                 <TextInput 
                     style={experienceStyle.input}
@@ -84,7 +123,7 @@ export default function EditExp({route}) {
                 />
                 
                  <View style={{height:20}}></View>
-                 <Text style={experienceStyle.label}>Lieu</Text>
+                 <Text style={experienceStyle.label}>{TextTranslation.Lieu}</Text>
                  <View style={{height:5}}></View>
                 <TextInput 
                     style={experienceStyle.input}
@@ -93,7 +132,7 @@ export default function EditExp({route}) {
                     onChangeText={(text) => {setPlace(text)}}
                 />
                   <View style={{height:20}}></View>
-                 <Text style={experienceStyle.label}>Date de debut</Text>
+                 <Text style={experienceStyle.label}>{TextTranslation.DateDebut}</Text>
                  <View style={{height:5}}></View>
                 <TextInput
                  readOnly={true}
@@ -108,7 +147,7 @@ export default function EditExp({route}) {
                     onChangeText={handleTimeConfirm} // MM/DD/YYYY has 10 characters
                 />
                 <View style={{height:20}}></View>
-                 <Text style={experienceStyle.label}>Date de fin </Text>
+                 <Text style={experienceStyle.label}>{TextTranslation.DateFin}</Text>
                  <View style={{height:5}}></View>
                 <TextInput
                 readOnly={true}
@@ -130,7 +169,7 @@ export default function EditExp({route}) {
                   />
                     
                     <View style={{height:20}}></View>
-                 <Text style={experienceStyle.label}>Description </Text>
+                 <Text style={experienceStyle.label}>{TextTranslation.Description}</Text>
                  <View style={{height:5}}></View>
                 <TextInput
                     style={experienceStyle.textarea}
@@ -190,7 +229,7 @@ export default function EditExp({route}) {
                     >
                         <Text style={experienceStyle.textButton}>
                            {
-                            loading ?<ActivityIndicator size="large" color={'white'}/> : 'Modifier'
+                            loading ?<ActivityIndicator size="large" color={'white'}/> : TextTranslation.Modifier
                            }
                         </Text>
                     </Pressable>

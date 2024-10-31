@@ -2,7 +2,7 @@ import { FlatList, View, loader,Text,Image, StyleSheet,ScrollView,useWindowDimen
 
 import styles from '../pages/styles/offerStyle';
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useLayoutEffect  } from "react";
 import RenderHtml from 'react-native-render-html';
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
@@ -11,8 +11,16 @@ import { Ionicons } from '@expo/vector-icons';
 import Loader from "../components/loader";
 import { displayDate, isDateTimeGreaterThanCurrent } from "../Utils";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useTranslation } from 'react-i18next';
+import translate from "translate";
+import { useSelector } from 'react-redux';
 
-export default function Offer({route}) {
+translate.engine = "deepl"; 
+translate.key ="98c4da1d-6d65-4402-9c30-510b68d6a3fa:fx";
+
+export default function Offer({route }) {
+  const lang = useSelector((state) => state.translate.lang);
+  
     const { width } = useWindowDimensions();
     const { id } = route.params;
     const { already } = route.params;
@@ -22,6 +30,50 @@ export default function Offer({route}) {
     const [loadin, setLoadin] = useState(false);
     const navigation = useNavigation()
     const [exist, setExist] = useState(false);
+    const { t } = useTranslation();
+    const [TextTransaction, setTextTransaction] = useState({
+      DetailsOffre:"Details sur l'offre",
+      Nopostule:"Vous n'avez pas encore postule",
+      HavePosule:"Vous avez deja postule",
+      Du:"Du",
+      Au:"Au",
+      Postuler:"Postuler",
+      Echec:"",
+      Succes:"Succes",
+      PostulSucces:"Vous avez postulé avec succès",
+      
+      
+    });
+    const Translation=async()=>{
+ 
+
+      const detailsOffres=await translate("Details sur l'offre", { from: 'fr', to: lang  });
+
+      const nopostule=await translate("Vous n'avez pas encore postule", { from: 'fr', to: lang  });
+
+      const havePosule=await translate("Vous avez deja postule", { from: 'fr', to: lang });
+
+      const du=await translate("Du", { from: 'fr', to: lang  });
+
+      const au=await translate("Au", { from: 'fr', to: lang  });
+    const postulesucess=await translate("Postuler avec succes", { from: 'fr', to: lang  });
+    const succes=await translate("Succes", { from: 'fr', to: lang  });
+      const postuler=await translate("Postuler", { from: 'fr', to: lang  });
+      const echec=await translate("Echec", { from: 'fr', to: lang });
+    
+
+      setTextTransaction({
+        DetailsOffre:detailsOffres,
+        Nopostule:nopostule,
+        HavePosule:havePosule,
+        Du:du,
+        Au:au,
+        Postuler:postuler,
+        Echec:echec,
+        PostulSucces:postulesucess,
+        Succes:succes
+      })
+    }
     // const conversion=()=>{
     //  return   setDesc(detailsOffres.description.replace(/<[^>]*>|&nbsp;/g, ' ').trim().toUpperCase().split('  '))
     // }
@@ -83,15 +135,19 @@ export default function Offer({route}) {
     }
     
   }
+  // navigation.setOptions({
+  //   headerTitle:TextTransaction.DetailsOffre
+  // })
 
     useEffect(() => {
-        getOffer()
+        getOffer();
+        Translation();
         const interval= setInterval(async () => {
       const abonement = await AsyncStorage.getItem('abonnement');
         // console.log("abonnement",abonement);
    if (abonement) {
     const mabonnement = JSON.parse(abonement);
-    console.log("abonnement",mabonnement);
+    // console.log("abonnement",mabonnement);
     
     if (isDateTimeGreaterThanCurrent(mabonnement.echeance)) {
       // console.log("Vous ", abonement);
@@ -106,7 +162,9 @@ export default function Offer({route}) {
 
     
   }, 1000);
-    }, []);
+
+        return () => clearInterval(interval);
+    }, [lang]);
 
     return (
         
@@ -115,7 +173,7 @@ export default function Offer({route}) {
        
        
         <View style={Monstyles.container}>
-        <Text style={Monstyles.detailoffre}>Detail de l'offre</Text>
+        <Text style={Monstyles.detailoffre}>{TextTransaction.DetailsOffre}</Text>
         <View style={Monstyles.subtile}>
        <Ionicons name={"location-sharp"} color={'black'} size={20}></Ionicons>
    <View style={{width:2}}></View>
@@ -174,11 +232,11 @@ export default function Offer({route}) {
               <View style={{width:10}}></View>
               
   {
-    already==false? <Text  style={Monstyles.info}>Pas encore postuler </Text> : <Text  style={Monstyles.info}>Déja postuler </Text>
+    already==false? <Text  style={Monstyles.info}>{TextTransaction.Nopostule} </Text> : <Text  style={Monstyles.info}>{TextTransaction.HavePosule} </Text>
   }
    </View>
    <View style={{height:15}}></View>
-   <Text style={Monstyles.date}>Date : Du  {detailsOffres.fin} au  {detailsOffres.fin}</Text>
+   <Text style={Monstyles.date}>Date : {TextTransaction.Du}  {detailsOffres.fin} {TextTransaction.Au} {detailsOffres.fin}</Text>
         
       
      
@@ -202,8 +260,10 @@ export default function Offer({route}) {
       <Pressable 
       onPress={
           async () => {
+            const lang = await AsyncStorage.getItem('lang')
               setLoadin(true)
                       try {
+                        
                           const token = await AsyncStorage.getItem('token')
                           if (token) {
                               axios.defaults.headers.common.Authorization = `Bearer ${token}`;
@@ -211,24 +271,37 @@ export default function Offer({route}) {
 
                           const dat = await axios.post('postule_offre', {offre_id: detailsOffres.id})
                          
-                          Alert.alert("Réussi", "Vous avez postulé", [{ text: 'OK'}])
+                          Alert.alert(TextTransaction.Succes, TextTransaction.PostulSucces, [{ text: 'OK'}])
                           // navigation.goBack()
                           setLoadin(false)
                          
                           console.log(dat)
                           getOffer();
                       } catch (error) {
-                          navigation.navigate('Abonnement');
-                          Alert.alert("Echec", JSON.stringify(error.response.data.message), [{ text: 'OK'},  ])
-                          setLoadin(false)
-                      
-                          console.log(error);
+                          // navigation.navigate('Abonnement');
+                          const texte = error.response?.data?.message || 'Une erreur s\'est produite'; // Message par défaut
+
+try {
+    const lang = await AsyncStorage.getItem('lang') || 'fr'; 
+    const errorText = await translate(texte, { from: 'fr', to: lang === 'en' ? 'en' : 'fr' }); // Attendez la traduction
+
+    Alert.alert(TextTransaction.Echec, errorText, [{ text: 'OK' }]); 
+} catch (translationError) {
+    console.error("Erreur lors de la traduction:", translationError);
+    Alert.alert(TextTransaction.Echec, texte, [{ text: 'OK' }]); 
+} finally {
+    setLoadin(false); 
+}
+
+console.log(error);
+console.log("Voici la traduction", texte);
+}
                           
                       }}
-      }
+    
       
       >
-          <Text style={Monstyles.textbutton}>Postuler maintenant</Text>
+          <Text style={Monstyles.textbutton}>{TextTransaction.Postuler}</Text>
       </Pressable>
   </View> : null):<ActivityIndicator color={'#F38B2B'} size="large" />
        }

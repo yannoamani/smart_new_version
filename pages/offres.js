@@ -23,8 +23,25 @@ import { useNavigation } from "@react-navigation/native";
 import style from "../offerStyle.js";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ThemeComponent from "./styles/theme.jsx";
+import { useTranslation } from 'react-i18next';
+import translate, { Translate } from "translate";
+import { useSelector } from 'react-redux';
+
+translate.engine = "deepl"; 
+translate.key ="98c4da1d-6d65-4402-9c30-510b68d6a3fa:fx";
 
 export default function List() {
+  
+  const { t } = useTranslation();
+  const [texttranslate, setTextTransaction]=useState({
+    Bienvenue:"Bienvenue",
+    Tout: "Tout",
+    Nooffres:"Pas d'offres Disponible",
+    OffrsDispo:"Les offres disponibles"
+    
+
+  });
+  const lang = useSelector((state) => state.translate.lang);
   const navigation = useNavigation();
   const [data, setData] = useState();
   const [already, setAlready] = useState(false);
@@ -32,14 +49,43 @@ export default function List() {
   const [refreshing, setRefreshing] = useState(false);
   const token = AsyncStorage.getItem("token");
   const [categorie, Setcategorie] = useState([]);
-  const [select, setSelect] = useState("Tout");
+
   const [like, setLike] = useState(false);
   const [policeBold, setPolices] = useState("Poppins_700Bold");
   const [policeRegular, setPoliceRegular] = useState("Poppins_400Regular");
   const [policeLight, setPoliceLight] = useState("Poppins_300Light_Italic");
   offersStyle(policeBold, policeRegular);
+  
+  const Translation=async()=>{
+ 
+
+
+   
+
+  
+     
+      const bienvenue= await translate("Bienvenue",  { from: 'fr', to: lang  });
+      const tout= await translate("Tout",  { from: 'fr', to: lang});
+      const noOffrs= await translate("Pas d'offres disponible", { from: 'fr', to: lang });
+      const offrsDispo= await translate("Les offres disponibles", { from: 'fr', to: lang });
+
+      
+      setTextTransaction({
+        Bienvenue:bienvenue,
+        Tout:tout,
+        Nooffres:noOffrs,
+        OffrsDispo:offrsDispo
+        
+      })
+    
+    
+  }
+  const [select, setSelect] = useState("Tout");
+
+
 
   const getOffers = async () => {
+   
     try {
       // data;
       const token = await AsyncStorage.getItem("token");
@@ -48,9 +94,22 @@ export default function List() {
       }
       const value = await AsyncStorage.getItem("user");
       const res = await axios.get("list_offres");
-      setData(res.data.data);
+      const data = res.data.data;
+      const translateAll= await Promise.all(
+        data.map(async (offre) => {
+          return{
+            ...offre,
+            nom_offre: await translate(offre.nom_offre,{from:'fr',to:lang}),
+            description: await translate(offre.description,{from:'fr',to:lang}),
+            categorie: await translate(offre.categorie.categorie,{from:'fr',to:lang})
+          }
+        })
+      )
+      setData(translateAll);
     //  console.log('La liste des offres',res.data.data);
       const favoris = res.data.data.favoris;
+
+      console.log('La liste des offres', translateAll);
 
       // data.forEach((element) => {
       //   if () {
@@ -71,18 +130,33 @@ export default function List() {
     }
   };
   const getCategorie = async () => {
+
     try {
-      Setcategorie([{ id: 0, categorie: "Tout" }]);
+    
+    
+    
+      Setcategorie([{ id: 0, categorie:"Tout"}]);
       const res = await axios.get("seeCategorie");
       const data = res.data.data;
-      data.forEach((element) => {
+      console.log("La liste des categorie", data);
+         const dataTraduit = await Promise.all(
+        data.map(async (element) => {
+            const categorieTraduit = await translate(element.categorie, { from: 'fr', to: lang }); // Change 'en' pour la langue cible
+            return { ...element, categorie: categorieTraduit }; // Met à jour le champ `categorie` traduit
+        })
+    );
+  
+      dataTraduit.forEach((element) => {
         key = element.categorie;
         Setcategorie((oldArray) => [...oldArray, element].sort());
       });
+      console.log("La liste des categorie", dataTraduit);
+      //  Translation();
+      
       // categorie.push(res.data.data);
       // console.log("La liste des categorie", categorie[0]);
     } catch (error) {
-      console.log(error);
+      console.log('Erreur categori',error);
     }
   };
   const addfavori = async (id) => {
@@ -165,6 +239,10 @@ const getAbonnement = async () => {
   const fetchOffers = () => {
     //setRefreshing(true);
     getOffers();
+    getCategorie();
+    Translation();
+
+
 
     // verifierabonement();
   };
@@ -175,33 +253,30 @@ const getAbonnement = async () => {
  
     const interval= setInterval(async () => {
       const abonement = await AsyncStorage.getItem('abonnement');
-        console.log("abonnement",abonement);
+        // console.log("abonnement",abonement);
    if (abonement) {
     const mabonnement = JSON.parse(abonement);
     // console.log("abonnement",mabonnement);
     
     if (isDateTimeGreaterThanCurrent(mabonnement.echeance)) {
-      console.log("Vous ", abonement);
+      // console.log("Tu es  dans ma fonction accepter ", abonement);
       verifierabonement();
       clearInterval(interval);
       
     }
     else{
-        console.log("abonnement expire");
+      return ;
+        // console.log("abonnement expire");
     }
    }
 
     
   }, 5000);
 
-  //  verifierabonement();
-
-    // Set up an interval to fetch offers every 1 minute
-    // const intervalId = setInterval(fetchOffers, 60000);
-
-    // // Clean up the interval when the component unmounts
-    // return () => clearInterval(intervalId);
-  }, []);
+  return () => {
+        
+  }
+  }, [lang]);
   const getData = async (item) => {
     try {
       // setAlready(false);
@@ -339,11 +414,11 @@ const getAbonnement = async () => {
               style={{ width: "100%" }}
               renderItem={renderItem}
               data={
-                select != "Tout"
+                (select !="Tout"&&select!="All")
                   ? data.filter(
                       (item) =>
                         new Date() < new Date(item.fin) &&
-                        item.categorie.categorie == select
+                        item.categorie == select
                     )
                   : data.filter((item) => new Date() < new Date(item.fin))
               }
@@ -351,13 +426,13 @@ const getAbonnement = async () => {
               onRefresh={()=>{
                 getOffers();
                 getCategorie();
-                // verifierabonement();
+             
                 getAbonnement();
               }}
               refreshing={refreshing}
               ListEmptyComponent={
                 <Text style={{ marginTop: 20, textAlign: "center" }}>
-                  Aucune offre
+                  {texttranslate.Nooffres}
                 </Text>
               }
               ListHeaderComponent={
@@ -367,7 +442,7 @@ const getAbonnement = async () => {
                       <Text
                         style={[mystyle.welcome, { fontFamily: policeRegular }]}
                       >
-                        Bienvenue
+                        {texttranslate.Bienvenue}   
                       </Text>
                       <Text
                         style={[mystyle.userId, { fontFamily: policeBold }]}
@@ -385,10 +460,14 @@ const getAbonnement = async () => {
                   <View style={{ height: 10 }}></View>
                   <ScrollView horizontal>
                     <View style={mystyle.categorie}>
-                      {categorie.map((item) => (
+                      {
+                        categorie.map((item) => (
+                        
                         <Pressable
                           onPress={() => {
+                            
                             setSelect(item.categorie);
+                            console.log(select)
                           }}
                           key={item.categorie}
                         >
@@ -424,7 +503,7 @@ const getAbonnement = async () => {
                   </ScrollView>
                   <View style={{ height: 10 }}></View>
                   <Text style={[mystyle.title, { fontFamily: policeBold }]}>
-                    Liste des offres
+                   {texttranslate.OffrsDispo}
                   </Text>
                 </View>
               }

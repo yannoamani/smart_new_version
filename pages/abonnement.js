@@ -5,10 +5,14 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { Ionicons } from "@expo/vector-icons";
 import RenderHtml from 'react-native-render-html';
-import { WebView } from 'react-native-webview';
 
+import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import translateText from "../pages/store/TranslationUtils.js"
 
 export default function Abonnement() {
+  const {t}=useTranslation();
+  const lang = useSelector((state) => state.translate.lang);
     const { width } = useWindowDimensions();
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [data, setData] = useState([]);
@@ -25,14 +29,71 @@ export default function Abonnement() {
     const [modalVisible, setModalVisible] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
     const [veri, setveri] = useState('');
+    const [TextTranslate, setTextTranslate] = useState({
+      Methode:"Methode de paiement",
+      Souscrire:"Souscrire",
+      Attention:"Attention",
+      sousAttention:"Veuillez selectionner une methode de paiement",
+      Annuler:"Annuler",
+      Payer:"Payer",
+      Oui:"Oui",
+      Non:"Non",
+      Echec:"Echec",
+      Abonnement:"Abonnement",
+      Paiement:"Paiement",
+      TitleSucces:"Paiement Réussi !",
+      TitleFailed:"Echec de paiement",
+      PaiementSuccess:"Félicitations, votre paiement a été traité avec succès.",
+      PaiementFailed:"Votre paiement a echoué",
+      PayerWith:"Payer avec",
+
+      
+    })
+    const Translation= async()=>{
+      const methode = await translateText(TextTranslate.Methode, lang);
+      const souscrire = await translateText(TextTranslate.Souscrire, lang);
+      const attention = await translateText(TextTranslate.Attention, lang);
+      const sousAttention = await translateText(TextTranslate.sousAttention, lang);
+      const Annuler = await translateText(TextTranslate.Annuler, lang);
+      const Payer = await translateText(TextTranslate.Payer, lang);
+      const Oui = await translateText(TextTranslate.Oui, lang);
+      const Non = await translateText(TextTranslate.Non, lang);
+      const Abonnement = await translateText(TextTranslate.Abonnement, lang);
+      const Paiement = await translateText(TextTranslate.Paiement, lang);
+      const TitleSucces = await translateText(TextTranslate.TitleSucces, lang);
+      const TitleFailed = await translateText(TextTranslate.TitleFailed, lang);
+      const PaiementSuccess = await translateText(TextTranslate.PaiementSuccess, lang);
+      const PaiementFailed = await translateText(TextTranslate.PaiementFailed, lang);
+      const PayerWith = await translateText(TextTranslate.PayerWith, lang);
+      const echec = await translateText(TextTranslate.Echec, lang);
+      setTextTranslate({
+        Methode:methode,
+        Souscrire:souscrire,
+        Attention:attention,
+        sousAttention:sousAttention,
+        Annuler:Annuler,
+        Payer:Payer,
+        Oui:Oui,
+        Non:Non,
+        Abonnement:Abonnement,
+        Paiement:Paiement,
+        TitleSucces:TitleSucces,
+        TitleFailed:TitleFailed,
+        PaiementSuccess:PaiementSuccess,
+        PaiementFailed:PaiementFailed,
+        PayerWith:PayerWith,
+        echec:echec
+      })
+
+    }
+    
 
     const reseau=[
         {'nom':'ORANGE MONEY', 'logo':require('../assets/Orange-Money-logo.png')},
         {'nom':'MTN MONEY', 'logo':require('../assets/mtn-1-1200x900.jpg')},
         {'nom':'MOOV MONEY', 'logo':require('../assets/images.png')},
-        {'nom':'WAVE', 'logo':require('../assets/0PZcR8OO_400x400.jpg')},
+        {'nom':'WAVE', 'logo':require('../assets/0PZcR8OO_400x400.jpg')},]
 
-    ]
   
     const getinfoUser = async () => {
     
@@ -55,6 +116,15 @@ export default function Abonnement() {
       const res = await axios.post("cintepay/verification_paiement/"+trans_id);
       const donne= res.data;
       console.log('REPONSE Paiement',donne);
+      await AsyncStorage.setItem('abonnement', JSON.stringify(donne));
+      
+      // donne.forEach(async (offre) => {
+      //   if (offre.statut=='ACCEPTED') {
+      //     console.log("Objet de abonnement ",offre);
+          // await AsyncStorage.setItem('abonnement', JSON.stringify(offre));
+          
+      //   }
+      // });
     // if (donne.includes("Echec")) {
     //   console.log("Echec");
       // setIsSuccess(false);
@@ -72,7 +142,7 @@ export default function Abonnement() {
     
   } catch (error) {
 
-    console.log(error);
+    console.log("Reponse payement",error);
     setModalVisible(true);
     setIsSuccess(false);
     setTrans_id("");
@@ -92,10 +162,21 @@ export default function Abonnement() {
             const res = await axios.get('getAbonnement');
            const donne= res.data.data;
            const abonnement= donne.filter(offre => offre.categorie.categorie === 'Etudiant');
-           setData(abonnement);
+
+           const abonnementTraduit = await Promise.all(
+            abonnement.map(async (offre) => {
+                return {
+                    ...offre,
+                    titre: await translateText(offre.libelle, lang), 
+                    description: await translateText(offre.description, lang), 
+                    
+                };
+            })
+        );
+           setData(abonnementTraduit);
            setLoading(true);
        
-        console.log('Je suis ',data);
+        console.log('Je suis ',donne);
 
             
         } catch (error) {
@@ -181,7 +262,9 @@ console.log("DATA454",data)
        
          
         } catch (error) {
-          Alert.alert("Echec", JSON.stringify(error.response.data.message), [{text: 'OK', onPress: () => console.log('OK')}], { cancelable: true })
+          const message= error.response.data.message;
+          const transalteText=await translateText(message, lang);
+          Alert.alert(TextTranslate.Echec, transalteText, [{text: 'OK', onPress: () => console.log('OK')}], { cancelable: true })
          console.log(error);
          
         }
@@ -212,7 +295,9 @@ console.log("DATA454",data)
         }
     }
     useEffect(() => {
+
         getAbonnement();
+        Translation();
         const interval = setInterval(() => { 
           if(trans_id){
             try{
@@ -229,7 +314,7 @@ console.log("DATA454",data)
             return;}
     }, 1000);
     return () => clearInterval(interval);
-    }, [trans_id])
+    }, [trans_id,lang])
     const cardAbonnement=({item})=>{
         
 
@@ -269,7 +354,7 @@ console.log("DATA454",data)
        ListFooterComponent={
         <View style={{flex:1, flexDirection:'column',}} >
         <View style={{height:15}}></View>
-            <Text style={newstyle.title}>MOYENS DE PAIEMENT </Text>
+            <Text style={newstyle.title}>{TextTranslate.Methode} </Text>
             <View style={{height:10}}></View>
             {reseau.map((resea, index) => (
      <Pressable onPress={()=>{
@@ -290,12 +375,12 @@ console.log("DATA454",data)
           <View style={newstyle.modalView}>
             <View style={[newstyle.modalView, isSuccess ? newstyle.successCard : newstyle.failCard]}>
             <Text style={newstyle.modalText}>
-            {isSuccess ? 'Paiement Réussi !' : 'Échec du Paiement'}
+            {isSuccess ?  TextTranslate.TitleSucces :  TextTranslate.TitleSucces}
           </Text>
           <Text style={newstyle.detailText}>
             {isSuccess
-              ? 'Félicitations, votre paiement a été traité avec succès'
-              : 'Votre paiement a echoué.'}
+              ? TextTranslate.PaiementSuccess
+              : TextTranslate.PaiementFailed}
           </Text>
           <Pressable
             style={[newstyle.button, isSuccess ? newstyle.buttonSuccess : newstyle.buttonFail]}
@@ -336,15 +421,15 @@ console.log("DATA454",data)
 <Pressable
 onPress={()=>{
    if(moyenPayement && abonnement){
-    Alert.alert('Attention','Abonnement '+ abonnement+" Payer par : "+moyenPayement+" ", [{ text: 'Oui', onPress: () => {dopaiement()} },{ text: 'Annuler', onPress: () => console.log('Annuler') }], { cancelable: true });
+    Alert.alert(TextTranslate.Attention,TextTranslate.Abonnement +' '+abonnement+" "+TextTranslate.PayerWith+" "+moyenPayement+" ", [{ text: TextTranslate.Annuler,  },{ text: TextTranslate.Oui, onPress: () => {dopaiement()} },], { cancelable: true });
    }
    else{
-    Alert.alert('Attention','Veuillez choisir un abonnement ', [,{ text: 'Annuler', onPress: () => console.log('OK') }], { cancelable: true });
+    Alert.alert(TextTranslate.Attention,TextTranslate.sousAttention, [,{ text:TextTranslate.Annuler, onPress: () => console.log('OK') }], { cancelable: true });
    }
     // buyAbonnement();
 
 }}
- style={style.button}>{charging? <ActivityIndicator  style={{ flex: 1 ,alignItems: 'center', justifyContent: 'center'}}size="large" color="white" />: <Text style={style.textButton}>Payer</Text>}</Pressable>
+ style={style.button}>{charging? <ActivityIndicator  style={{ flex: 1 ,alignItems: 'center', justifyContent: 'center'}}size="large" color="white" />: <Text style={style.textButton}>{TextTranslate.Souscrire}</Text>}</Pressable>
 
             
           <View height={40}></View>

@@ -8,8 +8,12 @@ import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { Dropdown } from 'react-native-element-dropdown';
+import { useSelector } from 'react-redux';
+import translateText from "../pages/store/TranslationUtils"
+
 
 export default function Skills() {
+    const lang = useSelector((state) => state.translate.lang);
     const navigation = useNavigation();
     const [data, setData] = useState();
     const [skills, setSkills] = useState();
@@ -17,6 +21,58 @@ export default function Skills() {
     const [isLoading, setLoading] = useState(false);
     const token = AsyncStorage.getItem('token')
     const[competence, setCompetence] = useState(0);
+    const [TextTranslation, setTextTransaction] = useState({
+        Title: "Ajouter une competence / Supprimer une competence",
+    Ajouter :"Ajouter",
+  NoCompetence:"Aucune competence ajoutée au profil",
+  Competence:"Competence",
+  Succes:"Succes",
+  Echec:"Echec",
+  BodySucces:"Compétence ajoutée avec succès",
+  Supression:"Supprimer",
+  Bodysupression:"Voulez-vous supprimer cette compétence de votre profil ?",
+  DeleteSucces:"Compétence supprimée avec succès!",
+  Yes:"Oui",
+  Non:"Non",
+  NoSelect:"Veuillez selectionner une competence"
+  
+ 
+    
+       
+      });
+      const translation= async()=>{
+       const title= await translateText(TextTranslation.Title, lang);
+       const ajouter= await translateText(TextTranslation.Ajouter, lang);
+       const NoCompetence= await translateText(TextTranslation.NoCompetence, lang);
+       const competence= await translateText(TextTranslation.Competence, lang);
+       const succes= await translateText(TextTranslation.Succes, lang);
+       const bodySucces= await translateText(TextTranslation.BodySucces, lang);
+      const  Supression= await translateText(TextTranslation.Supression, lang);
+      const Bodysupression= await translateText(TextTranslation.Bodysupression, lang);
+       const DeleteSucces= await translateText(TextTranslation.DeleteSucces, lang);
+       const oui= await translateText(TextTranslation.Yes, lang);
+       const non= await translateText(TextTranslation.Non, lang);
+       const NoSelect= await translateText(TextTranslation.NoSelect, lang);
+
+       setTextTransaction({
+        Title: title,
+        Ajouter:ajouter,
+        NoCompetence:NoCompetence,
+        Competence:competence,
+        Succes:succes,
+        BodySucces:bodySucces,
+        Supression:Supression,
+        Bodysupression:Bodysupression,
+        DeleteSucces:DeleteSucces,
+        Yes:oui,
+        Non:non,
+        NoSelect:NoSelect
+
+       })
+
+
+          
+      }
     const goToAddSched = () => {
         navigation.navigate("AddSched");
     }
@@ -27,8 +83,18 @@ export default function Skills() {
                 axios.defaults.headers.common.Authorization = `Bearer ${token}`;
             }
             const res = await axios.get('GetAllCompetences');
+            const Mydata = res.data.data;
+            // const translateAll = await Promise.all(
+            //     Mydata.map(async (item) => {
+            //         return {
+            //             ...item,
+            //             nom: await translateText(item.nom, lang),
+            //         };
+            //     })
+            // )
             setData(res.data.data);
             setRefreshing(false);
+            console.log(Mydata);
         } catch (error) {
             console.log(error);
             setRefreshing(false);
@@ -50,11 +116,13 @@ export default function Skills() {
             setRefreshing(false);
         }
     };
+    
 
     const fetchOffers = () => {
         setRefreshing(true);
         getOffers();
         getUserSkills()
+        translation();
     };
 
     useEffect(() => {
@@ -66,7 +134,7 @@ export default function Skills() {
 
         // Clean up the interval when the component unmounts
         return () => clearInterval(intervalId);
-    }, []);
+    }, [lang]);
 
     const renderItem = ({ item }) => {
         return (
@@ -136,18 +204,19 @@ export default function Skills() {
                 </Text>
                 <Ionicons
                     onPress={() => {
-                        Alert.alert("Supprimer ?",'Voulez-vous supprimer cette compétence de votre profil ?',[
-                            {text: 'OUI', onPress: async () => {
+                        Alert.alert(TextTranslation.Supression,TextTranslation.Bodysupression,[
+                            {text: TextTranslation.Non, onPress: async () => console.log('NON')},
+                            {text:TextTranslation.Yes, onPress: async () => {
                                 try {
                                     //return console.log(item.id);
                                     const del = await axios.delete('deleteCompetencesOfStudents/'+ item.id)
-                                    Alert.alert("Réussi", 'Compétence supprimée au profil', [{text: 'OK', onPress: () => console.log('OK')}], { cancelable: true })
+                                    Alert.alert(TextTranslation.Succes, TextTranslation.DeleteSucces, [{text: 'OK', onPress: () => console.log('OK')}], { cancelable: true })
                                     getUserSkills();
                                 } catch (error) {
                                     Alert.alert("Echec", error.message, [{text: 'OK', onPress: () => console.log('OK')}], { cancelable: true })
                                 }
                             }},
-                            {text: 'NON', onPress: async () => console.log('NON')},
+                          ,
                         ], { cancelable: true })
                         
                     }}
@@ -196,7 +265,7 @@ export default function Skills() {
                         <FlatList
                         // style={{width:'100%', height:'100%'}}
                          ListHeaderComponent={<View style={{padding: "2%"}}>
-                         <Text style={style1.title}>Ajouter une competence / supprimer une competence</Text>
+                         <Text style={style1.title}>{TextTranslation.Title}</Text>
                          <View style={{height:20}}></View>
                             <Dropdown 
                  style={style1.dropdown}
@@ -224,7 +293,7 @@ export default function Skills() {
                                 try {
 
                                    if(competence==0){
-                                    Alert.alert("Echec", 'Veuillez selectionner une competence', [{text: 'OK', onPress: () => console.log('OK')}], { cancelable: true })
+                                    Alert.alert(TextTranslation.Echec, TextTranslation.NoSelect, [{text: 'OK', onPress: () => console.log('OK')}], { cancelable: true })
                                     setLoading(false);
                                    }
                                    else{
@@ -232,7 +301,7 @@ export default function Skills() {
                                         competence: [competence]
                                     })
                                     getUserSkills();
-                                    Alert.alert("Réussi", 'Compétence ajoutée au profil', [{text: 'OK', onPress: () => console.log('OK')}], { cancelable: true })
+                                    Alert.alert(TextTranslation.Succes, TextTranslation.BodySucces, [{text: 'OK', onPress: () => console.log('OK')}], { cancelable: true })
                                     setLoading(false);
                                     console.log(del.data);
                                    }
@@ -242,7 +311,7 @@ export default function Skills() {
                                 }
                             }}>
                    <Text style={style1.textButton}>{
-                       isLoading ? <ActivityIndicator size="large" color="white" /> : "Ajouter"
+                       isLoading ? <ActivityIndicator size="large" color="white" /> : TextTranslation.Ajouter
                    }</Text>
                   </Pressable>
 
@@ -258,8 +327,10 @@ export default function Skills() {
                             refreshing={refreshing} 
                             scrollEnabled={true}
                             ListEmptyComponent={<View style={{height:'100%', width:'100%', justifyContent:'center', alignItems:'center'}} >
-                                <View style={{borderColor:'gray', borderWidth:1, padding:10, height:40, backgroundColor:"red"}}>
-                                <Text style={{color:'white'}}>Aucune compétence ajoutée</Text>
+                                <View style={{borderColor:'gray', borderRadius:15, padding:10, height:40, backgroundColor:"red"}}>
+                                <Text style={{color:'white'}}>{
+                                    TextTranslation.NoCompetence
+                                }</Text>
                                 </View>
                             </View>}
                         />

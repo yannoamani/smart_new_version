@@ -1,0 +1,114 @@
+{
+    "titleStepOne": "Welcome to",
+    "soutitreStepOne": "Easily connect with companies for enriching projects during your free time.",
+    "titleStepTwo": "Find small jobs in no time!",
+    "soutitreStepTwo": "Easily connect with companies for enriching projects during your free time. Sign up, explore offers, and land a job in just a few minutes.",
+    "titleStepThree": "Your next job is within reach",
+    "soutitreStepThree": "Explore a variety of small jobs available instantly. Don't waste time, start now!",
+    "passer": "Skip",
+    "Suivant": "Next",
+    "Commencer": "Start",
+
+    "connexion": "LOGIN",
+    "SeSouvenir": "Remember me",
+    "Mot de passe oublie": "Forgot password?",
+    "SeConnecter": "Log in",
+    "noAccount": "Don't have an account?",
+    "Inscrire": "Sign up",
+  
+
+      "titleInscription": "Welcome to Smart Connect",
+      "soutitreInscription": "Sign up by filling in the necessary fields",
+      "Identifiant": "USERNAME",
+      "Habitation": "RESIDENCE",
+      "Qualification": "QUALIFICATION",
+      "inscrire": "Sign up",
+      "HaveAccount": "Already have an account?",
+      "Connect": "Log in",
+      "cliquez-ici": "Click here to add your piece",
+        "nom": "Name",
+        "prenom": "First Name",
+        "phone": "Phone",
+        "Email": "Email",
+        "Mot de passe": "Password",
+        "Ville": "City",
+        "Commune": "District",
+        "Quartier": "Neighborhood",
+        "diplome": "Degree",
+       
+        "Welcome": "Welcome",
+        "titleOffres": "Available Offers",
+        "details": "Offer Details",
+        "postuler": "Apply Now",
+        "pas-de-offre":"No Offers Available",
+        "offres": "Offers",
+        "Tout":"All",
+        "pasPostuler":"Not yet apply",
+        "dejaPostuler":"Already apply",
+        
+        
+        
+       
+        "Abonnement": "Subscription",
+        "experiences": "MY EXPERIENCES",
+        "plages horaires": "My schedules",
+        "AjouExperience": "Add an experience",
+        "ajoutCompetence": "Add a skill",
+        "Deconnexion": "Logout",
+        "noCompetence":"No skill",
+        "pasExperience":"experiences empty",
+         "ChangeLanguage":"Change language",
+
+
+     
+         "Faire un abonnement": "Make a subscription",
+         "Mes abonnements": "My subscriptions",
+         "methode de paiement": "Payment methods",
+         "Payer":"Subscribe",
+         "Attention":"Warning",
+         "sousAttention":"Please select a payment method",
+         "Annuler":"Cancel",
+         "Payer avec":"Pay with",
+         "Oui":"Yes",
+         "Non":"NO",
+
+
+
+         
+         "mes Postulations":"My applications",
+         "mes contacts":"My contacts",
+         "contacts":"Contacts",
+         "profil":"Profile" ,
+         "Details de l'offre":"Offer details",
+
+
+
+
+         "detailsOffre": "Offer details",
+   "Favoris": "My Favorites",
+   "addskills": "Add/Remove a skill",
+   "addexperience": "Add an experience",
+   "MySubscription":"My Subscription",
+   "Suscribe": "Subscribe to a plan",
+   "changeLanguage": "Change language",
+   "AddPlageHoraire": "Add time slot",
+   "EditPlagehoraire": "Edit time slot",
+   "PlagesHoraires": "Time slots",
+   "EditExp": "Edit an experience",
+   "french": "French",
+   "english": "English",
+   "Signin":"Sign up"
+
+
+
+
+
+
+
+
+      
+      
+
+    
+  }
+  

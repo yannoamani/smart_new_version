@@ -7,6 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 
+
 export default function Contacts() {
     const navigation = useNavigation();
     const [data, setData] = useState();
@@ -14,6 +15,9 @@ export default function Contacts() {
     const [refreshing, setRefreshing] = useState(false);
     const [isLoading, setLoading] = useState(true)
     const token = AsyncStorage.getItem('token')
+    const [policeBold, setPolices] = useState("Poppins_700Bold");
+    const [policeRegular, setPoliceRegular] = useState("Poppins_400Regular");
+    const [policeLight, setPoliceLight] = useState("Poppins_300Light_Italic");
     const getOffers = async () => {
         try {
             const token = await AsyncStorage.getItem('token')
@@ -23,7 +27,7 @@ export default function Contacts() {
             const res = await axios.get('get_who_contact_student');
             setData(res.data.entreprises);
             setLoading(false)
-            console.log("contacts", res.data);
+            console.log("contacts   ", res.data);
             console.log("count", data.length);
             setRefreshing(false);
         } catch (error) {

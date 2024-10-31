@@ -3,11 +3,54 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { displayDate } from "../Utils";
-
+import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import translateText from "../pages/store/TranslationUtils.js"
+import Abonnement from "./abonnement.js";
 
 const MyAbonnement=()=>{
+  const lang = useSelector((state) => state.translate.lang);
     const [refreshing, setRefreshing] = useState(false);
     const [myabonnement, setMyabonnement] = useState([]);
+    const [TextTranslate, setTextTranslate] = useState({
+      Abonnement:"Abonnement",
+      Moyen_paiement:"Moyen de paiement",
+      Montant:"Montant",
+      Reference:"Reference",
+      Statut:"Statut",
+      DatePayement:'Date de paiement',
+      DateFin:'Date de fin',
+      Actif:"Actif",
+      Expire:"Expire"
+    });
+    const translation= async() => {
+      const abonnement=await translateText(TextTranslate.Abonnement, lang);
+      const moyen_paiement=await translateText(TextTranslate.Moyen_paiement, lang);
+      const Montant=await translateText(TextTranslate.Montant, lang);
+      const reference=await translateText(TextTranslate.Reference, lang);
+      const statut=await translateText(TextTranslate.Statut, lang);
+      const datePayement=await translateText(TextTranslate.DatePayement, lang);
+      const dateFin=await translateText(TextTranslate.DateFin, lang);
+      const actif=await translateText(TextTranslate.Actif, lang);
+      const expire=await translateText(TextTranslate.Expire, lang);
+      setTextTranslate({
+        Abonnement:abonnement,
+        Moyen_paiement:moyen_paiement,
+        Montant:Montant,
+        Reference:reference,
+        Statut:statut,
+        DatePayement:datePayement,
+        DateFin:dateFin,
+        Actif:actif,
+        Expire:expire
+      })
+      
+    }
+
+    useEffect(() => {
+      translation();
+    }, []);
+
     const getAbonnement = async () => {
       setRefreshing(true);
         try {
@@ -37,20 +80,20 @@ const MyAbonnement=()=>{
         return(
             <View style={style.cardAbonnement}>
                <View style={style.leading}>
-                <Text style={style.title}>Abonnement</Text>
-                <Text style={style.title} >Moyen de paiement </Text>
-                <Text style={style.title}>Montant</Text>
-                <Text style={style.title}>Reference</Text>
-                <Text style={style.title}>Statut</Text>
-                <Text style={style.title}>Date de paiement</Text>
-                <Text style={style.title}>Date de fin</Text>
+                <Text style={style.title}>{TextTranslate.Abonnement}</Text>
+                <Text style={style.title} >{TextTranslate.Moyen_paiement}</Text>
+                <Text style={style.title}>{TextTranslate.Montant}</Text>
+                <Text style={style.title}>{TextTranslate.Reference}</Text>
+                <Text style={style.title}>{TextTranslate.Statut}</Text>
+                <Text style={style.title}>{TextTranslate.DatePayement}</Text>
+                <Text style={style.title}>{TextTranslate.DateFin}</Text>
                </View>
                <View style={style.trailing}>
                 <Text style={style.subtitle}>{item.abonement.libelle}</Text>
                 <Text style={style.subtitle} numberOfLines={1} >{item.moyen_paiement}</Text>
                 <Text style={style.subtitle} numberOfLines={1}>{item.abonement.prix}FCFA</Text>
                 <Text style={style.subtitle}>{item.transaction_id}</Text>
-                <Text style={[style.subtitle,{color:'green'}]}>{item.statut=="ACCEPTED"?'Paiement accepté':item.statut}</Text>
+                <Text style={[style.subtitle,{color:item.statut=="ACCEPTED"?'green':'red'}]}>{item.statut=="ACCEPTED"?TextTranslate.Actif:TextTranslate.Expire}</Text>
                 <Text style={style.subtitle}>{time.date} </Text>
                 <Text style={style.subtitle}>{item.echeance} </Text>
 

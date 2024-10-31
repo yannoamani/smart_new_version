@@ -5,16 +5,13 @@ import { Dropdown } from 'react-native-element-dropdown';
 import {
   Text,
   View,
-  
+  StatusBar,
   SafeAreaView,
   TextInput,
   Platform,
   Pressable,
   KeyboardAvoidingView,
-  TouchableOpacity,
-  Image
-  ,
-
+  Image,
   ScrollView,
   Alert,
 } from "react-native";
@@ -24,10 +21,16 @@ import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import * as DocumentPicker from "expo-document-picker";
 import Loader from "../components/loader";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+
+import { useTranslation } from 'react-i18next';
+import translateText from "../pages/store/TranslationUtils"
+
+import { useSelector } from 'react-redux';
+
 
 export default function Signin() {
-
+ const { t } = useTranslation();
+ const lang = useSelector((state) => state.translate.lang);
   const [loading, setLoading] = React.useState(false);
   const [name, setName] = React.useState("");
   const [fname, setfName] = React.useState("");
@@ -48,6 +51,84 @@ export default function Signin() {
   const [policeBold, setPolices] = useState("Poppins_700Bold");
   const [policeRegular, setPoliceRegular] = useState("Poppins_400Regular");
   const [policeLight, setPoliceLight] = useState("Poppins_300Light_Italic");
+  const [TextTransaction, setTextTransaction] = useState({
+  title:"Bienvenue sur Smart Connect",
+  soutitre:"Inscrivez-vous en renseignant les champs spéciaux",
+  Identifiant:"Identifiant",
+  Habitation:"Habitation",
+  Qualification:"Qualification",
+  inscrire:"S'inscrire",
+  HaveAccount:"Vous avez deja un compte ?",
+  Connect:"Connectez-vous",
+  cliquezici:"Cliquez pour ajouter votre piece",
+  Nom:"Nom",
+  Prenom:"Prenom",
+  Phone:"Numéro de télephone",
+  Email:"Emai",
+  Password:"Mot de passe",
+  Ville:"Ville",
+  Commune:"Commune",
+  Quartier:"Quartier",
+  Diplome:"Mot de passe",
+
+
+  });
+
+  const translation = async () => {
+   
+ 
+
+      const welcomeTitle= await translateText("Bienvenue sur Smart Connect", lang);
+      console.log(welcomeTitle)
+      const soutitre= await translateText("Inscrivez-vous en renseignant les champs spéciaux", lang);
+      const identifiant= await translateText("Identifiant", lang);
+      const cliquer= await translateText("Cliquez pour ajouter votre piece",lang)
+      const habitation= await translateText("Habitation", lang);
+      
+      const qualification=await translateText("Qualification", lang);
+      const inscire= await translateText("S'inscrire");
+      const haveAccount= await translateText("Vous avez deja un compte ?", lang);
+      const connect = await translateText("Connectez-vous", lang);
+      const nom= await translateText("Nom", lang);
+      const prenom=await translateText("Prenom", lang);
+      const email=await translateText("Email", lang);
+      const phone= await translateText("Numéro de télephone", lang);
+      const ville= await translateText("Ville", lang);
+      const commune= await  translateText("Commune",lang);
+      const quartier= await translateText("Quartier", lang);
+      const diplome = await translateText("Diplôme", lang);
+    const password= await translateText("Mot de passe", lang); 
+ setTextTransaction({
+      title:welcomeTitle,
+      soutitre:soutitre,
+      Identifiant:identifiant,
+      Habitation:habitation,
+      Qualification:qualification,
+      inscrire:inscire,
+      HaveAccount: haveAccount,
+      cliquezici:cliquer,
+      Connect:connect,
+      Password:password,
+     Nom:nom,
+     Prenom:prenom,
+     Email:email,
+     Phone:phone,
+     Ville:ville,
+     Commune:commune,
+     Quartier:quartier,
+     Diplome:diplome
+
+
+
+
+     })
+
+
+      
+  
+  }
+
+
   const visible = () => {
     return setVisibility(!visibility);
   };
@@ -203,7 +284,12 @@ export default function Signin() {
   };
   useEffect(() => {
     getProfiles();
-  }, []);
+    translation();
+    return () => {
+        
+    }
+
+  }, [lang]);
   return (
    
     <KeyboardAvoidingView
@@ -212,23 +298,24 @@ export default function Signin() {
     >
       <SafeAreaView style={{ flex: 1 }}>
         <ScrollView>
-          <View style={{ flex: 1, padding: 10 }}>
+          <View style={{ flex: 1, padding: 10  , paddingTop:Platform.OS === "ios" ? 0 : 20}}>
             <Text style={[style1.headerInscription,{fontFamily:policeBold}]}>
-              Bienvenue sur Smart Connect
+            {TextTransaction.title}
             </Text>
             <View style={{ height: 5 }}></View>
             <Text style={[style1.labelText,{fontFamily:policeRegular}]}>
-              Inscrivez-vous en renseignant les champs nécessaires
+            {TextTransaction.soutitre}
             </Text>
             <View style={{ height: 20 }}></View>
             <Text
               style={[styles.titleText,{fontFamily:policeBold}]}
             >
-                 IDENTIFIANT
+                 {TextTransaction.Identifiant}
             </Text>
+            <StatusBar></StatusBar>
             <View style={{ height: 10 }}></View>
 
-            <Text style={[style1.labelText,{fontFamily:policeRegular}]}>Nom</Text>
+            <Text style={[style1.labelText,{fontFamily:policeRegular}]}>{TextTransaction.Nom}</Text>
             <View style={{ height: 2 }}></View>
             <Loader loading={loading} />
             <TextInput
@@ -239,7 +326,7 @@ export default function Signin() {
               onChangeText={(text) => setName(text)}
             />
             <View style={{ height: 20 }}></View>
-            <Text style={[style1.labelText,{fontFamily:policeRegular}]}>Prenom</Text>
+            <Text style={[style1.labelText,{fontFamily:policeRegular}]}>{TextTransaction.Prenom}</Text>
             <View style={{ height: 2 }}></View>
             <TextInput
               style={[style1.inputCustom,{fontFamily:policeRegular}]}
@@ -251,7 +338,7 @@ export default function Signin() {
               onChangeText={(text) => setfName(text)}
             />
             <View style={{ height: 20 }}></View>
-            <Text style={[style1.labelText,{fontFamily:policeRegular}]}>Phone</Text>
+            <Text style={[style1.labelText,{fontFamily:policeRegular}]}>{TextTransaction.Phone}</Text>
             <View style={{ height: 2 }}></View>
             <TextInput
               style={style1.inputCustom}
@@ -264,7 +351,7 @@ export default function Signin() {
             />
 
             <View style={{ height: 20 }}></View>
-            <Text style={[style1.labelText,{fontFamily:policeRegular}]}>Email</Text>
+            <Text style={[style1.labelText,{fontFamily:policeRegular}]}>{TextTransaction.Email}</Text>
             <View style={{ height: 2 }}></View>
             <TextInput
               style={style1.inputCustom}
@@ -276,7 +363,7 @@ export default function Signin() {
               onChangeText={(text) => setMail(text)}
             />
             <View style={{ height: 20 }}></View>
-            <Text  style={[style1.labelText,{fontFamily:policeRegular}]}>Mot de passe</Text>
+            <Text  style={[style1.labelText,{fontFamily:policeRegular}]}>{TextTransaction.Password}</Text>
             <View style={{ height: 2 }}></View>
             <View
               style={{
@@ -313,12 +400,12 @@ export default function Signin() {
             </View>
 
             <View style={{ height: 20 }}></View>
-            <Text   style={[styles.titleText,{fontFamily:policeBold}]}>HABITATION</Text>
+            <Text   style={[styles.titleText,{fontFamily:policeBold}]}>{TextTransaction.Habitation}</Text>
             
             
             
             <View style={{ height: 20 }}></View>
-            <Text  style={[style1.labelText,{fontFamily:policeRegular}]}>Ville</Text>
+            <Text  style={[style1.labelText,{fontFamily:policeRegular}]}>{TextTransaction.Ville}</Text>
             <View style={{ height: 2 }}></View>
             <TextInput
               style={style1.inputCustom}
@@ -328,7 +415,7 @@ export default function Signin() {
               onChangeText={(text) => setCity(text)}
             />
              <View style={{ height: 20 }}></View>
-            <Text  style={[style1.labelText,{fontFamily:policeRegular}]}>Commune </Text>
+            <Text  style={[style1.labelText,{fontFamily:policeRegular}]}>{TextTransaction.Commune}</Text>
             <View style={{ height: 2 }}></View>
             <TextInput
               style={style1.inputCustom}
@@ -338,7 +425,7 @@ export default function Signin() {
               onChangeText={(text) => setMunicipality(text)}
             />
               <View style={{ height: 20 }}></View>
-            <Text  style={[style1.labelText,{fontFamily:policeRegular}]}>Quartier </Text>
+            <Text  style={[style1.labelText,{fontFamily:policeRegular}]}>{TextTransaction.Quartier} </Text>
             <View style={{ height: 2 }}></View>
             <TextInput
               style={style1.inputCustom}
@@ -348,11 +435,11 @@ export default function Signin() {
               onChangeText={(text) => setHood(text)}
             />
             <View style={{ height: 20 }}></View>
-            <Text style={[styles.titleText,{fontFamily:policeBold}]}>QUALIFICATION</Text>
+            <Text style={[styles.titleText,{fontFamily:policeBold}]}>{TextTransaction.Qualification}</Text>
             
             <View style={{ height: 20 }}></View>
          
-             <Text style={[style1.labelText,{fontFamily:policeRegular}]}>Diplôme </Text>
+             <Text style={[style1.labelText,{fontFamily:policeRegular}]}>{TextTransaction.Diplome} </Text>
              <View style={{ height: 3 }}></View>
              <View  >
                 <Dropdown 
@@ -395,7 +482,7 @@ export default function Signin() {
    borderWidth:1, borderWidth: 1 , alignItems:"center",justifyContent:"center" , borderRadius: 10, padding: 10}}>
             <Ionicons name="download-outline" size={50} color="#F38B2B"></Ionicons>
             <View style={{ height: 20 }}></View>
-            <Text style={{fontFamily:policeRegular}}>Cliquez pour ajouter votre piece</Text>
+            <Text style={{fontFamily:policeRegular}}>{TextTransaction.cliquezici}</Text>
             <View style={{ height: 10 }}></View>
             {
                 idcard ? (<View>
@@ -419,11 +506,11 @@ export default function Signin() {
            <View  style={{ height: 30 }}></View>
           <Pressable onPress={validationForm}>
           <View style={style1.customButon}>
-            <Text style={style1.textCustomButton}>S'inscrire</Text>
+            <Text style={style1.textCustomButton}>{TextTransaction.inscrire}</Text>
            </View>
           </Pressable>
           <View style={{ height: 30 }}></View>
-          <Text style={{textAlign:"center", fontFamily:policeRegular}}>Vous avez deja un compte ? <Text style={{color:"#F38B2B", fontWeight:'bold', fontFamily:policeBold}} onPress={() => navigation.navigate('Login')}>Connectez-vous</Text></Text>
+          <Text style={{textAlign:"center", fontFamily:policeRegular}}>{TextTransaction.Connect}<Text style={{color:"#F38B2B", fontWeight:'bold', fontFamily:policeBold}} onPress={() => navigation.navigate('Login')}>{t('Connect')} </Text></Text>
 
           
           </View>

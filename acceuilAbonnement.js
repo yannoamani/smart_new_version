@@ -1,21 +1,42 @@
 import { View , Text, StyleSheet, Pressable} from "react-native"
 import { useNavigation } from "@react-navigation/native";
-import React, { useState } from "react";
-
+import React, { useState, useEffect } from "react";
+import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import translateText from "./pages/store/TranslationUtils"
 
 const AcceuilAbonnement=()=>{
+    const lang = useSelector((state) => state.translate.lang);
+    const {t}=useTranslation()
     const [policeBold, setPolices] = useState("Poppins_700Bold");
     const [policeRegular, setPoliceRegular] = useState("Poppins_400Regular");
     const [policeLight, setPoliceLight] = useState("Poppins_300Light_Italic");
     const navigation = useNavigation();
+    const [TextTranslate, setTextTranslate] = useState({
+        Souscrire:"Faire un abonnement",
+        MesAbonnements:"Mes abonnements",
+    });
+    const translation= async () =>{
+       const souscrire=await translateText("Faire un abonnement",lang);
+       const MesAbonnements=await translateText("Mes abonnements",lang);
+       setTextTranslate({
+        Souscrire:souscrire,
+        MesAbonnements:MesAbonnements
+       })
+    }
+
+    useEffect(() => {
+        translation();
+
+      }, [lang]);
     return(
      <View style={style.container}>
         <Pressable style={[style.button,]} onPress={() => navigation.navigate("Abonnement")}> 
-                <Text style={[style.textbutton, {fontFamily:policeRegular}]}>Faire un abonnement</Text>
+                <Text style={[style.textbutton, {fontFamily:policeRegular}]}> {TextTranslate.Souscrire}</Text>
         </Pressable>
         <View height={50}></View>
         <Pressable style={style.button} onPress={() => navigation.navigate("MyAbonnement")}> 
-                <Text style={[style.textbutton, {fontFamily:policeRegular}]}>Mes  abonnements </Text>
+                <Text style={[style.textbutton, {fontFamily:policeRegular}]}>{TextTranslate.MesAbonnements}</Text>
         </Pressable>
         
 

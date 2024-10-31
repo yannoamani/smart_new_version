@@ -28,6 +28,7 @@ export function createFormattedDateExp(dateInput) {
 };
 
 export function createFormattedDate(dateInput) {
+  console.log("Input date:", dateInput);
   const [year, month, day] = dateInput.split('-').map(Number);
 
   // Check if the date components are valid

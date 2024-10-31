@@ -1,17 +1,45 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
-import { Button, IconButton } from 'react-native-paper'
+import React, { useState , useEffect} from 'react'
+
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { useNavigation } from "@react-navigation/native";
-import { MotiView } from 'moti'
-import { Easing } from 'react-native-reanimated';
+import translateText from "../store/TranslationUtils"
+import { useSelector } from 'react-redux';
+
+
 
 const StepThree = () => {
+    const language = useSelector((state) => state.translate.lang);
     const [policeBold, setPolices] = useState("Poppins_700Bold")
     const [policeRegular, setPoliceRegular] = useState("Poppins_400Regular")
     const [policeLight, setPoliceLight] = useState("Poppins_300Light_Italic")
 
     const navigation = useNavigation();
+    const [texttranslate, setTexttranslate] = useState({
+        welcome:"",
+        subtitle:"",
+        commencer:""
+       
+    
+
+    })
+    const translation= async () =>{
+   
+        const welcomeTitle= await translateText("Votre prochain job est à portée de main", language);
+        const commencer= await translateText('Commencer', language);
+        
+        const soutitle=await translateText('Explorez une multitude de petits boulots disponibles instantanément. Ne perdez plus de temps, commencez dès maintenant !', language);
+       
+       return setTexttranslate({welcome:welcomeTitle, subtitle:soutitle,  commencer:commencer})
+ 
+    }
+    useEffect(() => {
+        translation();
+        return () => {
+        
+        }
+
+  }, [language]);
 
   return (
     <View style={{flex:1}}>
@@ -24,8 +52,8 @@ const StepThree = () => {
             <Image source={require('../../assets/remove3.png')} style={{width:300, height:300}} />
             <View style={{justifyContent:"center", alignItems:"center", padding:10, position:"relative", Top:"15%"}}>
               
-                <Text style={{fontFamily:policeBold, fontSize:20, color:"#F38B2B", marginTop:"1%", textAlign:"center"}}>Votre prochain job est à portée de main</Text>
-                <Text style={{fontFamily:policeRegular, fontSize:12, lineHeight:21, textAlign:"center", marginTop:"7%"}}>Explorez une multitude de petits boulots disponibles instantanément. Ne perdez plus de temps, commencez dès maintenant !</Text>
+                <Text style={{fontFamily:policeBold, fontSize:20, color:"#F38B2B", marginTop:"1%", textAlign:"center"}}>{texttranslate.welcome}</Text>
+                <Text style={{fontFamily:policeRegular, fontSize:12, lineHeight:21, textAlign:"center", marginTop:"7%"}}>{texttranslate.subtitle}</Text>
                 <View style={{flexDirection:"row", marginTop:"8%"}}>
                   
                     <View style={styles.pointilleslight}></View>
@@ -60,7 +88,7 @@ const StepThree = () => {
                 }}
             >
 
-            <Text style={{fontFamily:policeRegular, fontSize:15, color:'white'}}>Commencer</Text>
+            <Text style={{fontFamily:policeRegular, fontSize:15, color:'white'}}>{texttranslate.commencer}</Text>
                 <MaterialCommunityIcons name="arrow-right-thin" size={27} color="white" style={{alignSelf:'flex-end'}} />
             </TouchableOpacity>
         </View>

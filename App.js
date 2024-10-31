@@ -37,12 +37,25 @@ import Cinetpay from './pages/cinetpay';
 import { CinetPay } from 'node-cinetpay';
 import Cinetpays from './pages/cinetpay';
 import { displayDate, displayDates, isDateTimeGreaterThanCurrent, isTimeGreaterThanCurrent } from "./Utils";
+import { useTranslation } from 'react-i18next';
+import Translate from './pages/Translate';
+import {Provider, useSelector} from "react-redux";
+import store from './pages/store';
+import translateText from "./pages/store/TranslationUtils"
+
+
+
 export default function App() {
-  axios.defaults.baseURL = 'http://192.168.1.5:8000/api/';
-  // http://back-smart-connect.lce-ci.com/api/
+ 
+  
+  const {t}=useTranslation();
+   axios.defaults.baseURL = 
+//    'http://192.168.1.9:8000/api/';
+   "http://back-smart-connect.lce-ci.com/api/";
   const setAuthorizationHeader = async () => {
     try {
       const token = await AsyncStorage.getItem('token');
+
   
       if (token) {
         axios.defaults.headers.common.Authorization = `Bearer ${token}`;
@@ -68,10 +81,10 @@ export default function App() {
 
       const res = await axios.get("handleAbonnementExpired");
       setData(res.data.data);
-     console.log('verification de mon paiement',res.data);
+    //  console.log('verification de mon paiement',res.data);
     } catch (error) {
       console.log(error);
-       console.log("verifier paiement",error.response.data.message);
+      //  console.log("verifier paiement",error.response.data.message);
      
     }
     
@@ -100,22 +113,24 @@ export default function App() {
   const ProfileStack = createNativeStackNavigator();
   const Tab = createBottomTabNavigator();
 
+
   useEffect(() => {
+    getAlarmNumber();
     const interval= setInterval(async () => {
       const abonement = await AsyncStorage.getItem('abonnement');
-        console.log("abonnement",abonement);
+        // console.log("abonnement",abonement);
    if (abonement) {
     const mabonnement = JSON.parse(abonement);
     // console.log("abonnement",mabonnement);
     
     if (isDateTimeGreaterThanCurrent(mabonnement.echeance)) {
-      console.log("Vous ", abonement);
+      // console.log("Vous ", abonement);
       verifierabonement();
       clearInterval(interval);
       
     }
     else{
-        console.log("abonnement expire");
+        return; // console.log("abonnement expire");
     }
    }
 
@@ -123,6 +138,7 @@ export default function App() {
   }, 5000);
   },[])
   function OffersStackScreen() {
+    // const lang = useSelector((state) => state.translate.lang);
     return (
       <OfferStack.Navigator screenOptions={{
         headerStyle: {
@@ -135,7 +151,7 @@ export default function App() {
           headerBackTitleVisible: false
         }} />
         <OfferStack.Screen name="favories" component={Favories} options={{
-          headerTitle: "mes favories",
+          headerTitle: t("Favoris"),
           headerBackTitleVisible: false
         }} />
       </OfferStack.Navigator>
@@ -150,7 +166,7 @@ export default function App() {
       }}>
         <ContactsStack.Screen name="Contacts" component={Contacts} options={{}} />
         <ContactsStack.Screen name="Contact" component={Contact} options={{
-          headerTitle: "Détails de l'offre",
+          headerTitle: t('detailsOffre'),
           headerBackTitleVisible: false
         }} />
        
@@ -166,11 +182,11 @@ export default function App() {
         }
       }}>
         <ApplianceStack.Screen name="Appliances" component={AppliancesList} options={{
-          headerTitle: "Mes Postulations",
+          headerTitle: t('mes Postulations'),
           headerBackTitleVisible: false
         }}/>
         <ApplianceStack.Screen name="Appliance" component={Appliance} options={{
-          headerTitle: "Détails de l'offre",
+          headerTitle: t('detailsOffre'),
           headerBackTitleVisible: false
         }} />
       </ApplianceStack.Navigator>
@@ -192,46 +208,52 @@ export default function App() {
           headerBackTitleVisible: false
         }}/>
         <ProfileStack.Screen name="Skills" component={Skills} options={{
-           headerTitle: "Ajouter/Supprimer une compétence",
+           headerTitle: t('addskills'),
            headerBackTitleVisible: false
         }} />
         <ProfileStack.Screen name="Editer" component={EditSelf} options={{
-           headerTitle: "Ajouter une expérience",
+           headerTitle: t('addexperience'),
            headerBackTitleVisible: false
         }} />
         <ProfileStack.Screen name="Abonnement" component={Abonnement} options={{
-           headerTitle: "Souscrire a un abonnement",
+           headerTitle: t("Suscribe"),
+           headerBackTitleVisible: false
+        }} />
+        <ProfileStack.Screen name="Traduction" component={Translate} options={{
+           headerTitle: t('changeLanguage'),
            headerBackTitleVisible: false
         }} />
         <ProfileStack.Screen name="acceuil_Abonnement" component={AcceuilAbonnement} options={{
-           headerTitle: "Abonnement",
+           headerTitle: t("Abonnement"),
            headerBackTitleVisible: false
         }} />
         <ProfileStack.Screen name="MyAbonnement" component={MyAbonnement} options={{
-           headerTitle: "Mes abonnements",
+           headerTitle: t('MySubscription'),
            headerBackTitleVisible: false
         }} />
         <ProfileStack.Screen name="AddSched" component={AddSchedule} options={{
-           headerTitle: "Ajouter plages horaires",
+           headerTitle: t('AddPlageHoraire'),
            headerBackTitleVisible: false
         }} />
         <ProfileStack.Screen name="EditSched" component={EditSchedule} options={{
-           headerTitle: "Modifier plage horaire",
+           headerTitle: t("EditPlagehoraire"),
            headerBackTitleVisible: false
         }} />
         <ProfileStack.Screen name="Scheds" component={Schedules} options={{
-           headerTitle: "Plages horaires",
+           headerTitle: t("PlagesHoraires"),
            headerBackTitleVisible: false
         }} />
         <ProfileStack.Screen name="EditExp" component={EditExp} options={{
-           headerTitle: "Modifier une expérience",
+           headerTitle: t("EditExp"),
            headerBackTitleVisible: false
         }} />
       </ProfileStack.Navigator>
     );
   }
   function AuthStackScreen() {
+    // console.log("NOUS SOMMES DANS LE STORE",store.getState())
     return (
+
       <AuthStack.Navigator screenOptions={{headerShown: false}}>
        
        {/* <AuthStack.Screen name="cinetpay" component={Cinetpays} /> */}
@@ -240,7 +262,7 @@ export default function App() {
         <AuthStack.Screen name="StepTwo" component={StepTwo} />
         <AuthStack.Screen name="StepThree" component={StepThree} />
         <AuthStack.Screen name="Login" component={Login} />
-        <AuthStack.Screen name="Signin" component={Signin} />
+        <AuthStack.Screen name="Signin" component={Signin}  options={{headerShown: true, headerTitle: t("Signin"),            headerBackTitleVisible: false}}/>
       </AuthStack.Navigator>
     );
   }
@@ -254,79 +276,87 @@ export default function App() {
   }
 
   return (
-      <NavigationContainer>
-        <Tab.Navigator screenOptions={({ route }) => ({
-          headerStyle: {
-            backgroundColor: '#F38B2B',
-          },
-          tabBarStyle: {
-            backgroundColor: '#F38B2B',
-            
-            
-            
-          },
-          tabBarActiveTintColor: '#1A9E47',
-          tabBarInactiveTintColor: 'white',
-          
-          tabBarLabelStyle: {
-            fontSize: 10,
-          },
-          tabBarIcon: ({ color, size }) => {
-            let iconName;
+  
+    <Provider store={store}>
+    
+    <NavigationContainer>
+ 
+  <Tab.Navigator screenOptions={({ route }) => ({
+    headerStyle: {
+      backgroundColor: '#F38B2B',
+    },
+    tabBarStyle: {
+      backgroundColor: '#F38B2B',
+      
+      
+      
+    },
+    tabBarActiveTintColor: '#1A9E47',
+    tabBarInactiveTintColor: 'white',
+    
+    tabBarLabelStyle: {
+      fontSize: 10,
+    },
+    tabBarIcon: ({ color, size }) => {
+      let iconName;
 
-            if (route.name === 'ProfileTab') {
-              iconName = 'person-outline'; // Adjust the icon name as needed
-            } else if (route.name === 'OffresTab') {
-              iconName = 'briefcase-outline'; // Adjust the icon name as needed
-            } else if (route.name === 'AppliancesTab') {
-              iconName = 'bookmark-outline'; // Adjust the icon name as needed
-            } else if (route.name === 'ContactsTab') {
-              iconName = 'people-outline'; // Adjust the icon name as needed
-            }
+      if (route.name === 'ProfileTab') {
+        iconName = 'person-outline'; // Adjust the icon name as needed
+      } else if (route.name === 'OffresTab') {
+        iconName = 'briefcase-outline'; // Adjust the icon name as needed
+      } else if (route.name === 'AppliancesTab') {
+        iconName = 'bookmark-outline'; // Adjust the icon name as needed
+      } else if (route.name === 'ContactsTab') {
+        iconName = 'people-outline'; // Adjust the icon name as needed
+      }
 
-            // You can return any component here, not just Ionicons!
-            return <Ionicons name={iconName} size={size} color={'white'} />;
-          },
-          tabBarVisible: route.name !== 'Auth',
-          })}
-        >
-          <Tab.Screen name="Auth" component={AuthStackScreen} options={{
-            tabBarStyle: { display: 'none' },
-            headerShown: false,
-            tabBarButton: () => null, 
-            tabBarIcon: () => null
-          }}/>
-          {
-            token ? <>
-            <Tab.Screen name="OffresTab" component={OffersStackScreen} options={{
-              title: 'Offres',
-              headerShown: false,
-              
-            }} />
-            <Tab.Screen name="AppliancesTab" component={AppliancesStackScreen} options={{
-              title: 'Mes Postulations',
-              headerShown: false,
-            }}/>
-            <Tab.Screen name="ContactsTab" component={ContactsStackScreen} options={{
-              title: 'Mes Contacts',
-              headerShown: false,
-              tabBarBadge: alarm_number > 0 ? alarm_number : null
-            }}/>
-            <Tab.Screen name="ProfileTab" component={ProfileStackScreen} options={{
-              title: 'Profil',
-            headerShown: false,
-          }}/>
-            </>
-            : 
-            <Tab.Screen name="Auth" component={AuthStackScreen} options={{
-              tabBarStyle: { display: 'none' },
-              headerShown: false,
-              tabBarButton: () => null, 
-              tabBarIcon: () => null
-            }}/>
-          }
-          
-        </Tab.Navigator>
-      </NavigationContainer>
+      // You can return any component here, not just Ionicons!
+      return <Ionicons name={iconName} size={size} color={'white'} />;
+    },
+    tabBarVisible: route.name !== 'Auth',
+    })}
+  >
+    <Tab.Screen name="Auth" component={AuthStackScreen} options={{
+      tabBarStyle: { display: 'none' },
+      headerShown: false,
+      tabBarButton: () => null, 
+      tabBarIcon: () => null
+    }}/>
+    {
+      token ? <>
+      <Tab.Screen name="OffresTab" component={OffersStackScreen} options={{
+        title: t('offres'),
+        headerShown: false,
+        
+      }} />
+      <Tab.Screen name="AppliancesTab" component={AppliancesStackScreen} options={{
+        title: t('mes Postulations'),
+        headerShown: false,
+      }}/>
+      <Tab.Screen name="ContactsTab" component={ContactsStackScreen} options={{
+        title: t('mes contacts'),
+        headerShown: false,
+        tabBarBadge: alarm_number > 0 ? alarm_number : null
+      }}/>
+      <Tab.Screen name="ProfileTab" component={ProfileStackScreen} options={{
+        title: 'Profil',
+      headerShown: false,
+    }}/>
+      </>
+      : 
+      <Tab.Screen name="Auth" component={AuthStackScreen} options={{
+        tabBarStyle: { display: 'none' },
+        headerShown: false,
+        tabBarButton: () => null, 
+        tabBarIcon: () => null
+      }}/>
+    }
+    
+  </Tab.Navigator>
+
+</NavigationContainer>
+  </Provider>
+  
+     
   );
 }

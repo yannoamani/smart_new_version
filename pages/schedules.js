@@ -7,12 +7,43 @@ import { displayDate } from "../Utils";
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
+import translateText from "../pages/store/TranslationUtils"
+import { useSelector } from 'react-redux';
 
 export default function Schedules() {
+    const lang = useSelector((state) => state.translate.lang);
     const navigation = useNavigation();
     const [data, setData] = useState();
     const [refreshing, setRefreshing] = useState(false);
     const token = AsyncStorage.getItem('token')
+    const [Traduction, setTraduction] = useState({
+        Jour: 'Jour',
+        De: 'De',
+        A: 'à',
+        Supprimer: 'Supprimer',
+        soustitre:"Voulez-vous supprimer cette plage d'horaires ?",
+        Yes:"Oui",
+        No:"Non"
+    });
+    const translate = async () => {
+        const jour = await translateText(Traduction.Jour, lang);
+        const de = await translateText(Traduction.De, lang);
+        const a = await translateText(Traduction.A, lang);
+        const supprimer = await translateText(Traduction.Supprimer, lang);
+        const soustitre = await translateText(Traduction.soustitre, lang);
+        const Yes = await translateText(Traduction.Yes, lang);
+        const No = await translateText(Traduction.No, lang);
+        setTraduction({
+            Jour: jour,
+            De: de,
+            A: a,
+            Supprimer: supprimer,
+            soustitre: soustitre,
+            Yes: Yes,
+            No: No
+        })
+    }
+
     const goToAddSched = () => {
         navigation.navigate("AddSched");
     }
@@ -39,13 +70,14 @@ export default function Schedules() {
     useEffect(() => {
         // Fetch offers when the component mounts
         fetchOffers();
+        translate();
 
         // Set up an interval to fetch offers every 1 minute
         const intervalId = setInterval(fetchOffers, 60000);
 
         // Clean up the interval when the component unmounts
         return () => clearInterval(intervalId);
-    }, []);
+    }, [lang]);
 
     const renderItem = ({ item }) => {
         const time = item.First_horaire.split('-')
@@ -62,16 +94,17 @@ export default function Schedules() {
                     //disabled = {isBeforeToday()}
                 >
                     <Text style={style.itemCard}>
-                        Jour : {item.jour}
+                 {Traduction.Jour} : {item.jour}
                     </Text>
                     <View style={{height:10}}></View>
                     <Text style={style.itemCard}>
-                        De {time[0]} à {time[1]}
+                    {Traduction.De} {time[0]} {Traduction.A} {time[1]}
                     </Text>
                     <Ionicons
                         onPress={() => {
-                            Alert.alert("Supprimer ?",'Voulez-vous supprimer cette plage horaire ?',[
-                                {text: 'OUI', onPress: async () => {
+                            Alert.alert(Traduction.Supprimer, Traduction.soustitre,[
+                                {text: Traduction.No, onPress: async () => console.log('NON')},
+                                {text: Traduction.Yes, onPress: async () => {
                                     try {
                                         const del = await axios.delete('delete_schedule/'+ item.id)
                                         fetchOffers()
@@ -79,7 +112,7 @@ export default function Schedules() {
                                         Alert.alert("Echec", error.message, [{text: 'OK', onPress: () => console.log('OK')}], { cancelable: true })
                                     }
                                 }},
-                                {text: 'NON', onPress: async () => console.log('NON')},
+                              
                             ], { cancelable: true })
                             
                         }}

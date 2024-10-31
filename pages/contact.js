@@ -7,19 +7,76 @@ import { Ionicons } from '@expo/vector-icons';
 import { displayDate, isDateTimeGreaterThanCurrent } from "../Utils";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
+import * as Print from 'expo-print';
+import { shareAsync } from 'expo-sharing';
+import * as FileSystem from 'expo-file-system';
+import translate from "translate";
+import { useSelector } from 'react-redux';
+  
 
 
 export default function Contact({route}) {
     const { width } = useWindowDimensions();
+    const lang = useSelector((state) => state.translate.lang);
     const { data } = route.params;
     const navigation = useNavigation();
     const { already } = route.params;
     //const [data, setData] = useState();
+    const [userinfo, setUseinfo] = useState();
     const [desc, setDesc] = useState();
     const [policeBold, setPolices] = useState("Poppins_700Bold");
   const [policeRegular, setPoliceRegular] = useState("Poppins_400Regular");
   const [policeLight, setPoliceLight] = useState("Poppins_300Light_Italic");
-    
+  const [texttranslate, setTexttranslate] = useState({
+    DDetailsOofre:"Details de l'offre",
+    DateCloture:"Date de cloture",
+    Refuser:"Refuser",
+    Accepter:"Accepter",
+    RefusOffre:"Vous avez refusée cette l'offre ",
+    AccepterOffre:"Offre acceptée",
+    reponder:"Repondre",
+    Download:"Telecharger votre attestation ici",
+    Question:"Voulez-vous accepter cette offre ?",
+    Yes:"Oui",
+    No:"Non",
+Attendre:"Attendre",
+Succes:"Succes",
+
+  })
+    const translation = async () => {
+      
+        const detailsOofre = await translate("Details de l'offre", { from: 'fr', to: lang });
+        const dateCloture = await translate("Date de cloture", { from: 'fr', to: lang });
+       
+        const refuser = await translate("Refuser", { from: 'fr', to: lang  });
+        const accepter = await translate("Accepter", { from: 'fr', to: lang  });
+        const refusOffre = await translate("Vous avez refusée cette l'offre", { from: 'fr', to: lang  });
+        const accepterOffre = await translate("Offre acceptée", { from: 'fr', to: lang  });
+        const download = await translate("Telecharger votre attestation ici", { from: 'fr', to: lang });
+        const question = await translate("Voulez-vous accepter cette offre ?", { from: 'fr', to: lang  });
+        const yes = await translate("Oui", { from: 'fr', to: lang  });
+        const no = await translate("Non", { from: 'fr', to: lang  });
+        const repondre = await translate("Repondre", { from: 'fr', to: lang  });
+        const succes = await translate("Succes", { from: 'fr', to: lang  });
+        setTexttranslate({
+            DDetailsOofre:detailsOofre,
+         DateCloture:dateCloture,
+            Refuser:refuser,
+            Accepter:accepter,
+            RefusOffre:refusOffre,
+            AccepterOffre:accepterOffre,
+            Download:download,
+            Question:question,
+            Yes:yes,
+            No:no,
+            reponder:repondre,
+            Attendre:await translate("Attendre", { from: 'fr', to: lang === 'en' ? 'en' : 'fr' }),
+            Succes:succes
+
+
+      
+        
+        })}
     const getOffer = async () => {
         try {
             if (data.pivot.offre.description[0] === '<') {
@@ -48,15 +105,115 @@ export default function Contact({route}) {
     }
     
   }
+  const html = `
+
+  <html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Document</title>
+  </head>
+  <body>
+  <div style="padding: 16px;">
+      <div style="display: flex; flex-direction: row; justify-content: space-between;">
+          <div style="height: 100px; align-items: center; justify-content:center; display: flex;">
+              <h1 style="font-weight: bold; color: green; text-align: center;">${data.nom.toUpperCase()}</h1>
+          </div>
+          <div style=" height: 100px; width: 100px; display: flex;">
+              <img src="https://i.postimg.cc/pXGNKVF4/Whats-App-Image-2024-08-12-11-07-09-dfada05d.jpg" alt="Image" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+          <div style=" height: 100px; width: 100px; ">
+              <img src="https://lce-ci.com/assets/img/l.png" alt="Image" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+      </div>
+      <div style="height: 40px;"></div>
+      <div style="display: flex; flex-direction: row; flex: 1; align-items: center; ;">
+      <p style="font-weight: bold; margin: 0;">Adresse: <span style="font-weight: normal;">${data.ville}</span></p>
+      </div>
+      
+      <div style="display: flex; flex-direction: row; flex: 1; align-items: center; ">
+          <p style="font-weight: bold; margin: 1;" >Contact: <span style="font-weight: normal;">${data.contact}</span></p>
+  </div>
+      <div style="height: 50px;"></div>
+      <p style="font-weight: bold; text-align: center; font-size: 30px; ;">ATTESTATION D'ADMISSION</p>
+      <div style="height: 30px;"></div>
+      <p style="font-weight: bold; font-size: 20px;">Offre : ${data.pivot.offre.nom_offre}</p>
+    <p> <span>L'entreprise ${data.nom} vous a acceptée Mr(Mme) ${userinfo},  au sein de son entreprise pour 
+      effectuer un travail dans la categorie ${data.pivot.offre.categorie.categorie} vu votre disponibilité. Merci de contacter l'entreprise pour plus de détail.</span></p>
+
+      <div style="height: 20px;"></div>
+      <div style="display: flex; flex-direction: row; flex: 1; align-items: center; ">
+          <p style="font-weight: bold; margin: 1;" >Honoraire: <span style="font-weight: normal;">${data.pivot.offre.salaire==null?null:data.pivot.offre.salaire+'FCFA'}</span></p>
+      </div>
+      <div style="display: flex; flex-direction: row; flex: 1; align-items: center; ">
+          <p style="font-weight: bold; margin: 1;" >Contact du gérant: <span style="font-weight: normal;">08125403</span></p>
+      </div>
+      <div style="display: flex; flex-direction: row; flex: 1; align-items: center; ">
+          <p style="font-weight: bold; margin: 1;" >Lieu: <span style="font-weight: normal;">${data.pivot.offre.lieu}</span></p>
+      </div>
+      <div style="height: 50px;"></div>
+      <p style="font-weight: bold; font-size: 15px; text-align: right;">Fait à abidjan le ${new Date(data.updated_at).toLocaleDateString()}</p>
+      
+      
+  </div>
+  </body>
+  </html>
+  
+  `;
+  const printToFileAndShare = async () => {
+      try {
+        const { uri } = await Print.printToFileAsync({ html });
+    
+    // Définir l'emplacement de téléchargement
+    const fileUri = `${FileSystem.documentDirectory}mon_document.pdf`;
+    
+    // Déplacer le PDF généré à l'emplacement souhaité
+    await FileSystem.moveAsync({
+      from: uri,
+      to: fileUri,
+    });
+    
+    Alert.alert('Téléchargement réussi', `Le PDF a été téléchargé ici : ${fileUri}`);
+    
+    // Partager le PDF
+    await  shareAsync(fileUri, {
+      UTI: '.pdf', // Type de fichier
+      mimeType: 'application/pdf', // Type MIME
+    });
+    
+    } catch (error) {
+      console.error('Erreur lors du téléchargement du fichier :', error);
+      Alert.alert('Erreur', 'Une erreur est survenue lors du téléchargement du PDF.');
+    }
+    
+    };
+    const getuser = async () => {
+      try {
+          const user = await AsyncStorage.getItem('user')
+          if (user!=null) {
+              const allinfo = JSON.parse(user)
+              setUseinfo(allinfo.nom+ ' '+ allinfo.prenoms)
+          }
+          
+      } catch (error) {
+          console.log(error)
+          
+      }
+        
+    }
+  
 
     useEffect(() => {
         getOffer();
+        getuser();
+translation()
+        console.log("data",data);
         const interval= setInterval(async () => {
       const abonement = await AsyncStorage.getItem('abonnement');
         // console.log("abonnement",abonement);
    if (abonement) {
     const mabonnement = JSON.parse(abonement);
-    console.log("abonnement",mabonnement);
+    // console.log("abonnement",mabonnement);
     
     if (isDateTimeGreaterThanCurrent(mabonnement.echeance)) {
       console.log("Vous ", abonement);
@@ -70,9 +227,9 @@ export default function Contact({route}) {
    }
 
     
-  }, 1000);
+  }, 5000);
 
-    }, []);
+    }, [lang]);
 
     return (
         <View 
@@ -82,7 +239,7 @@ export default function Contact({route}) {
         {data ? (
                 <View >
                 <View style={style.container}>
-                <Text style={style.detailoffre} >Details de l'offre</Text>
+                <Text style={style.detailoffre} >{texttranslate.DDetailsOofre}</Text>
                 <View style={style.subtile}>
                 <Ionicons name={"location-outline"} color={'black'} size={20}></Ionicons>
                 <View style={{width:3}}></View>
@@ -136,12 +293,16 @@ export default function Contact({route}) {
  }
               <View style={{width:10}}></View>
               
- <Text style={style.info}>{data.pivot.contrat==1?'Acepté':data.pivot.contrat==0?'En attente':'Refusé'}</Text>
+ <Text style={style.info}>{data.pivot.contrat==1?texttranslate.Accepter:data.pivot.contrat==0? texttranslate.Attendre:texttranslate.Refuser}</Text>
    </View>
    <View style={{height:15}}></View>
-   <Text style={style.date}>Date de cloture :  {data.pivot.offre.fin}</Text>
+   <Text style={style.date}>{texttranslate.DateCloture} :  {data.pivot.offre.fin}</Text>
    
    </View>
+   <View style={{height:25}}></View>{
+    data.pivot.contrat==1? 
+    <Text style={{fontSize:20, fontWeight:'bold', padding:10, backgroundColor:'red'}} onPress={printToFileAndShare}>{texttranslate.Download}</Text>:null
+   }
    <View style={{height:25}}></View>
         <Text style={style.titleDescription}>{data.pivot.offre.nom_offre}</Text>
         <View style={{height:25}}></View>
@@ -159,18 +320,18 @@ export default function Contact({route}) {
                                 if (token) {
                                     axios.defaults.headers.common.Authorization = `Bearer ${token}`;
                                 }
-                                Alert.alert('Répondre', 'Voulez-vous accepter ou refuser cette offre ?', [
-                                    {text: 'Refuser', onPress: async () => {
+                                Alert.alert(texttranslate.reponder, texttranslate.Question, [
+                                    {text: texttranslate.Refuser, onPress: async () => {
                                       try {
                                         const dat = await axios.put('changeStatutJob/'+data.pivot.id, {contrat: 2})
-                                        Alert.alert("Réussi", "Vous avez refusé l'offre avec succès", [{ text: 'OK'}])
+                                        Alert.alert(texttranslate.Succes, texttranslate.RefusOffre, [{ text: 'OK'}])
                                       } catch (error) {
                                         Alert.alert("Echec", JSON.stringify(error.message), [{ text: 'OK'}], {cancelable: true})
                                       }
                                     }},
-                                    {text: 'Accepter', onPress: async () => {
+                                    {text: texttranslate.Accepter, onPress: async () => {
                                         const dat = await axios.put('changeStatutJob/'+data.pivot.id, {contrat: 1})
-                                        Alert.alert("Réussi", "Vous avez accepté l'offre avec succès", [{ text: 'OK'}])
+                                        Alert.alert(texttranslate.Succes, texttranslate.AccepterOffre, [{ text: 'OK'}])
                                     }}
                                 ], {cancelable: true})
                                 navigation.navigate('Contacts')
@@ -217,7 +378,9 @@ export default function Contact({route}) {
   shadowRadius: 4,
   elevation: 5, 
 }}>
-  Vous avez {data.pivot.contrat == 1 ? 'accepté' : 'refusé'} cette offre
+{
+    data.pivot.contrat == 1 ? texttranslate.AccepterOffre : texttranslate.RefusOffre
+}
 
 
                        

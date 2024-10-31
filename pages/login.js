@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import LinearGradient from "react-native-linear-gradient";
 import { Checkbox, IconButton } from 'react-native-paper';
 import { MaterialCommunityIcons } from '@expo/vector-icons'
+import { useTranslation } from 'react-i18next';
 
 
 
@@ -13,28 +14,28 @@ import {
   Text,
   View,
   ScrollView,
-  Button,
   Image,
   TextInput,
   Pressable,
   Modal,
   KeyboardAvoidingView,
-  CheckBox,
   StyleSheet,
-  Platform,
+
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Alert } from "react-native";
 import Loader from "../components/loader";
-import { SafeAreaView } from "react-native-safe-area-context";
-import style1 from "../modification_design";
 import { Ionicons } from "@expo/vector-icons";
+import translate from "translate";
+import translateText from "../pages/store/TranslationUtils"
+import { useSelector } from 'react-redux';
+
 
 
 export default function Login() {
-
+  const lang = useSelector((state) => state.translate.lang);
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
   const [email, setMail] = React.useState("");
@@ -46,15 +47,78 @@ export default function Login() {
   const [policeBold, setPolices] = useState("Poppins_700Bold");
   const [policeRegular, setPoliceRegular] = useState("Poppins_400Regular");
   const [policeLight, setPoliceLight] = useState("Poppins_300Light_Italic");
+  const [texttranslate, setTexttranslate] = useState({
+        login:"CONNEXION",
+        Email:"Email",
+        Password:'Mot de passe',
+        resterConnecter:"Se souvenir de moi",
+        forgotPassword:"Mot de passe oublié ?",
+        seConnecter:"Se connecter",
+        noAccount:"Vous n'avez pas de compte ?",
+        inscrire:"S'inscrire",
+        Error1:"Veillez renseigner votre email",
+        Error2:"Veuillez renseigner votre mot de passe",
+        Echec:"Echec",
+        Succes:"Succes",
+        BodySucces:"Vous  êes connecté avec success",
+        titleForgot:"Mot de passe oublié",
+        bodyForgot:"Entrez votre adresse email et nous vous enverrons un lien pour reinitialiser votre mot de passe.",
+        Continer:"Soumettre",
+
+
+       
+     })
+    const translation= async () =>{
+     
+     
+
+        const welcomeTitle= await translateText("CONNEXION",lang);
+        const Email= await translateText('Email',lang);
+        const Password= await translateText('Mot de passe',lang);
+        const beConnected=await translateText('Se souvenir de moi', lang);
+        const forgotPassword=await translateText('Mot de passe oublié ?', lang);
+        const seConnecter=await translateText('Se connecter', lang);
+        const noAccount=await translateText("Vous n'avez pas de compte ?", lang);
+        const inscrire=await translateText('S\'inscrire', lang);
+        const Error1=await translateText('Veillez renseigner votre email', lang);
+        const Error2=await translateText('Veuillez renseigner votre mot de passe', lang);
+        const Succes=await translateText('Succes', lang);
+        const Echec=await translateText('Echec', lang);
+        const BodySucces=await translateText('Vous  êtes connecté avec success', lang);
+        const titleForgot=await translateText('Mot de passe oublié', lang);
+        const bodyForgot=await translateText('Entrez votre adresse email et nous vous enverrons un lien pour reinitialiser votre mot de passe.', lang);
+        const Continer=await translateText('Soumettre', lang);
+
+       
+       return setTexttranslate({
+        login : welcomeTitle,
+        Email : Email,
+        Password : Password,
+        resterConnecter : beConnected,
+        forgotPassword : forgotPassword,
+        seConnecter : seConnecter,
+        noAccount : noAccount,
+        inscrire : inscrire,
+        Error1 : Error1,
+        Error2 : Error2,
+        Echec : Echec,
+        Succes : Succes,
+        BodySucces : BodySucces,
+        titleForgot : titleForgot,
+        bodyForgot : bodyForgot,
+        Continer : Continer
+       })
+   
+    }
 
   const toggleModal = () => {
     setPwdModalVisible(!isPwdModalVisible);
   };
   const validation = () => {
     if (email != "") {
-      Alert.alert("Veuillez renseigner votre email");
+      Alert.alert(texttranslate.Error1);
     } else if (pwd != "") {
-      Alert.alert("Veuillez renseigner votre mot de passe");
+      Alert.alert(texttranslate.Error2);
     } else {
       Log();
     }
@@ -69,17 +133,19 @@ export default function Login() {
       });
       console.log("req", req);
       setLoading(false);
+      const translate= await translateText(req.data.message, lang)
       Alert.alert(
-        "Réussi",
-        req.data.message,
+        texttranslate.Succes,
+        translate,
         [{ text: "OK", onPress: () => setModalVisible(!isModalVisible) }],
         { cancelable: true }
       );
     } catch (error) {
       setLoading(false);
+      const translate= await translateText(error.response.data.message, lang)
       Alert.alert(
-        "Echec",
-        JSON.stringify(error.response.data.message),
+       texttranslate.Echec,
+        translate,
         [{ text: "OK" }],
         { cancelable: true }
       );
@@ -133,7 +199,7 @@ export default function Login() {
       //   // Set loading to false to hide the loader when the task is complete
        
       // }, 3000);
-      Alert.alert("Connexion réussie", "", [
+      Alert.alert(texttranslate.Succes, texttranslate.BodySucces, [
         { text: "OK", onPress: () => console.log("OK") },
       ]);
      
@@ -141,7 +207,9 @@ export default function Login() {
       }
       
     } catch (error) {
-      Alert.alert(JSON.stringify(error.response.data.message), "", [
+      const message= error.response.data.message;
+      const transalteText=await translateText(message, lang);
+      Alert.alert(texttranslate.Echec, transalteText, [
         { text: "OK", onPress: () => console.log("OK") },
       ]);
       console.log(error);
@@ -152,11 +220,16 @@ export default function Login() {
   const validationPassword = () => {
     console.log(resetPwdEmail);
     if (resetPwdEmail == "") {
-      Alert.alert("Veuillez renseigner votre email");
+      Alert.alert(texttranslate.Error1);
     } else {
       resetPwd();
     }
   };
+  useEffect(() => {
+   translation();
+    
+   
+  },[lang] )
 
   return (
     <View style={style.container}>
@@ -178,10 +251,10 @@ export default function Login() {
 
           <View style={{ height: 250 }}></View>
           <View style={style.form}>
-            <Text style={[style.title, { fontFamily: policeBold }]}>CONNEXION</Text>
+            <Text style={[style.title, { fontFamily: policeBold }]}>{texttranslate.login}</Text>
 
-            <Text style={[style.labelText, { fontFamily: policeRegular }]}> Email</Text>
-            <View style={{ height: "1%" }}></View>
+            <Text style={[style.labelText, { fontFamily: policeRegular }]}> {texttranslate.Email}</Text>
+            <View style={{ height: "" }}></View>
 
             <View style={style.inputCustom}>
               <TextInput
@@ -193,8 +266,8 @@ export default function Login() {
               />
             </View>
             <View style={{ height: 30 }}></View>
-            <Text style={[style.labelText, { fontFamily: policeRegular }]}>Mot de passe</Text>
-            <View style={{ height: "1%" }}></View>
+            <Text style={[style.labelText, { fontFamily: policeRegular }]}>{texttranslate.Password}</Text>
+            <View style={{ height: "" }}></View>
 
             <View style={style.inputCustom}>
               <TextInput
@@ -215,7 +288,7 @@ export default function Login() {
                 ></Ionicons>
               </Pressable>
             </View>
-            <View style={{ height: 10 }}></View>
+            <View style={{ height: 20 }}></View>
             <View style={style.afterinput}>
               <View style={style.row}>
                 <Pressable
@@ -232,7 +305,7 @@ export default function Login() {
                 </Pressable>
           
                 
-                <Text style={[style.checkText, { fontFamily: policeRegular }]}>Se souvenir de moi</Text>
+                <Text style={[style.checkText, { fontFamily: policeRegular }]}>{texttranslate.resterConnecter}</Text>
               </View>
 
               <Pressable
@@ -240,14 +313,14 @@ export default function Login() {
                   setModalVisible(!isModalVisible);
                 }}
               >
-                <Text style={[style.checkText, { fontFamily: policeRegular }]}>Mot de passe oublié ?</Text>
+                <Text style={[style.checkText, { fontFamily: policeRegular }]}>{texttranslate.forgotPassword}</Text>
               </Pressable>
             </View>
 
             <Loader loading={loading} />
             <View style={{ height: 30 }}></View>
             <Pressable style={style.button} onPress={validation}>
-              <Text style={[style.textbutton, { fontFamily: policeRegular }]}>Se connecter</Text>
+              <Text style={[style.textbutton, { fontFamily: policeRegular }]}>{texttranslate.seConnecter}</Text>
             </Pressable>
 
 
@@ -290,10 +363,10 @@ export default function Login() {
             <View style={{ height: 110 }}></View>
             <View style={{ flexDirection: "row", justifyContent: "center" }}>
               <Text style={[style.noaccont, { fontFamily: policeRegular }]}>
-                Vous n'avez pas de compte ?
+               {texttranslate.noAccount}
                 <Text onPress={() => navigation.navigate("Signin")}>
                   {" "}
-                  <Text style={[style.link, { fontFamily: policeBold }]}>S'inscrire</Text>
+                  <Text style={[style.link, { fontFamily: policeBold }]}> {texttranslate.inscrire}</Text>
                 </Text>{" "}
               </Text>
             </View>
@@ -330,13 +403,11 @@ export default function Login() {
                 </View>
                 <ScrollView>
                   <View style={style.conatainerReset}>
-                    <Text style={style.titlereset}>Mot de passe oublié</Text>
+                    <Text style={[style.titlereset,{fontFamily: policeBold}]}>{texttranslate.titleForgot}</Text>
 
                     <View style={{ height: 20 }}></View>
                     <Text style={style.subTitleReset}>
-                      Saisissez l'adresse électronique associée à votre compte
-                      et nous vous enverrons par courrier électronique des
-                      instructions pour réinitialiser votre mot de passe.
+                    {texttranslate.bodyForgot}
                     </Text>
 
                     <View style={{ height: 40 }}></View>
@@ -355,7 +426,7 @@ export default function Login() {
                       onPress={validationPassword}
                       style={style.button}
                     >
-                      <Text style={style.textbutton}>Continuer</Text>
+                      <Text style={style.textbutton}>{texttranslate.Continer}</Text>
                     </Pressable>
                     <View style={{ height: 20 }}></View>
                   </View>
@@ -509,7 +580,7 @@ const style = StyleSheet.create({
   titlereset: {
     color: "#000000",
     textAlign: "center",
-    fontSize: 36,
+    fontSize: 19,
     fontWeight: "700",
   },
   subTitleReset: {

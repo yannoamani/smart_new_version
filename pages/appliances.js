@@ -7,9 +7,13 @@ import { displayDate, isDateTimeGreaterThanCurrent } from "../Utils";
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
+import translate, { Translate } from "translate";
+import { useSelector } from 'react-redux';
+import translateText from "../pages/store/TranslationUtils"
 
 
 export default function AppliancesList() {
+    const lang = useSelector((state) => state.translate.lang);
     const navigation = useNavigation();
     const [data, setData] = useState();
     const [refreshing, setRefreshing] = useState(false);
@@ -28,8 +32,20 @@ export default function AppliancesList() {
                 axios.defaults.headers.common.Authorization = `Bearer ${token}`;
             }
             const res = await axios.get('get_offres_postule');
-            console.log("La liste de de mes offres", res.data.data.offres);
-            setData(res.data.data.offres);
+            console.log("La liste de de mes offres propes à moi", res.data);
+
+            const Mydata=res.data.data.offres;
+            const translateAll= await Promise.all(
+                Mydata.map(async (offre) => {
+                    return{
+                        ...offre,
+                        nom_offre: await translateText(offre.nom_offre,lang),
+                        description: await translateText(offre.description,lang),
+                        categorie: await translateText(offre.categorie.categorie,lang)
+                    }
+                })
+            )
+            setData(translateAll);
             setRefreshing(false);
         } catch (error) {
             console.log(error);
@@ -54,10 +70,13 @@ export default function AppliancesList() {
     }
     
   }
+ 
+  
 
     const fetchOffers = () => {
         //setRefreshing(true);
         getOffers();
+
     };
 
     useEffect(() => {
@@ -67,8 +86,8 @@ export default function AppliancesList() {
       const abonement = await AsyncStorage.getItem('abonnement');
         // console.log("abonnement",abonement);
    if (abonement) {
-    const mabonnement = JSON.parse(abonement);
-    console.log("abonnement",mabonnement);
+     const mabonnement = JSON.parse(abonement);
+    // console.log("abonnement",mabonnement);
     
     if (isDateTimeGreaterThanCurrent(mabonnement.echeance)) {
       // console.log("Vous ", abonement);
@@ -82,14 +101,11 @@ export default function AppliancesList() {
    }
 
     
-  }, 1000);
+  }, 5000);
 
-        // Set up an interval to fetch offers every 1 minute
-        // const intervalId = setInterval(fetchOffers, 60000);
-
-        // // Clean up the interval when the component unmounts
-        // return () => clearInterval(intervalId);
-    }, []);
+     
+    }, [lang]);
+    
 
     const renderItem = ({ item }) => {
         const time = displayDate(item.created_at);
@@ -102,10 +118,10 @@ export default function AppliancesList() {
         <View style={styles.iconContainer}>
             {item.pivot.recruit === 1 ? (
                 <Ionicons name="checkmark-circle" size={25} color="#1A9E47" />
-            ) : new Date() > new Date(item.fin) ? (
+            ) : item.pivot.recruit === 2 ? (
                 <Ionicons name="close-circle-outline" size={25} color="red" />
             ) : (
-                <Ionicons name="hourglass" size={25} color="#FFD233" />
+                <Ionicons name="hourglass" size={25} color="#FFD233"/>
             )}
         </View>
         <View style={styles.infoContainer}>
@@ -120,7 +136,10 @@ export default function AppliancesList() {
 
     <View style={styles.locationContainer}>
         <Ionicons name="location-outline" color={'black'} size={24} />
-        <Text style={[styles.locationText,{fontFamily:policeLight}]}>{item.lieu}</Text>
+        <Text style={[styles.locationText,{fontFamily:policeLight}]}>
+        {item.lieu}
+        </Text>
+
     </View>
 </View>
 
