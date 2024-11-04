@@ -20,10 +20,10 @@ const StepTwo = () => {
 
     const navigation = useNavigation();
     const [texttranslate, setTexttranslate] = useState({
-        welcome:"",
-        subtitle:"",
-        passer:"",
-    suivant:""
+        welcome:language=="fr"?"Trouvez des petits boulots en un clin d'œil !":"Find small jobs in a snap!",
+        subtitle: language=="fr"?"Connectez-vous facilement avec des entreprises pour des projets enrichissants pendant votre temps libre.  Inscrivez-vous, explorez les offres et décrochez un job en quelques minutes seulement.":"Connect easily with companies for enriching projects during your free time.",
+        passer: language=="fr"?"Passer":"Skip",
+    suivant: language=="fr"?"Suivant":"Next"
 
     })
     const translation= async () =>{
@@ -31,16 +31,16 @@ const StepTwo = () => {
     console.log("languge232", language)
  
 
-        const welcomeTitle= await  translateText("Trouvez des petits boulots en un clin d'œil !", language);
-        const next= await  translateText('Suivant',  language);
-        const skip= await  translateText('Passer',  language);
-        const soutitle=await  translateText('Connectez-vous facilement avec des entreprises pour des projets enrichissants pendant votre temps libre.  Inscrivez-vous, explorez les offres et décrochez un job en quelques minutes seulement.',  language);
+    //     const welcomeTitle= await  translateText("Trouvez des petits boulots en un clin d'œil !", language);
+    //     const next= await  translateText('Suivant',  language);
+    //     const skip= await  translateText('Passer',  language);
+    //     const soutitle=await  translateText('Connectez-vous facilement avec des entreprises pour des projets enrichissants pendant votre temps libre.  Inscrivez-vous, explorez les offres et décrochez un job en quelques minutes seulement.',  language);
        
-       return setTexttranslate({welcome:welcomeTitle, subtitle:soutitle, passer:skip, suivant:next})
+    //    return setTexttranslate({welcome:welcomeTitle, subtitle:soutitle, passer:skip, suivant:next})
     
     }
     useEffect(() => {
-  translation()
+//   translation()
   return () => {
         
   }

@@ -56,55 +56,56 @@ export default function EditSelf() {
     }
   };
   const [TextTranslation, setTextTransaction] = useState({
-    Title: "Ajouter une nouvelle experience",
-Poste :"Poste",
-Ajouter:"Ajouter",
-Entreprise:"Entreprise",
-Lieu:"Lieu",
-DateDebut:"Date de debut",
-DateFin:"Date de fin",
-Description:"Description",
-Modifier:"Modifier",
-Ajouterpiece:"Ajouter une piece jointe ici",
-Attention:"Attention",
-ReponseErreur:"Entrer des Dates Valides",
-Succes:"Expérience enregistrée avec succès"
+    Title: lang=="fr"?"Ajouter une nouvelle experience":"Add a new experience",
+Poste :lang=="fr"?"Poste":"Job",
+Ajouter:lang=="fr"?"Ajouter":"Add",
+Entreprise:lang=="fr"?"entreprise":"company",
+Lieu:lang=="fr"?"Lieu":"Location",
+DateDebut:lang=='fr'?"Date de debut":"Start Date",
+DateFin:lang=='fr'?"Date de fin":"End Date",
+Description:lang=="fr"?"Description":"Description",
+Modifier:lang=="fr"?"Modifier":"Edit",
+Ajouterpiece:lang=="fr"?"Ajouter une piece jointe":"Add a file",
+Attention:lang=="fr"?"Attention":"Warning",
+ReponseErreur:lang=="fr"?"Entrer des Dates Valides":"Enter valid Dates",
+Succes:lang=="fr"?"Expérience enregistrée avec succès":"Experience added successfully",
    
   });
   const translation = async()=>{
-    const title= await translateText(TextTranslation.Title, lang);
-    const poste= await translateText(TextTranslation.Poste, lang);
-    const Entreprise= await translateText(TextTranslation.Entreprise, lang);
-    const Lieu= await translateText(TextTranslation.Lieu, lang);
-    const DateDebut= await translateText(TextTranslation.DateDebut, lang);
-    const DateFin= await translateText(TextTranslation.DateFin, lang);
-    const Description= await translateText(TextTranslation.Description, lang);
-    const Modifier= await translateText(TextTranslation.Modifier, lang);
-    const Ajouterpiece= await translateText(TextTranslation.Ajouterpiece, lang);
-    const ajouter= await translateText(TextTranslation.Ajouter, lang);
-    const attention= await translateText(TextTranslation.Attention, lang);
-    const reponseErreur= await translateText(TextTranslation.ReponseErreur, lang);
-    const succes= await translateText(TextTranslation.Succes, lang);
-    setTextTransaction({
-      Title: title,
-      Poste:poste,
-      Entreprise:Entreprise,
-      Lieu:Lieu,
-      DateDebut:DateDebut,
-      DateFin:DateFin,
-      Description:Description,
-      Modifier:Modifier,
-      Ajouterpiece:Ajouterpiece,
-      Ajouter:ajouter,
-      Attention:attention,
-      ReponseErreur:reponseErreur,
-      Succes:succes
-    })
+    // const title= await translateText(TextTranslation.Title, lang);
+    // const poste= await translateText(TextTranslation.Poste, lang);
+    // const Entreprise= await translateText(TextTranslation.Entreprise, lang);
+    // const Lieu= await translateText(TextTranslation.Lieu, lang);
+    // const DateDebut= await translateText(TextTranslation.DateDebut, lang);
+    // const DateFin= await translateText(TextTranslation.DateFin, lang);
+    // const Description= await translateText(TextTranslation.Description, lang);
+    // const Modifier= await translateText(TextTranslation.Modifier, lang);
+    // const Ajouterpiece= await translateText(TextTranslation.Ajouterpiece, lang);
+    // const ajouter= await translateText(TextTranslation.Ajouter, lang);
+    // const attention= await translateText(TextTranslation.Attention, lang);
+    // const reponseErreur= await translateText(TextTranslation.ReponseErreur, lang);
+    // const succes= await translateText(TextTranslation.Succes, lang);
+    // setTextTransaction({
+    //   Title: title,
+    //   Poste:poste,
+    //   Entreprise:Entreprise,
+    //   Lieu:Lieu,
+    //   DateDebut:DateDebut,
+    //   DateFin:DateFin,
+    //   Description:Description,
+    //   Modifier:Modifier,
+    //   Ajouterpiece:Ajouterpiece,
+    //   Ajouter:ajouter,
+    //   Attention:attention,
+    //   ReponseErreur:reponseErreur,
+    //   Succes:succes
+    // })
   }
 
 
 
-    useEffect(() => {translation()
+    useEffect(() => {
+      // translation()
     }, [lang]);
     return (
        

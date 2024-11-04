@@ -30,60 +30,60 @@ export default function Abonnement() {
     const [isSuccess, setIsSuccess] = useState(false);
     const [veri, setveri] = useState('');
     const [TextTranslate, setTextTranslate] = useState({
-      Methode:"Methode de paiement",
-      Souscrire:"Souscrire",
-      Attention:"Attention",
-      sousAttention:"Veuillez selectionner une methode de paiement",
-      Annuler:"Annuler",
-      Payer:"Payer",
-      Oui:"Oui",
-      Non:"Non",
-      Echec:"Echec",
-      Abonnement:"Abonnement",
-      Paiement:"Paiement",
-      TitleSucces:"Paiement Réussi !",
-      TitleFailed:"Echec de paiement",
-      PaiementSuccess:"Félicitations, votre paiement a été traité avec succès.",
-      PaiementFailed:"Votre paiement a echoué",
-      PayerWith:"Payer avec",
+      Methode:lang=="fr"?"Methode de paiement":"Payment method",
+      Souscrire:lang=="fr"?"Faire un abonnement":"Subscribe",
+      Attention:lang=="fr"?"Attention":"Warning",
+      sousAttention:lang=="fr"?"Veillez selectionner une methode de paiement":"Please select a payment method",
+      Annuler:lang=="fr"?"Annuler":"Cancel",
+      Payer:lang=="fr"?"Payer":"Pay",
+      Oui:lang=="fr"?"Oui":"Yes",
+      Non:lang=="fr"?"Non":"No",
+      Echec:lang=="fr"?"Echec":"Echec",
+      Abonnement:lang=="fr"?"Abonnement":"Subscription", 
+      Paiement:lang=="fr"?"Paiement":"Payment",
+      TitleSucces:lang=='fr'?"Paiement reussi":"Payment succeeded",
+      TitleFailed:lang=='fr'?"Paiement echoué":"Payment failed",
+      PaiementSuccess:lang=="fr"?"Félicitations, votre paiement a été traité avec succès.":"Congratulations, your payment has been processed successfully.",
+      PaiementFailed:lang=="fr"?"Oups, votre paiement a été echoué. Veuillez reessayer.":"Oops, your payment has failed. Please try again.",
+      PayerWith:lang=="fr"?"Payer avec":"Pay with",
 
       
     })
     const Translation= async()=>{
-      const methode = await translateText(TextTranslate.Methode, lang);
-      const souscrire = await translateText(TextTranslate.Souscrire, lang);
-      const attention = await translateText(TextTranslate.Attention, lang);
-      const sousAttention = await translateText(TextTranslate.sousAttention, lang);
-      const Annuler = await translateText(TextTranslate.Annuler, lang);
-      const Payer = await translateText(TextTranslate.Payer, lang);
-      const Oui = await translateText(TextTranslate.Oui, lang);
-      const Non = await translateText(TextTranslate.Non, lang);
-      const Abonnement = await translateText(TextTranslate.Abonnement, lang);
-      const Paiement = await translateText(TextTranslate.Paiement, lang);
-      const TitleSucces = await translateText(TextTranslate.TitleSucces, lang);
-      const TitleFailed = await translateText(TextTranslate.TitleFailed, lang);
-      const PaiementSuccess = await translateText(TextTranslate.PaiementSuccess, lang);
-      const PaiementFailed = await translateText(TextTranslate.PaiementFailed, lang);
-      const PayerWith = await translateText(TextTranslate.PayerWith, lang);
-      const echec = await translateText(TextTranslate.Echec, lang);
-      setTextTranslate({
-        Methode:methode,
-        Souscrire:souscrire,
-        Attention:attention,
-        sousAttention:sousAttention,
-        Annuler:Annuler,
-        Payer:Payer,
-        Oui:Oui,
-        Non:Non,
-        Abonnement:Abonnement,
-        Paiement:Paiement,
-        TitleSucces:TitleSucces,
-        TitleFailed:TitleFailed,
-        PaiementSuccess:PaiementSuccess,
-        PaiementFailed:PaiementFailed,
-        PayerWith:PayerWith,
-        echec:echec
-      })
+      // const methode = await translateText(TextTranslate.Methode, lang);
+      // const souscrire = await translateText(TextTranslate.Souscrire, lang);
+      // const attention = await translateText(TextTranslate.Attention, lang);
+      // const sousAttention = await translateText(TextTranslate.sousAttention, lang);
+      // const Annuler = await translateText(TextTranslate.Annuler, lang);
+      // const Payer = await translateText(TextTranslate.Payer, lang);
+      // const Oui = await translateText(TextTranslate.Oui, lang);
+      // const Non = await translateText(TextTranslate.Non, lang);
+      // const Abonnement = await translateText(TextTranslate.Abonnement, lang);
+      // const Paiement = await translateText(TextTranslate.Paiement, lang);
+      // const TitleSucces = await translateText(TextTranslate.TitleSucces, lang);
+      // const TitleFailed = await translateText(TextTranslate.TitleFailed, lang);
+      // const PaiementSuccess = await translateText(TextTranslate.PaiementSuccess, lang);
+      // const PaiementFailed = await translateText(TextTranslate.PaiementFailed, lang);
+      // const PayerWith = await translateText(TextTranslate.PayerWith, lang);
+      // const echec = await translateText(TextTranslate.Echec, lang);
+      // setTextTranslate({
+      //   Methode:methode,
+      //   Souscrire:souscrire,
+      //   Attention:attention,
+      //   sousAttention:sousAttention,
+      //   Annuler:Annuler,
+      //   Payer:Payer,
+      //   Oui:Oui,
+      //   Non:Non,
+      //   Abonnement:Abonnement,
+      //   Paiement:Paiement,
+      //   TitleSucces:TitleSucces,
+      //   TitleFailed:TitleFailed,
+      //   PaiementSuccess:PaiementSuccess,
+      //   PaiementFailed:PaiementFailed,
+      //   PayerWith:PayerWith,
+      //   echec:echec
+      // })
 
     }
     

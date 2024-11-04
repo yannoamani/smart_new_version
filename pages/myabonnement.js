@@ -13,37 +13,37 @@ const MyAbonnement=()=>{
     const [refreshing, setRefreshing] = useState(false);
     const [myabonnement, setMyabonnement] = useState([]);
     const [TextTranslate, setTextTranslate] = useState({
-      Abonnement:"Abonnement",
-      Moyen_paiement:"Moyen de paiement",
-      Montant:"Montant",
-      Reference:"Reference",
-      Statut:"Statut",
-      DatePayement:'Date de paiement',
-      DateFin:'Date de fin',
-      Actif:"Actif",
-      Expire:"Expire"
+      Abonnement:lang=="fr"?"Abonnement":"Subscription",
+      Moyen_paiement:lang=="fr"?"Moyen de paiement":"Payment method",
+      Montant:lang=="fr"?"Montant":"Amount",
+      Reference:lang=="fr"?"Reference":"Reference",
+      Statut:lang=="fr"?"Statut":"Status",
+      DatePayement:lang=="fr"?"Date de paiement":"Payment date",
+      DateFin:lang=="fr"?"Date de fin":"End date",
+      Actif:lang=="fr"?"Actif":"Active",
+      Expire:lang=="fr"?"Expire":"Expired"
     });
     const translation= async() => {
-      const abonnement=await translateText(TextTranslate.Abonnement, lang);
-      const moyen_paiement=await translateText(TextTranslate.Moyen_paiement, lang);
-      const Montant=await translateText(TextTranslate.Montant, lang);
-      const reference=await translateText(TextTranslate.Reference, lang);
-      const statut=await translateText(TextTranslate.Statut, lang);
-      const datePayement=await translateText(TextTranslate.DatePayement, lang);
-      const dateFin=await translateText(TextTranslate.DateFin, lang);
-      const actif=await translateText(TextTranslate.Actif, lang);
-      const expire=await translateText(TextTranslate.Expire, lang);
-      setTextTranslate({
-        Abonnement:abonnement,
-        Moyen_paiement:moyen_paiement,
-        Montant:Montant,
-        Reference:reference,
-        Statut:statut,
-        DatePayement:datePayement,
-        DateFin:dateFin,
-        Actif:actif,
-        Expire:expire
-      })
+      // const abonnement=await translateText(TextTranslate.Abonnement, lang);
+      // const moyen_paiement=await translateText(TextTranslate.Moyen_paiement, lang);
+      // const Montant=await translateText(TextTranslate.Montant, lang);
+      // const reference=await translateText(TextTranslate.Reference, lang);
+      // const statut=await translateText(TextTranslate.Statut, lang);
+      // const datePayement=await translateText(TextTranslate.DatePayement, lang);
+      // const dateFin=await translateText(TextTranslate.DateFin, lang);
+      // const actif=await translateText(TextTranslate.Actif, lang);
+      // const expire=await translateText(TextTranslate.Expire, lang);
+      // setTextTranslate({
+      //   Abonnement:abonnement,
+      //   Moyen_paiement:moyen_paiement,
+      //   Montant:Montant,
+      //   Reference:reference,
+      //   Statut:statut,
+      //   DatePayement:datePayement,
+      //   DateFin:dateFin,
+      //   Actif:actif,
+      //   Expire:expire
+      // })
       
     }
 

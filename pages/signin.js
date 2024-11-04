@@ -52,24 +52,24 @@ export default function Signin() {
   const [policeRegular, setPoliceRegular] = useState("Poppins_400Regular");
   const [policeLight, setPoliceLight] = useState("Poppins_300Light_Italic");
   const [TextTransaction, setTextTransaction] = useState({
-  title:"Bienvenue sur Smart Connect",
-  soutitre:"Inscrivez-vous en renseignant les champs spéciaux",
-  Identifiant:"Identifiant",
-  Habitation:"Habitation",
-  Qualification:"Qualification",
-  inscrire:"S'inscrire",
-  HaveAccount:"Vous avez deja un compte ?",
-  Connect:"Connectez-vous",
-  cliquezici:"Cliquez pour ajouter votre piece",
-  Nom:"Nom",
-  Prenom:"Prenom",
-  Phone:"Numéro de télephone",
-  Email:"Emai",
-  Password:"Mot de passe",
-  Ville:"Ville",
-  Commune:"Commune",
-  Quartier:"Quartier",
-  Diplome:"Mot de passe",
+  title: lang == "fr" ? "Bienvenue sur Smart Connect" : "Welcome to Smart Connect",
+  soutitre:lang=="fr"?"Inscrivez-vous en renseignant les champs spéciaux":"Fill in the required fields",
+  Identifiant: lang == "fr" ? "Identifiant" : "Identifier",
+  Habitation: lang == "fr" ? "Habitation" : "Home",
+  Qualification: lang == "fr" ? "Qualification" : "Qualification",
+  inscrire: lang == "fr" ? "S'inscrire" : "Sign up",
+  HaveAccount: lang == "fr" ? "Vous avez deja un compte ?" : " have an account ?",
+  Connect: lang == "fr" ? "Connectez-vous" : "Log in",
+  cliquezici: lang == "fr" ? "Cliquez pour ajouter votre piece" : "Click to add your piece",
+  Nom: lang == "fr" ? "Nom" : "Name",
+  Prenom: lang == "fr" ? "Prenom" : "First name",
+  Phone: lang == "fr" ? "Numéro de numéro" : "Phone number",
+  Email:"Email",
+  Password:lang=="fr"?"Mot de passe":"Password",
+  Ville:lang=="fr"?"Ville":"City",
+  Commune:lang=="fr"?"Commune":"Municipality",
+  Quartier:lang=="fr"?"Quartier":"Neighborhood",
+  Diplome: lang == "fr" ? "Diplome" : "Diploma",
 
 
   });
@@ -98,30 +98,30 @@ export default function Signin() {
       const quartier= await translateText("Quartier", lang);
       const diplome = await translateText("Diplôme", lang);
     const password= await translateText("Mot de passe", lang); 
- setTextTransaction({
-      title:welcomeTitle,
-      soutitre:soutitre,
-      Identifiant:identifiant,
-      Habitation:habitation,
-      Qualification:qualification,
-      inscrire:inscire,
-      HaveAccount: haveAccount,
-      cliquezici:cliquer,
-      Connect:connect,
-      Password:password,
-     Nom:nom,
-     Prenom:prenom,
-     Email:email,
-     Phone:phone,
-     Ville:ville,
-     Commune:commune,
-     Quartier:quartier,
-     Diplome:diplome
+//  setTextTransaction({
+//       title:welcomeTitle,
+//       soutitre:soutitre,
+//       Identifiant:identifiant,
+//       Habitation:habitation,
+//       Qualification:qualification,
+//       inscrire:inscire,
+//       HaveAccount: haveAccount,
+//       cliquezici:cliquer,
+//       Connect:connect,
+//       Password:password,
+//      Nom:nom,
+//      Prenom:prenom,
+//      Email:email,
+//      Phone:phone,
+//      Ville:ville,
+//      Commune:commune,
+//      Quartier:quartier,
+//      Diplome:diplome
 
 
 
 
-     })
+//      })
 
 
       
@@ -510,7 +510,7 @@ export default function Signin() {
            </View>
           </Pressable>
           <View style={{ height: 30 }}></View>
-          <Text style={{textAlign:"center", fontFamily:policeRegular}}>{TextTransaction.Connect}<Text style={{color:"#F38B2B", fontWeight:'bold', fontFamily:policeBold}} onPress={() => navigation.navigate('Login')}>{t('Connect')} </Text></Text>
+          <Text style={{textAlign:"center", fontFamily:policeRegular}}>{TextTransaction.Connect}<Text style={{color:"#F38B2B", fontWeight:'bold', fontFamily:policeBold}} onPress={() => navigation.navigate('Login')}>{TextTransaction.HaveAccount} </Text></Text>
 
           
           </View>

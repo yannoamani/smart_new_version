@@ -7,21 +7,21 @@ import { useSelector } from 'react-redux';
 
 
 const StepOne = () => {
-
+    const language = useSelector((state) => state.translate.lang);
     // const { t } = useTranslation();
     const [policeBold, setPolices] = useState("Poppins_700Bold")
     const [policeRegular, setPoliceRegular] = useState("Poppins_400Regular")
     const [policeLight, setPoliceLight] = useState("Poppins_300Light_Italic")
     const navigation = useNavigation();
     const [texttranslate, setTexttranslate] = useState({
-        welcome:"",
-        subtitle:"",
-        passer:"",
-    suivant:""
+        welcome:language=="fr"?"Bienvenue sur":"Welcome to",
+        subtitle:language=="fr"?"Connectez-vous facilement avec des entreprises pour des projets enrichissants pendant votre temps libre.":"Connect easily with companies for enriching projects during your free time.",
+        passer:language=="fr"?"Passer":"Skip",
+    suivant:language=="fr"?"Suivant":"Next"
 
     })
 
-    const language = useSelector((state) => state.translate.lang);
+  
     // const dispatch = useDispatch();
     const translation= async () =>{
     //   const lang =  await AsyncStorage.getItem("lang");
@@ -34,7 +34,7 @@ const StepOne = () => {
    return setTexttranslate({welcome:welcomeTitle, subtitle:soutitle, passer:skip, suivant:next})
     }
     useEffect( () => {
-        translation()
+        // translation()
 
 // await translation()
     // const fetchTranslation = async () => {

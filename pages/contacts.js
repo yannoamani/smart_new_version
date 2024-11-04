@@ -6,9 +6,12 @@ import { displayDate, isDateTimeGreaterThanCurrent } from "../Utils";
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
+import translateText from "../pages/store/TranslationUtils"
+import { useSelector } from 'react-redux';
 
 
 export default function Contacts() {
+  const lang = useSelector((state) => state.translate.lang);
     const navigation = useNavigation();
     const [data, setData] = useState();
     const [already, setAlready] = useState(false)
@@ -18,6 +21,7 @@ export default function Contacts() {
     const [policeBold, setPolices] = useState("Poppins_700Bold");
     const [policeRegular, setPoliceRegular] = useState("Poppins_400Regular");
     const [policeLight, setPoliceLight] = useState("Poppins_300Light_Italic");
+
     const getOffers = async () => {
         try {
             const token = await AsyncStorage.getItem('token')
@@ -25,10 +29,21 @@ export default function Contacts() {
                 axios.defaults.headers.common.Authorization = `Bearer ${token}`;
             }
             const res = await axios.get('get_who_contact_student');
-            setData(res.data.entreprises);
+           
             setLoading(false)
-            console.log("contacts   ", res.data);
-            console.log("count", data.length);
+            const myoffers=res.data.entreprises;
+            const translateAll= await Promise.all(
+                myoffers.map(async (offer) => {
+                    return {
+                        ...offer,
+                        nom_offre: await translateText(offer.pivot.offre.nom_offre, lang),
+                        description: await translateText(offer.pivot.offre.description, lang),
+                    }
+                })
+            )
+            setData(translateAll);
+            console.log("contacts ", data);
+            console.log("count");
             setRefreshing(false);
         } catch (error) {
             console.log(error);
@@ -90,7 +105,7 @@ export default function Contacts() {
 
         // // Clean up the interval when the component unmounts
         //return () => clearInterval(intervalId);
-    }, []);
+    }, [lang]);
 
     const renderItem = ({ item }) => {
     const time = displayDate(item.created_at);
@@ -108,7 +123,7 @@ export default function Contacts() {
           }}
         >
          <View style={style.rate}> 
-         <Text style={style.titleText}>{item.pivot.offre.nom_offre.toUpperCase()}</Text>
+         <Text style={style.titleText}>{item.nom_offre.toUpperCase()}</Text>
       
          </View>
           <Text style={style.lieu}>{item.pivot.offre.nom_offre.lieu}</Text>
@@ -118,7 +133,7 @@ export default function Contacts() {
           <View style={style.contimage}>
             <Image source={require("../assets/emploijeune.png")} style={style.image}></Image>
           </View>
-          <Text  numberOfLines={3} ellipsizeMode="tail" style={style.description}> {item.pivot.offre.description.toUpperCase().replace(/<[^>]*>|&nbsp;/g, ' ').trim().toUpperCase().split('  ')}</Text>
+          <Text  numberOfLines={3} ellipsizeMode="tail" style={style.description}> {item.description.toUpperCase().replace(/<[^>]*>|&nbsp;/g, ' ').trim().toUpperCase().split('  ')}</Text>
 
           </View>
         

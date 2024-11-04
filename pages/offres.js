@@ -31,17 +31,17 @@ translate.engine = "deepl";
 translate.key ="98c4da1d-6d65-4402-9c30-510b68d6a3fa:fx";
 
 export default function List() {
-  
+  const lang = useSelector((state) => state.translate.lang);
   const { t } = useTranslation();
   const [texttranslate, setTextTransaction]=useState({
-    Bienvenue:"Bienvenue",
+    Bienvenue:lang==="fr"?"Bienvenue":"Welcome",
     Tout: "Tout",
-    Nooffres:"Pas d'offres Disponible",
-    OffrsDispo:"Les offres disponibles"
+    Nooffres:lang==="fr"?"Pas d'offres disponible":"No offers available",
+    OffrsDispo:lang==="fr"?"Les offres disponibles":"Offers available"  
     
 
   });
-  const lang = useSelector((state) => state.translate.lang);
+ 
   const navigation = useNavigation();
   const [data, setData] = useState();
   const [already, setAlready] = useState(false);
@@ -64,23 +64,23 @@ export default function List() {
 
   
      
-      const bienvenue= await translate("Bienvenue",  { from: 'fr', to: lang  });
-      const tout= await translate("Tout",  { from: 'fr', to: lang});
-      const noOffrs= await translate("Pas d'offres disponible", { from: 'fr', to: lang });
-      const offrsDispo= await translate("Les offres disponibles", { from: 'fr', to: lang });
+      // const bienvenue= await translate("Bienvenue",  { from: 'fr', to: lang  });
+      // const tout= await translate("Tout",  { from: 'fr', to: lang});
+      // const noOffrs= await translate("Pas d'offres disponible", { from: 'fr', to: lang });
+      // const offrsDispo= await translate("Les offres disponibles", { from: 'fr', to: lang });
 
       
-      setTextTransaction({
-        Bienvenue:bienvenue,
-        Tout:tout,
-        Nooffres:noOffrs,
-        OffrsDispo:offrsDispo
+      // setTextTransaction({
+      //   Bienvenue:bienvenue,
+      //   Tout:tout,
+      //   Nooffres:noOffrs,
+      //   OffrsDispo:offrsDispo
         
-      })
+      // })
     
     
   }
-  const [select, setSelect] = useState("Tout");
+  const [select, setSelect] = useState(t('Tout'));
 
 
 
@@ -135,7 +135,7 @@ export default function List() {
     
     
     
-      Setcategorie([{ id: 0, categorie:"Tout"}]);
+      Setcategorie([{ id: 0, categorie:t('Tout')}]);
       const res = await axios.get("seeCategorie");
       const data = res.data.data;
       console.log("La liste des categorie", data);

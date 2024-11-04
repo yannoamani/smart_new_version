@@ -5,8 +5,12 @@ import axios from "axios";
 import { displayDate } from "../Utils";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Ionicons } from "@expo/vector-icons";
+import translateText from "../pages/store/TranslationUtils"
+import { useSelector } from 'react-redux';
+
 
 export default function Favories() {
+  const lang = useSelector((state) => state.translate.lang);
     const navigation = useNavigation();
     const [favories, setFavories] = useState([]);
     const [refreshing, setRefreshing] = useState(false);
@@ -75,13 +79,22 @@ export default function Favories() {
           if (abonnement.status == 200) {
             //  console.log(abonnement.data[0]);
           const data=abonnement.data.data.favoris;
+          const Translations= await Promise.all(
+            data.map(async (item) => {
+              return {
+                ...item,
+                offre_nom: await translateText(item.offre.nom_offre, lang),
+                offre_description: await translateText(item.offre.description, lang),
+              };
+            })
+          )
           
-        setFavories(data);
+        setFavories(Translations);
        
          
         
          
-            console.log('mes favories',data, token);
+            // console.log('mes favories',favories, T);
             
       
        
@@ -113,7 +126,7 @@ export default function Favories() {
               }}
             >
              <View style={mystyle.rate}> 
-             <Text style={mystyle.titleText}>{item.offre.nom_offre}</Text>
+             <Text style={mystyle.titleText}>{item.offre_nom}</Text>
             {
               like ? <Ionicons name="heart" size={20} color="#F38B2B" onPress={() => {
                 
@@ -128,7 +141,7 @@ export default function Favories() {
               <View style={mystyle.contimage}>
                 <Image source={require("../assets/emploijeune.png")} style={mystyle.image}></Image>
               </View>
-              <Text  numberOfLines={3} ellipsizeMode="tail" style={mystyle.description}> {item.offre.description.toUpperCase().replace(/<[^>]*>|&nbsp;/g, ' ').trim().toUpperCase().split('  ')}</Text>
+              <Text  numberOfLines={3} ellipsizeMode="tail" style={mystyle.description}> {item.offre_description.toUpperCase().replace(/<[^>]*>|&nbsp;/g, ' ').trim().toUpperCase().split('  ')}</Text>
     
               </View>
             

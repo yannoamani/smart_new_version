@@ -29,40 +29,40 @@ export default function AddSchedule() {
   const [loading, setLoading] = useState(false);
   const lang = useSelector((state) => state.translate.lang);
   const [TextTranslation, setTextTransaction] = useState({
-    Title:"Ajouter votre emploi du temps",
-    HeureDeb:"Heure de Début",
-    HeureFin:"Heure de Fin",
-    Date:"Date",
-    Ajouter:"Ajouter",
-    Succes:"Succes",
-    Echec:"Echec",
-    bodySucces:"Plage horaire ajoutée avec succès",
-    valeurValide:"Entrez des valeurs valides."
+    Title: lang=="fr"?"Ajouter votre plage horaire":"Add your schedule",
+    HeureDeb:lang=="fr"?"Heure de Début":"Start time",
+    HeureFin:lang=="fr"?"Heure de Fin":"End time",
+    Date:lang=="fr"?"Date":"Date",
+    Ajouter:lang=="fr"?"Ajouter":"Add",
+    Succes:lang=="fr"?"Succes":"Success",
+    Echec:lang=="fr"?"Echec":"Failed",
+    bodySucces:lang=="fr"?"Plage horaire ajoutée avec succès":"Added schedule successfully",
+    valeurValide:lang=="fr"?"Entrez des valeurs valides.":"Enter valid values.",
   });
   const Translation =async() => {
 
-    const title=await translateText("Ajouter votre plage horaire",lang);
+    // const title=await translateText("Ajouter votre plage horaire",lang);
 
-    const heureDeb=await translateText("Heure de Début",lang);
-    const heureFin=await translateText("Heure de Fin", lang);
-    const date=await translateText("Date", lang);
-    const ajouter=await translateText("Ajouter", lang);
-    const succes=await translateText("Succes", lang);
-    const echec=await translateText("Echec", lang);
-    const bodySucces=await translateText("Plage horaire ajoutée avec succès", lang);
-    const valeurValide=await translateText("Entrez des valeurs valides.", lang);
+    // const heureDeb=await translateText("Heure de Début",lang);
+    // const heureFin=await translateText("Heure de Fin", lang);
+    // const date=await translateText("Date", lang);
+    // const ajouter=await translateText("Ajouter", lang);
+    // const succes=await translateText("Succes", lang);
+    // const echec=await translateText("Echec", lang);
+    // const bodySucces=await translateText("Plage horaire ajoutée avec succès", lang);
+    // const valeurValide=await translateText("Entrez des valeurs valides.", lang);
 
-    setTextTransaction({
-      Title:title,  
-      HeureDeb:heureDeb,
-      HeureFin:heureFin,
-      Date:date,
-      Ajouter:ajouter,
-      Succes:succes,
-      Echec:echec,
-      bodySucces:bodySucces,
-      valeurValide:valeurValide
-    })
+    // setTextTransaction({
+    //   Title:title,  
+    //   HeureDeb:heureDeb,
+    //   HeureFin:heureFin,
+    //   Date:date,
+    //   Ajouter:ajouter,
+    //   Succes:succes,
+    //   Echec:echec,
+    //   bodySucces:bodySucces,
+    //   valeurValide:valeurValide
+    // })
 
  
 

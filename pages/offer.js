@@ -32,47 +32,47 @@ export default function Offer({route }) {
     const [exist, setExist] = useState(false);
     const { t } = useTranslation();
     const [TextTransaction, setTextTransaction] = useState({
-      DetailsOffre:"Details sur l'offre",
-      Nopostule:"Vous n'avez pas encore postule",
-      HavePosule:"Vous avez deja postule",
-      Du:"Du",
-      Au:"Au",
-      Postuler:"Postuler",
-      Echec:"",
-      Succes:"Succes",
-      PostulSucces:"Vous avez postulé avec succès",
+      DetailsOffre:lang==="fr"?"Details sur l'offre":"Detail of offer",
+      Nopostule: lang==="fr"?"Vous n'avez pas encore postule":"You have not yet applied",
+      HavePosule:lang==="fr"?"Vous avez deja postule":"You have already applied",
+      Du:lang==="fr"?"Du":"From",
+      Au:lang==="fr"?"Au":"To",
+      Postuler:lang==="fr"?"Postuler":"Apply",
+      Echec:lang==="fr"?"Echec":"Failed",
+      Succes:lang==="fr"?"Succes":"Success",
+      PostulSucces:lang==="fr"?"Postuler avec succes":"Applied successfully",
       
       
     });
     const Translation=async()=>{
  
 
-      const detailsOffres=await translate("Details sur l'offre", { from: 'fr', to: lang  });
+    //   const detailsOffres=await translate("Details sur l'offre", { from: 'fr', to: lang  });
 
-      const nopostule=await translate("Vous n'avez pas encore postule", { from: 'fr', to: lang  });
+    //   const nopostule=await translate("Vous n'avez pas encore postule", { from: 'fr', to: lang  });
 
-      const havePosule=await translate("Vous avez deja postule", { from: 'fr', to: lang });
+    //   const havePosule=await translate("Vous avez deja postule", { from: 'fr', to: lang });
 
-      const du=await translate("Du", { from: 'fr', to: lang  });
+    //   const du=await translate("Du", { from: 'fr', to: lang  });
 
-      const au=await translate("Au", { from: 'fr', to: lang  });
-    const postulesucess=await translate("Postuler avec succes", { from: 'fr', to: lang  });
-    const succes=await translate("Succes", { from: 'fr', to: lang  });
-      const postuler=await translate("Postuler", { from: 'fr', to: lang  });
-      const echec=await translate("Echec", { from: 'fr', to: lang });
+    //   const au=await translate("Au", { from: 'fr', to: lang  });
+    // const postulesucess=await translate("Postuler avec succes", { from: 'fr', to: lang  });
+    // const succes=await translate("Succes", { from: 'fr', to: lang  });
+    //   const postuler=await translate("Postuler", { from: 'fr', to: lang  });
+    //   const echec=await translate("Echec", { from: 'fr', to: lang });
     
 
-      setTextTransaction({
-        DetailsOffre:detailsOffres,
-        Nopostule:nopostule,
-        HavePosule:havePosule,
-        Du:du,
-        Au:au,
-        Postuler:postuler,
-        Echec:echec,
-        PostulSucces:postulesucess,
-        Succes:succes
-      })
+    //   setTextTransaction({
+    //     DetailsOffre:detailsOffres,
+    //     Nopostule:nopostule,
+    //     HavePosule:havePosule,
+    //     Du:du,
+    //     Au:au,
+    //     Postuler:postuler,
+    //     Echec:echec,
+    //     PostulSucces:postulesucess,
+    //     Succes:succes
+    //   })
     }
     // const conversion=()=>{
     //  return   setDesc(detailsOffres.description.replace(/<[^>]*>|&nbsp;/g, ' ').trim().toUpperCase().split('  '))

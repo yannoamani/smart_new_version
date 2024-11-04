@@ -16,9 +16,9 @@ const StepThree = () => {
 
     const navigation = useNavigation();
     const [texttranslate, setTexttranslate] = useState({
-        welcome:"",
-        subtitle:"",
-        commencer:""
+        welcome: language=="fr"?"Votre prochain job est à portée de main":"Your next job is on the way",
+        subtitle:language=="fr"?"Explorez une multitude de petits boulots disponibles instantanément. Ne perdez plus de temps, commencez simplement !":"Explore an endless variety of small jobs. Don't waste time, start now!",
+        commencer:language=="fr"?"Commencer":"Start"
        
     
 

@@ -13,20 +13,13 @@ const AcceuilAbonnement=()=>{
     const [policeLight, setPoliceLight] = useState("Poppins_300Light_Italic");
     const navigation = useNavigation();
     const [TextTranslate, setTextTranslate] = useState({
-        Souscrire:"Faire un abonnement",
-        MesAbonnements:"Mes abonnements",
+        Souscrire:lang=="fr"?"Faire un abonnement":"Subscribe",
+        MesAbonnements:lang=="fr"?"Mes abonnements":"My subscriptions",
     });
-    const translation= async () =>{
-       const souscrire=await translateText("Faire un abonnement",lang);
-       const MesAbonnements=await translateText("Mes abonnements",lang);
-       setTextTranslate({
-        Souscrire:souscrire,
-        MesAbonnements:MesAbonnements
-       })
-    }
+  
 
     useEffect(() => {
-        translation();
+     
 
       }, [lang]);
     return(

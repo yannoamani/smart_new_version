@@ -40,44 +40,44 @@ export default function Appliance({route}) {
     const [desc, setDesc] = useState();
     const [isModalVisible, setModalVisible] = useState(false);
     const [TextTranslation, setTextTransaction] = useState({
-        Accepter:"Accepter",
-        Refuser:"Refuser",
-        Download:"Telecharger votre attentation",
-        description:"Description de l'offre",
-        Comment:"Commenter l'offre",
-        EnAttente:'En attente',
-        Appreciation:"Quelle est votre appréciation pour cette offre ?",
-        Envoyer:"Envoyer",
-        EnterComment:"Entrez votre commentaire",
-        Personne:"Entrez votre commentaire",
+        Accepter:lang=='fr'?"Accepter":"Accept",
+        Refuser:lang=='fr'?"Refuser":"Refuse",
+        Download:lang=='fr'?"Telecharger votre attestation ici":"Download your attestation here",
+        description:lang=='fr'?"Description de l'offre":"Offer description",
+        Comment:lang=='fr'?"Commenter l'offre":"Comment the offer",
+        EnAttente:lang=='fr'?"En attente":"Waiting",
+        Appreciation:lang=='fr'?"Quelle est votre appréciation pour cette offre ?":"What is your appreciation for this offer ?",
+        Envoyer:lang=='fr'?"Envoyer":"Send",
+        EnterComment:lang=='fr'?"Entrez votre commentaire":"Enter your comment",
+        Personne:lang=="fr"?"Entrez votre commentaire":"Enter your comment",
     });
     const Translation=async()=>{
       
 
-        const accepter=await translate("Accepter", { from: 'fr', to: lang === 'en' ? 'en' : 'fr' });
-        const refuser=await translate("Refuser", { from: 'fr', to: lang === 'en' ? 'en' : 'fr' });
-        const download=await translate("Telecharger votre attestation ici", { from: 'fr', to: lang === 'en' ? 'en' : 'fr' });
-        const description=await translate("Description de l'offre", { from: 'fr', to: lang === 'en' ? 'en' : 'fr' });
-        const comment=await translate("Commenter l'offre", { from: 'fr', to: lang === 'en' ? 'en' : 'fr' });
-        const enAttente= await translate("En attente", { from: 'fr', to: lang === 'en' ? 'en' : 'fr' });
-        const appreciation= await translate("Quelle est votre appréciation pour cette offre ?", { from: 'fr', to: lang === 'en' ? 'en' : 'fr' });
-        const envoyer=await translate("Envoyer", { from: 'fr', to: lang === 'en' ? 'en' : 'fr' });
-        const enterComment=await translate("Entrez votre commentaire", { from: 'fr', to: lang === 'en' ? 'en' : 'fr' });
-        const personne=await translate("Personnes(s)", { from: 'fr', to: lang === 'en' ? 'en' : 'fr' });
+        // const accepter=await translate("Accepter", { from: 'fr', to: lang === 'en' ? 'en' : 'fr' });
+        // const refuser=await translate("Refuser", { from: 'fr', to: lang === 'en' ? 'en' : 'fr' });
+        // const download=await translate("Telecharger votre attestation ici", { from: 'fr', to: lang === 'en' ? 'en' : 'fr' });
+        // const description=await translate("Description de l'offre", { from: 'fr', to: lang === 'en' ? 'en' : 'fr' });
+        // const comment=await translate("Commenter l'offre", { from: 'fr', to: lang === 'en' ? 'en' : 'fr' });
+        // const enAttente= await translate("En attente", { from: 'fr', to: lang === 'en' ? 'en' : 'fr' });
+        // const appreciation= await translate("Quelle est votre appréciation pour cette offre ?", { from: 'fr', to: lang === 'en' ? 'en' : 'fr' });
+        // const envoyer=await translate("Envoyer", { from: 'fr', to: lang === 'en' ? 'en' : 'fr' });
+        // const enterComment=await translate("Entrez votre commentaire", { from: 'fr', to: lang === 'en' ? 'en' : 'fr' });
+        // const personne=await translate("Personnes(s)", { from: 'fr', to: lang === 'en' ? 'en' : 'fr' });
 
-        setTextTransaction({
-            Accepter:accepter,
-            Refuser:refuser,
-            Download:download,
-            description:description,
-            Comment:comment,
-            EnAttente:enAttente,
-            Appreciation:appreciation,
-            Envoyer:envoyer,
-            EnterComment:enterComment,
-            Personne:personne
+        // setTextTransaction({
+        //     Accepter:accepter,
+        //     Refuser:refuser,
+        //     Download:download,
+        //     description:description,
+        //     Comment:comment,
+        //     EnAttente:enAttente,
+        //     Appreciation:appreciation,
+        //     Envoyer:envoyer,
+        //     EnterComment:enterComment,
+        //     Personne:personne
 
-        })
+        // })
     }
 
     

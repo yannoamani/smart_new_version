@@ -28,55 +28,59 @@ export default function Contact({route}) {
   const [policeRegular, setPoliceRegular] = useState("Poppins_400Regular");
   const [policeLight, setPoliceLight] = useState("Poppins_300Light_Italic");
   const [texttranslate, setTexttranslate] = useState({
-    DDetailsOofre:"Details de l'offre",
-    DateCloture:"Date de cloture",
-    Refuser:"Refuser",
-    Accepter:"Accepter",
-    RefusOffre:"Vous avez refusée cette l'offre ",
-    AccepterOffre:"Offre acceptée",
-    reponder:"Repondre",
-    Download:"Telecharger votre attestation ici",
-    Question:"Voulez-vous accepter cette offre ?",
-    Yes:"Oui",
-    No:"Non",
-Attendre:"Attendre",
-Succes:"Succes",
+    DDetailsOofre:lang=="fr"?"Details de l'offre":"Offer details",
+    DateCloture:lang=="fr"?"Date de cloture":"Closing date",
+    Refuser:lang=="fr"?"Refuser":"Refuse",
+    Accepter:lang=="fr"?"Accepter":"Accept",
+    RefusOffre:lang=="fr"?"Vous avez refusée cette l'offre":"You have refused this offer",
+    AccepterOffre:lang=="fr"?"Offre acceptée":"Offer accepted",
+    reponder:lang=="fr"?"Repondre":"Respond",
+    Download:lang=="fr"?"Telecharger votre attestation ici":"Download your attestation here",
+    Question:lang=="fr"?"Voulez-vous accepter cette offre ?":"Do you want to accept this offer ?",
+    Yes: lang=="fr"?"Oui":"Yes",
+    No: lang=="fr"?"Non":"No",
+Attendre:lang=="fr"?"En attente":"Waiting",
+Succes:lang=="fr"?"Succes":"Success",
+DownloadSucces:lang=="fr"?"Telecharger réussie":"Download success",
+bodyDownloadSuccess:lang=="fr"?"Veillez vous rendre dans notre siège avec ce document":"Please visit our office with this document",
+
 
   })
     const translation = async () => {
       
-        const detailsOofre = await translate("Details de l'offre", { from: 'fr', to: lang });
-        const dateCloture = await translate("Date de cloture", { from: 'fr', to: lang });
+        // const detailsOofre = await translate("Details de l'offre", { from: 'fr', to: lang });
+        // const dateCloture = await translate("Date de cloture", { from: 'fr', to: lang });
        
-        const refuser = await translate("Refuser", { from: 'fr', to: lang  });
-        const accepter = await translate("Accepter", { from: 'fr', to: lang  });
-        const refusOffre = await translate("Vous avez refusée cette l'offre", { from: 'fr', to: lang  });
-        const accepterOffre = await translate("Offre acceptée", { from: 'fr', to: lang  });
-        const download = await translate("Telecharger votre attestation ici", { from: 'fr', to: lang });
-        const question = await translate("Voulez-vous accepter cette offre ?", { from: 'fr', to: lang  });
-        const yes = await translate("Oui", { from: 'fr', to: lang  });
-        const no = await translate("Non", { from: 'fr', to: lang  });
-        const repondre = await translate("Repondre", { from: 'fr', to: lang  });
-        const succes = await translate("Succes", { from: 'fr', to: lang  });
-        setTexttranslate({
-            DDetailsOofre:detailsOofre,
-         DateCloture:dateCloture,
-            Refuser:refuser,
-            Accepter:accepter,
-            RefusOffre:refusOffre,
-            AccepterOffre:accepterOffre,
-            Download:download,
-            Question:question,
-            Yes:yes,
-            No:no,
-            reponder:repondre,
-            Attendre:await translate("Attendre", { from: 'fr', to: lang === 'en' ? 'en' : 'fr' }),
-            Succes:succes
+        // const refuser = await translate("Refuser", { from: 'fr', to: lang  });
+        // const accepter = await translate("Accepter", { from: 'fr', to: lang  });
+        // const refusOffre = await translate("Vous avez refusée cette l'offre", { from: 'fr', to: lang  });
+        // const accepterOffre = await translate("Offre acceptée", { from: 'fr', to: lang  });
+        // const download = await translate("Telecharger votre attestation ici", { from: 'fr', to: lang });
+        // const question = await translate("Voulez-vous accepter cette offre ?", { from: 'fr', to: lang  });
+        // const yes = await translate("Oui", { from: 'fr', to: lang  });
+        // const no = await translate("Non", { from: 'fr', to: lang  });
+        // const repondre = await translate("Repondre", { from: 'fr', to: lang  });
+        // const succes = await translate("Succes", { from: 'fr', to: lang  });
+        // setTexttranslate({
+        //     DDetailsOofre:detailsOofre,
+        //  DateCloture:dateCloture,
+        //     Refuser:refuser,
+        //     Accepter:accepter,
+        //     RefusOffre:refusOffre,
+        //     AccepterOffre:accepterOffre,
+        //     Download:download,
+        //     Question:question,
+        //     Yes:yes,
+        //     No:no,
+        //     reponder:repondre,
+        //     Attendre:await translate("Attendre", { from: 'fr', to: lang === 'en' ? 'en' : 'fr' }),
+        //     Succes:succes
 
 
       
         
-        })}
+        // })
+      }
     const getOffer = async () => {
         try {
             if (data.pivot.offre.description[0] === '<') {
@@ -173,7 +177,7 @@ Succes:"Succes",
       to: fileUri,
     });
     
-    Alert.alert('Téléchargement réussi', `Le PDF a été téléchargé ici : ${fileUri}`);
+    Alert.alert(texttranslate.DownloadSucces, texttranslate.bodyDownloadSuccess);
     
     // Partager le PDF
     await  shareAsync(fileUri, {
@@ -206,7 +210,7 @@ Succes:"Succes",
     useEffect(() => {
         getOffer();
         getuser();
-translation()
+// translation()
         console.log("data",data);
         const interval= setInterval(async () => {
       const abonement = await AsyncStorage.getItem('abonnement');
@@ -239,13 +243,13 @@ translation()
         {data ? (
                 <View >
                 <View style={style.container}>
-                <Text style={style.detailoffre} >{texttranslate.DDetailsOofre}</Text>
+                <Text style={[style.detailoffre,{fontFamily:policeRegular}]} >{texttranslate.DDetailsOofre}</Text>
                 <View style={style.subtile}>
                 <Ionicons name={"location-outline"} color={'black'} size={20}></Ionicons>
                 <View style={{width:3}}></View>
                 <View>
-                    <Text style={style.nom_entreprise}>{data.nom}</Text>
-                    <Text style={style.location}>{data.pivot.offre.lieu}</Text>
+                    <Text style={[style.nom_entreprise,{fontFamily:policeRegular}]}>{data.nom}</Text>
+                    <Text style={[style.location,,{fontFamily:policeRegular}]}>{data.pivot.offre.lieu}</Text>
                 </View>
                  </View>
                  <View style={{height:15}}></View>
@@ -257,7 +261,7 @@ translation()
               <View style={{width:10}}></View>
               
               
-   <Text style={style.info}>{data.email}</Text>
+   <Text style={[style.info,{fontFamily:policeRegular}]}>{data.email}</Text>
    </View>
    <View style={{height:15}}></View>
    <View style={{flexDirection:'row', alignItems:'center', width:'100%'}}>
@@ -267,7 +271,7 @@ translation()
               size={20 } />
               <View style={{width:10}}></View>
               
-   <Text  style={style.info}>{data.contact}</Text>
+   <Text  style={[style.info,{fontFamily:policeRegular}]}>{data.contact}</Text>
    
   </View>
   <View style={{height:15}}></View>
@@ -279,7 +283,7 @@ translation()
               size={20 } />
               <View style={{width:10}}></View>
               
-   <Text  style={style.info}>{ data.pivot.offre.salaire} FCFA </Text>
+   <Text  style={[style.info,{fontFamily:policeRegular}]}>{ data.pivot.offre.salaire} FCFA </Text>
    </View>
       }
       <View style={{height:15}}></View>
@@ -293,23 +297,33 @@ translation()
  }
               <View style={{width:10}}></View>
               
- <Text style={style.info}>{data.pivot.contrat==1?texttranslate.Accepter:data.pivot.contrat==0? texttranslate.Attendre:texttranslate.Refuser}</Text>
+ <Text style={[style.info,{fontFamily:policeRegular}]}>{data.pivot.contrat==1?texttranslate.Accepter:data.pivot.contrat==0? texttranslate.Attendre:texttranslate.Refuser}</Text>
    </View>
    <View style={{height:15}}></View>
-   <Text style={style.date}>{texttranslate.DateCloture} :  {data.pivot.offre.fin}</Text>
+   <Text style={[style.date, {fontFamily:policeRegular}]}>{texttranslate.DateCloture} :  {data.pivot.offre.fin}</Text>
    
    </View>
    <View style={{height:25}}></View>{
     data.pivot.contrat==1? 
-    <Text style={{fontSize:20, fontWeight:'bold', padding:10, backgroundColor:'red'}} onPress={printToFileAndShare}>{texttranslate.Download}</Text>:null
+
+    <Pressable  onPress={printToFileAndShare}>
+          <View style={{padding:16, color:"black",borderWidth:1,  borderRadius:10,flexDirection:'row', alignItems:'center', }}>
+            <Ionicons name="download-outline" size={25} color="green"/>
+            <Text style={{fontFamily:policeRegular, fontSize:15, fontWeight:'500'}}> {texttranslate.Download}</Text>
+
+ {/* <Text style={{fontSize:20, fontWeight:'bold', padding:10, backgroundColor:'red' , color:'white'}} onPress={printToFileAndShare}>{TextTranslation.Download}</Text>:null */}
+          
+
+            </View>
+          </Pressable>: null
    }
    <View style={{height:25}}></View>
-        <Text style={style.titleDescription}>{data.pivot.offre.nom_offre}</Text>
+        <Text style={style.titleDescription}>{data.nom_offre}</Text>
         <View style={{height:25}}></View>
         
         <RenderHtml
       contentWidth={width}
-      source={{ html: data.pivot.offre.description }}
+      source={{ html: data.description }}
     />
 
                     {
@@ -437,13 +451,13 @@ const style = StyleSheet.create({
       info:{
         color:'black',
         fontWeight:'500',
-        fontSize: 10,
+        fontSize: 15,
         flex: 1
       },
       date:{
         color:'#FF0000',
         fontWeight:'500',
-        fontSize: 10
+        fontSize: 15
       },
       titleDescription:{
         color:'#F38B2B',

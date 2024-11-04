@@ -13,16 +13,16 @@ import { useSelector } from 'react-redux';
 export default function EditSchedule({route}) {
   const lang = useSelector((state) => state.translate.lang);
   const [TextTranslate, setTextTranslate] = useState({
-    ModifierPlage:"Modifier plage Horaire",
-    HeureDeb:"Heure de Début",
-    HeureFin:"Heure de Fin",
+    ModifierPlage:lang=="fr"?"Modifier votre plage horaire":"Edit your time slot",
+    HeureDeb:lang=="fr"?"Heure de Début":"Start time",
+    HeureFin:lang=="fr"?"Heure de Fin":"End time",
     Date:"Date",
-    Modifier:"Modifier",
-    Succes:"Succes",
-    Echec:"Echec",
+    Modifier:lang=="fr"?"Modifier":"Edit",
+    Succes:lang=="fr"?"Succes":"Success",
+    Echec:lang=="fr"?"Echec":"Fail",
 
-    bodySucces:"Plage horaire modifiée avec succès",
-    valeurValide:"Entrez des valeurs valides."
+    bodySucces:lang=="fr"?"Plage horaire modifiée avec succès":"Edited time slot successfully",
+    valeurValide:lang=="fr"?"Entrez des valeurs valides.":"Enter valid values.",
   });
     const { expR } = route.params || {};
   
@@ -69,32 +69,32 @@ export default function EditSchedule({route}) {
       hideshowTimePicker();
     };
     const translation =async ()=>{
-      const title=await translateText("Modifier votre plage horaire",lang);
-      const heureDeb=await translateText("Heure de Début",lang);
-      const heureFin=await translateText("Heure de Fin", lang);
-      const date=await translateText("Date", lang);
-      const ajouter=await translateText("Modifier", lang);
-      const succes=await translateText("Succes", lang);
-      const echec=await translateText("Echec", lang);
-      const bodySucces=await translateText("Plage horaire modifiée avec succès", lang);
-      const valeurValide=await translateText("Entrez des valeurs valides.", lang);
-      setTextTranslate({
-        ModifierPlage:title,
-        HeureDeb:heureDeb,
-        HeureFin:heureFin,
-        Date:date,
-        Modifier:ajouter,
-        Succes:succes,
-        Echec:echec,
-        bodySucces:bodySucces,
-        valeurValide:valeurValide
-      })
+      // const title=await translateText("Modifier votre plage horaire",lang);
+      // const heureDeb=await translateText("Heure de Début",lang);
+      // const heureFin=await translateText("Heure de Fin", lang);
+      // const date=await translateText("Date", lang);
+      // const ajouter=await translateText("Modifier", lang);
+      // const succes=await translateText("Succes", lang);
+      // const echec=await translateText("Echec", lang);
+      // const bodySucces=await translateText("Plage horaire modifiée avec succès", lang);
+      // const valeurValide=await translateText("Entrez des valeurs valides.", lang);
+      // setTextTranslate({
+      //   ModifierPlage:title,
+      //   HeureDeb:heureDeb,
+      //   HeureFin:heureFin,
+      //   Date:date,
+      //   Modifier:ajouter,
+      //   Succes:succes,
+      //   Echec:echec,
+      //   bodySucces:bodySucces,
+      //   valeurValide:valeurValide
+      // })
     }
   
       const navigation = useNavigation()
       useEffect(() => {
-        translation()
-      }, [lang]);
+        // translation()
+      }, []);
       return (
         <KeyboardAvoidingView 
                   style={{

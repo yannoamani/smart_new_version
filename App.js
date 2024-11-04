@@ -3,6 +3,7 @@ import React, { useState,useEffect } from 'react';
 import Login from './pages/login';
 import Signin from './pages/signin';
 import axios from 'axios';
+
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import OffersList from './pages/offres';
@@ -42,6 +43,7 @@ import Translate from './pages/Translate';
 import {Provider, useSelector} from "react-redux";
 import store from './pages/store';
 import translateText from "./pages/store/TranslationUtils"
+import NewSkills from './pages/newskills';
 
 
 
@@ -147,7 +149,7 @@ export default function App() {
       }}>
         <OfferStack.Screen name="Offres" component={OffersList} options={{headerShown: false}}  />
         <OfferStack.Screen name="Offer" component={Offer} options={{
-          headerTitle: "Détails de l'offre",
+          headerTitle: t('detailsOffre'),
           headerBackTitleVisible: false
         }} />
         <OfferStack.Screen name="favories" component={Favories} options={{
@@ -208,6 +210,10 @@ export default function App() {
           headerBackTitleVisible: false
         }}/>
         <ProfileStack.Screen name="Skills" component={Skills} options={{
+           headerTitle: t('addskills'),
+           headerBackTitleVisible: false
+        }} />
+        <ProfileStack.Screen name="newSkills" component={NewSkills} options={{
            headerTitle: t('addskills'),
            headerBackTitleVisible: false
         }} />

@@ -17,31 +17,32 @@ export default function Schedules() {
     const [refreshing, setRefreshing] = useState(false);
     const token = AsyncStorage.getItem('token')
     const [Traduction, setTraduction] = useState({
-        Jour: 'Jour',
-        De: 'De',
-        A: 'à',
-        Supprimer: 'Supprimer',
-        soustitre:"Voulez-vous supprimer cette plage d'horaires ?",
-        Yes:"Oui",
-        No:"Non"
+        Jour: lang=="fr"?"Jour":"Day",
+        De: lang=="fr"?"De":"From",
+        A: lang=="fr"?"à":"To",
+        Supprimer: lang=="fr"?"Supprimer":"Delete",
+        soustitre:lang=="fr"?"Voulez-vous supprimer cette plage d'horaires ?":"Are you sure you want to delete this time slot ?",
+        Yes:lang=="fr"?"Oui":"Yes",
+        No:lang=="fr"?"Non":"No"
     });
     const translate = async () => {
-        const jour = await translateText(Traduction.Jour, lang);
-        const de = await translateText(Traduction.De, lang);
-        const a = await translateText(Traduction.A, lang);
-        const supprimer = await translateText(Traduction.Supprimer, lang);
-        const soustitre = await translateText(Traduction.soustitre, lang);
-        const Yes = await translateText(Traduction.Yes, lang);
-        const No = await translateText(Traduction.No, lang);
-        setTraduction({
-            Jour: jour,
-            De: de,
-            A: a,
-            Supprimer: supprimer,
-            soustitre: soustitre,
-            Yes: Yes,
-            No: No
-        })
+        // const jour = await translateText(Traduction.Jour, lang);
+        // const de = await translateText(Traduction.De, lang);
+        // //const a = await translateText(Traduction.A, lang);
+        // const a = await translateText(Traduction.A, lang);
+        // const supprimer = await translateText(Traduction.Supprimer, lang);
+        // const soustitre = await translateText(Traduction.soustitre, lang);
+        // const Yes = await translateText(Traduction.Yes, lang);
+        // const No = await translateText(Traduction.No, lang);
+        // setTraduction({
+        //     Jour: jour,
+        //     De: de,
+        //     A: a,
+        //     Supprimer: supprimer,
+        //     soustitre: soustitre,
+        //     Yes: Yes,
+        //     No: No
+        // })
     }
 
     const goToAddSched = () => {
@@ -70,7 +71,7 @@ export default function Schedules() {
     useEffect(() => {
         // Fetch offers when the component mounts
         fetchOffers();
-        translate();
+        // translate();
 
         // Set up an interval to fetch offers every 1 minute
         const intervalId = setInterval(fetchOffers, 60000);

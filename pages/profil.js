@@ -120,29 +120,31 @@ export default function Profile() {
       setRefreshing(false);
     }
   };
+  const logout_context = "L'utilisateur utilise cette option pour quitter son compte et fermer sa session dans l'application.";
 const translate = async() => {
-  const Profile = await translateText("Profil",lang);
-  const email= await translateText("Email",lang);
-  const diplome = await translateText("Diplome",lang);
-  const habitation = await translateText("Habitation",lang);
-  const phone = await translateText("Numéro",lang);
-  const abonnement = await translateText("Abonnement",lang);
-  const MesExperiences = await translateText("Mes experiences",lang);
-  const plagesHoraires = await translateText("Mes plages horaires",lang);
-  const AddExperience = await translateText("Ajouter une experience",lang);
-  const AddSkill = await translateText("Ajouter une competence",lang);
-  const ChangeLang = await translateText("Changer la langue",lang);
-  const Deconnexion = await translateText("Se deconnecter",lang);
-  const noCompetence= await translateText("Pas de competence",lang);
-  const competence= await translateText("Pas de competence",lang);
-  const seDeonneter= await translateText("Se Deonnecter",lang);
-  const verifier= await translateText("Voulez-vous vous deconnecter",lang);
-  const yes= await translateText("Oui",lang);
-  const no= await translateText("Non",lang);
-  const Attention= await translateText("Attention",lang);
-  const TextAttention= await translateText("êtes vous-sur de suprimer cette experience",lang);
-  const Echec= await translateText("Echec",lang);
-  const noExperience= await translateText("Pas d'experience",lang);
+  // const Profile = await translateText("Profil",lang);
+  const Profile = lang == "fr" ? "profil" : "profile";
+  const email= lang=="fr" ? "Email" : "Email";
+  const diplome = lang=="fr" ? "Diplome" : "Diploma";
+  const habitation = lang=="fr" ? "Habitation" : "Home";
+  const phone = lang=="fr" ? "Numéro" : "Phone";
+  const abonnement = lang=="fr" ? "Abonnement" : "Subscription";
+  const MesExperiences = lang=="fr" ? "Mes experiences" : "My experiences";
+  const plagesHoraires = lang=="fr" ? "Mes plages horaires" : "My time slots";
+  const AddExperience = lang=="fr" ? "Ajouter une experience" : "Add an experience";
+  const AddSkill = lang=="fr" ? "Ajouter une competence" : "Add a skill";
+  const ChangeLang = lang=="fr" ? "Changer la langue" : "Change language";
+  const Deconnexion = lang=="fr" ? " se Deconnecter" : "Logout";
+  const noCompetence= lang=="fr"? "Pas de competence" : "No skills";
+  const competence= lang=="fr"? "Competence" : "Skill";
+  const seDeonneter= await translateText("Deconnexion",lang);
+  const verifier= lang=="fr"? "Voulez-vous vous deconnecter" : "Do you want to logout";
+  const yes= lang=="fr"? "Oui" : "Yes";
+  const no= lang=="fr"? "Non" : "No";
+  const Attention= lang=="fr"? "Attention" : "Attention";
+  const TextAttention=lang=="fr"? "etes vous-sur de suprimer experience" : "Are you sure you want to delete this experience";
+  const Echec= lang=="fr"? "Echec" : "Echec";
+  const noExperience= lang=="fr"? "Pas d'experience" : "No experience";
 
   setTextTranslate({
     Profile:Profile,
@@ -599,7 +601,9 @@ const translate = async() => {
        
         <Pressable
         onPress={async () => {
-                    navigation.navigate('Skills')
+
+                    // navigation.navigate('Skills')
+                    navigation.navigate('newSkills')
                 }}
         >
           <View

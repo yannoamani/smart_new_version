@@ -22,53 +22,53 @@ export default function Skills() {
     const token = AsyncStorage.getItem('token')
     const[competence, setCompetence] = useState(0);
     const [TextTranslation, setTextTransaction] = useState({
-        Title: "Ajouter une competence / Supprimer une competence",
-    Ajouter :"Ajouter",
-  NoCompetence:"Aucune competence ajoutée au profil",
-  Competence:"Competence",
-  Succes:"Succes",
-  Echec:"Echec",
-  BodySucces:"Compétence ajoutée avec succès",
-  Supression:"Supprimer",
-  Bodysupression:"Voulez-vous supprimer cette compétence de votre profil ?",
-  DeleteSucces:"Compétence supprimée avec succès!",
-  Yes:"Oui",
-  Non:"Non",
-  NoSelect:"Veuillez selectionner une competence"
+        Title: lang=='fr'?"Ajouter /Retirer une competence au profile":"Add /Remove a skill to profile",
+    Ajouter :lang=='fr'?"Ajouter":"Add",
+  NoCompetence:lang=='fr'?"Aucune competence":"No skills",
+  Competence:lang=='fr'?"Compétence":"Skill",
+  Succes:lang=='fr'?"Succes":"Success",
+  Echec:lang=='fr'?"Echec":"Fail",
+  BodySucces:lang=='fr'?"Compétence ajoutée avec succès":"Skill added successfully",
+  Supression:lang=='fr'?"Supprimer":"Delete",
+  Bodysupression:lang=='fr'?"Voulez-vous de retirer  cette compétence à votre profile":"Are you sure you want to delete this skill",
+  DeleteSucces:lang=='fr'?"Compétence retirée avec succès":"Skill removed successfully",
+  Yes:lang=='fr'?"Oui":"Yes",
+  Non:lang=='fr'?"Non":"No",
+  NoSelect:lang=='fr'?"Veuillez selectionner une competence":"Please select a skill",
   
  
     
        
       });
       const translation= async()=>{
-       const title= await translateText(TextTranslation.Title, lang);
-       const ajouter= await translateText(TextTranslation.Ajouter, lang);
-       const NoCompetence= await translateText(TextTranslation.NoCompetence, lang);
-       const competence= await translateText(TextTranslation.Competence, lang);
-       const succes= await translateText(TextTranslation.Succes, lang);
-       const bodySucces= await translateText(TextTranslation.BodySucces, lang);
-      const  Supression= await translateText(TextTranslation.Supression, lang);
-      const Bodysupression= await translateText(TextTranslation.Bodysupression, lang);
-       const DeleteSucces= await translateText(TextTranslation.DeleteSucces, lang);
-       const oui= await translateText(TextTranslation.Yes, lang);
-       const non= await translateText(TextTranslation.Non, lang);
-       const NoSelect= await translateText(TextTranslation.NoSelect, lang);
+    //    const title= await translateText(TextTranslation.Title, lang);
+    //    const ajouter= await translateText(TextTranslation.Ajouter, lang);
+    //    const NoCompetence= await translateText(TextTranslation.NoCompetence, lang);
+    //    const competence= await translateText(TextTranslation.Competence, lang);
+    //    const succes= await translateText(TextTranslation.Succes, lang);
+    //    const bodySucces= await translateText(TextTranslation.BodySucces, lang);
+    //   const  Supression= await translateText(TextTranslation.Supression, lang);
+    //   const Bodysupression= await translateText(TextTranslation.Bodysupression, lang);
+    //    const DeleteSucces= await translateText(TextTranslation.DeleteSucces, lang);
+    //    const oui= await translateText(TextTranslation.Yes, lang);
+    //    const non= await translateText(TextTranslation.Non, lang);
+    //    const NoSelect= await translateText(TextTranslation.NoSelect, lang);
 
-       setTextTransaction({
-        Title: title,
-        Ajouter:ajouter,
-        NoCompetence:NoCompetence,
-        Competence:competence,
-        Succes:succes,
-        BodySucces:bodySucces,
-        Supression:Supression,
-        Bodysupression:Bodysupression,
-        DeleteSucces:DeleteSucces,
-        Yes:oui,
-        Non:non,
-        NoSelect:NoSelect
+    //    setTextTransaction({
+    //     Title: title,
+    //     Ajouter:ajouter,
+    //     NoCompetence:NoCompetence,
+    //     Competence:competence,
+    //     Succes:succes,
+    //     BodySucces:bodySucces,
+    //     Supression:Supression,
+    //     Bodysupression:Bodysupression,
+    //     DeleteSucces:DeleteSucces,
+    //     Yes:oui,
+    //     Non:non,
+    //     NoSelect:NoSelect
 
-       })
+    //    })
 
 
           
@@ -84,14 +84,14 @@ export default function Skills() {
             }
             const res = await axios.get('GetAllCompetences');
             const Mydata = res.data.data;
-            // const translateAll = await Promise.all(
-            //     Mydata.map(async (item) => {
-            //         return {
-            //             ...item,
-            //             nom: await translateText(item.nom, lang),
-            //         };
-            //     })
-            // )
+            const translateAll = await Promise.all(
+                Mydata.map(async (item) => {
+                    return {
+                        ...item,
+                        competence: await translateText(item.nom, lang),
+                    };
+                })
+            )
             setData(res.data.data);
             setRefreshing(false);
             console.log(Mydata);
@@ -119,10 +119,10 @@ export default function Skills() {
     
 
     const fetchOffers = () => {
-        setRefreshing(true);
+        // setRefreshing(true);
         getOffers();
         getUserSkills()
-        translation();
+        // translation();
     };
 
     useEffect(() => {
@@ -130,11 +130,8 @@ export default function Skills() {
         fetchOffers();
 
         // Set up an interval to fetch offers every 1 minute
-        const intervalId = setInterval(fetchOffers, 60000);
-
-        // Clean up the interval when the component unmounts
-        return () => clearInterval(intervalId);
-    }, [lang]);
+      
+    }, []);
 
     const renderItem = ({ item }) => {
         return (
@@ -270,7 +267,7 @@ export default function Skills() {
                             <Dropdown 
                  style={style1.dropdown}
                  search
-                 placeholder="Competence ..."
+                 placeholder={TextTranslation.Competence}
                  placeholderStyle={style1.placeholderStyle}
                  selectedTextStyle={style1.selectedTextStyle}
                  inputSearchStyle={style1.inputSearchStyle}
@@ -306,7 +303,8 @@ export default function Skills() {
                                     console.log(del.data);
                                    }
                                 } catch (error) {
-                                    Alert.alert("Echec", JSON.stringify(error.response.data.message), [{text: 'OK', onPress: () => console.log('OK')}], { cancelable: true })
+                                    const translate= await translateText(error.response.data.message, lang)
+                                    Alert.alert(TextTranslation.Echec, translate, [{text: 'OK', onPress: () => console.log('OK')}], { cancelable: true })
                                     setLoading(false);
                                 }
                             }}>

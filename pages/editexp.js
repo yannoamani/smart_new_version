@@ -35,37 +35,41 @@ export default function EditExp({route}) {
   const [hourend, handleHourEndChange] = useState(expR ? expR.dateFin : "");
   const [timer, setTimer] = useState(false);
   const [TextTranslation, setTextTransaction] = useState({
-    Title: "Modifier votre experience",
-Poste :"Poste",
-Entreprise:"Entreprise",
-Lieu:"Lieu",
-DateDebut:"Date de debut",
-DateFin:"Date de fin",
-Description:"Description",
-Modifier:"Modifier",
+    Title: lang=='fr'?"Modifier votre experience":"Edit your experience",
+Poste :lang=='fr'?"Poste":"Job",
+Entreprise:lang=='fr'?"Entreprise":"Company",
+Lieu:lang=='fr'?"Lieu":"Place",
+DateDebut:lang=='fr'?"Date de debut":"Start date",
+DateFin:lang=='fr'?"Date de fin":"End date",
+Description:lang=='fr'?"Description":"Description",
+Modifier:lang=='fr'?"Modifier":"Edit",
+Succes:lang=='fr'?"Succes":"Success",
+Echec:lang=='fr'?"Echec":"Failed",
+bodySucces:lang=='fr'?"Experience modifiée avec succès":"Experience modified successfully",
+valeurValide:lang=='fr'?"Entrez des valeurs valides.":"Enter valid values"
 
    
   });
 
   const Translation = async()=>{
- const title= await translateText(TextTranslation.Title, lang);
- const poste= await translateText(TextTranslation.Poste, lang);
- const Entreprise= await translateText(TextTranslation.Entreprise, lang);
- const Lieu= await translateText(TextTranslation.Lieu, lang);
- const DateDebut= await translateText(TextTranslation.DateDebut, lang);
- const DateFin= await translateText(TextTranslation.DateFin, lang);
- const Description= await translateText(TextTranslation.Description, lang);
- const Modifier= await translateText(TextTranslation.Modifier, lang);
- setTextTransaction({
-  Title: title,
-  Poste:poste,
-  Entreprise:Entreprise,
-  Lieu:Lieu,
-  DateDebut:DateDebut,
-  DateFin:DateFin,
-  Description:Description,
-  Modifier:Modifier
- })
+//  const title= await translateText(TextTranslation.Title, lang);
+//  const poste= await translateText(TextTranslation.Poste, lang);
+//  const Entreprise= await translateText(TextTranslation.Entreprise, lang);
+//  const Lieu= await translateText(TextTranslation.Lieu, lang);
+//  const DateDebut= await translateText(TextTranslation.DateDebut, lang);
+//  const DateFin= await translateText(TextTranslation.DateFin, lang);
+//  const Description= await translateText(TextTranslation.Description, lang);
+//  const Modifier= await translateText(TextTranslation.Modifier, lang);
+//  setTextTransaction({
+//   Title: title,
+//   Poste:poste,
+//   Entreprise:Entreprise,
+//   Lieu:Lieu,
+//   DateDebut:DateDebut,
+//   DateFin:DateFin,
+//   Description:Description,
+//   Modifier:Modifier
+//  })
   }
   const handleTimeConfirm = (time) => {
     const platform = Platform
@@ -78,7 +82,7 @@ Modifier:"Modifier",
   };
     useEffect(() => {
 
-    Translation();
+    // Translation();
     }, [lang]);
     return (
         <KeyboardAvoidingView
@@ -213,7 +217,7 @@ Modifier:"Modifier",
                                     handleHourStartChange('')
                                     handleHourEndChange('')
                                     Setloading(false);
-                                    Alert.alert('Succès', 'Expérience modifiée avec succès.', [
+                                    Alert.alert(TextTranslation.Succes, TextTranslation.bodySucces, [
                                         { text: 'OK', onPress: () => console.log('OK') }
                                       ],
                                       { cancelable: true })

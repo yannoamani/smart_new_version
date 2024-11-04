@@ -48,22 +48,22 @@ export default function Login() {
   const [policeRegular, setPoliceRegular] = useState("Poppins_400Regular");
   const [policeLight, setPoliceLight] = useState("Poppins_300Light_Italic");
   const [texttranslate, setTexttranslate] = useState({
-        login:"CONNEXION",
-        Email:"Email",
-        Password:'Mot de passe',
-        resterConnecter:"Se souvenir de moi",
-        forgotPassword:"Mot de passe oublié ?",
-        seConnecter:"Se connecter",
-        noAccount:"Vous n'avez pas de compte ?",
-        inscrire:"S'inscrire",
-        Error1:"Veillez renseigner votre email",
-        Error2:"Veuillez renseigner votre mot de passe",
-        Echec:"Echec",
-        Succes:"Succes",
-        BodySucces:"Vous  êes connecté avec success",
-        titleForgot:"Mot de passe oublié",
-        bodyForgot:"Entrez votre adresse email et nous vous enverrons un lien pour reinitialiser votre mot de passe.",
-        Continer:"Soumettre",
+        login:lang=="fr"?"CONNEXION":"Login",
+        Email:lang=="fr"?"Email":"Email",
+        Password:lang=="fr"?"Mot de passe":"Password",
+        resterConnecter:lang=="fr"?"Se souvenir de moi":"Remember me",
+        forgotPassword:lang=="fr"?"Mot de passe oublié ?":"Forgot password ?",
+        seConnecter:lang=="fr"?"Se connecter":"Login",
+        noAccount:lang=="fr"?"Vous n'avez pas de compte ?":"Don't have an account ?",
+        inscrire:lang=="fr"?"S'inscrire":"Sign up",
+        Error1:lang=="fr"?"Veillez renseigner votre email":"Please enter your email",
+        Error2:lang=="fr"?"Veuillez renseigner votre mot de passe":"Please enter your password",
+        Echec:lang=="fr"?"Echec":"Failed",
+        Succes:lang=="fr"?"Succes":"Success",
+        BodySucces:lang=="fr"?"Vous  êtes connecté avec success":"You are logged in successfully",
+        titleForgot:lang=="fr"?"Reinitialisation du mot de passe":"Forgot password",
+        bodyForgot:lang=="fr"?"Entrez votre adresse email et nous vous enverrons un lien pour reinitialiser votre mot de passe.":"Enter your email and we will send you a link to reset your password.",
+        Continer:lang=="fr"?"Soumettre":"Submit",
 
 
        
@@ -72,42 +72,42 @@ export default function Login() {
      
      
 
-        const welcomeTitle= await translateText("CONNEXION",lang);
-        const Email= await translateText('Email',lang);
-        const Password= await translateText('Mot de passe',lang);
-        const beConnected=await translateText('Se souvenir de moi', lang);
-        const forgotPassword=await translateText('Mot de passe oublié ?', lang);
-        const seConnecter=await translateText('Se connecter', lang);
-        const noAccount=await translateText("Vous n'avez pas de compte ?", lang);
-        const inscrire=await translateText('S\'inscrire', lang);
-        const Error1=await translateText('Veillez renseigner votre email', lang);
-        const Error2=await translateText('Veuillez renseigner votre mot de passe', lang);
-        const Succes=await translateText('Succes', lang);
-        const Echec=await translateText('Echec', lang);
-        const BodySucces=await translateText('Vous  êtes connecté avec success', lang);
-        const titleForgot=await translateText('Mot de passe oublié', lang);
-        const bodyForgot=await translateText('Entrez votre adresse email et nous vous enverrons un lien pour reinitialiser votre mot de passe.', lang);
-        const Continer=await translateText('Soumettre', lang);
+      //   const welcomeTitle= await translateText("CONNEXION",lang);
+      //   const Email= await translateText('Email',lang);
+      //   const Password= await translateText('Mot de passe',lang);
+      //   const beConnected=await translateText('Se souvenir de moi', lang);
+      //   const forgotPassword=await translateText('Mot de passe oublié ?', lang);
+      //   const seConnecter=await translateText('Se connecter', lang);
+      //   const noAccount=await translateText("Vous n'avez pas de compte ?", lang);
+      //   const inscrire=await translateText('S\'inscrire', lang);
+      //   const Error1=await translateText('Veillez renseigner votre email', lang);
+      //   const Error2=await translateText('Veuillez renseigner votre mot de passe', lang);
+      //   const Succes=await translateText('Succes', lang);
+      //   const Echec=await translateText('Echec', lang);
+      //   const BodySucces=await translateText('Vous  êtes connecté avec success', lang);
+      //   const titleForgot=await translateText('Mot de passe oublié', lang);
+      //   const bodyForgot=await translateText('Entrez votre adresse email et nous vous enverrons un lien pour reinitialiser votre mot de passe.', lang);
+      //   const Continer=await translateText('Soumettre', lang);
 
        
-       return setTexttranslate({
-        login : welcomeTitle,
-        Email : Email,
-        Password : Password,
-        resterConnecter : beConnected,
-        forgotPassword : forgotPassword,
-        seConnecter : seConnecter,
-        noAccount : noAccount,
-        inscrire : inscrire,
-        Error1 : Error1,
-        Error2 : Error2,
-        Echec : Echec,
-        Succes : Succes,
-        BodySucces : BodySucces,
-        titleForgot : titleForgot,
-        bodyForgot : bodyForgot,
-        Continer : Continer
-       })
+      //  return setTexttranslate({
+      //   login : welcomeTitle,
+      //   Email : Email,
+      //   Password : Password,
+      //   resterConnecter : beConnected,
+      //   forgotPassword : forgotPassword,
+      //   seConnecter : seConnecter,
+      //   noAccount : noAccount,
+      //   inscrire : inscrire,
+      //   Error1 : Error1,
+      //   Error2 : Error2,
+      //   Echec : Echec,
+      //   Succes : Succes,
+      //   BodySucces : BodySucces,
+      //   titleForgot : titleForgot,
+      //   bodyForgot : bodyForgot,
+      //   Continer : Continer
+      //  })
    
     }
 
